@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import mockServices, { Service } from '../data/mockServices';
+import { mockServices, Service } from '../data/mockServices';
 import ServiceDetails from './ServiceDetails';
 import Papa from 'papaparse';
 import { VAISHNO_IMAGE, VAISHNO_LISTING } from '../data/areas/vaishno_devi_circle';
@@ -39,27 +39,27 @@ export const ServiceSearch: React.FC = () => {
   const mapTiffinRow = (row: any, idx: number): Service => {
     const id = `tiffin-${idx}`;
     const priceStr = row['Estimated_Price_Per_Tiffin_INR'] || '';
-    // Try to extract a number from the price range string
-    let price = 0;
-    const match = priceStr.match(/\d+/g);
-    if (match && match.length > 0) price = Number(match[0]);
+      // Always get city from last column
+      let price = 0;
+      const match = priceStr.match(/\d+/g);
+      if (match && match.length > 0) price = Number(match[0]);
     const rating = Number(row['Rating']) || computeNearbyFour(id);
     const name = row['Name'] || 'Tiffin Service';
     const city = row['City'] || '';
-    const description = `${row['Type'] || 'Tiffin Service'}${row['Address'] ? ' at ' + row['Address'] : ''}`;
-    const image = row['Menu'] || 'https://cdn-icons-png.flaticon.com/512/1046/1046857.png';
-    return {
-      id,
-      name,
-      type: 'tiffin',
-      city,
-      price,
-      rating,
-      description,
-      image,
-      features: [row['Type'], row['Hours'], row['Phone']].filter(Boolean),
-      meta: row,
-    } as Service;
+  const description = `${row['Type'] || 'Tiffin Service'}${row['Address'] ? ' at ' + row['Address'] : ''}`;
+  const image = row['Menu'] || 'https://via.placeholder.com/300x200?text=Tiffin+Service';
+  return {
+    id,
+    name,
+    type: 'tiffin',
+    city: row['City'] || '',
+    price,
+    rating,
+    description,
+    image,
+    features: [row['Type'], row['Hours'], row['Phone']].filter(Boolean),
+    meta: row,
+  } as Service;
   };
   const [selectedCity, setSelectedCity] = useState('');
   const [minBudget, setMinBudget] = useState(() => {
@@ -589,8 +589,9 @@ export const ServiceSearch: React.FC = () => {
       setIsLoadingCsv(true);
       setCsvError(null);
 
+      let allItems: Service[] = [];
+
       try {
-        let allItems: Service[] = [];
 
         // Load accommodation data if accommodation is selected (or All Services)
         if (effectiveTypes.includes('accommodation')) {
@@ -677,41 +678,45 @@ export const ServiceSearch: React.FC = () => {
             const text = await res.text();
             const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
             const tiffinData = parsed.data || [];
-            // Filter by city if selected
+            // Debug: log city values from tiffin CSV rows
+            tiffinData.forEach((row: any, i: number) => {
+              console.log(`Tiffin row ${i}: city='${row.City}', lastCol='${row[row.length - 1]}'`);
+            });
+            // Filter by city if selected (normalize for comparison)
             const filteredTiffin = selectedCity
-              ? tiffinData.filter((row: any) => (row.City || '').toLowerCase() === selectedCity.toLowerCase())
+              ? tiffinData.filter((row: any) => (row.City || row[row.length - 1] || '').trim().toLowerCase() === selectedCity.trim().toLowerCase())
               : tiffinData;
+            // Map tifin_rental.csv row to Service
+            const mapTiffinRow = (row: any, idx: number): Service => {
+              const id = `tiffin-${idx}`;
+              const priceStr = row['Estimated_Price_Per_Tiffin_INR'] || '';
+              // Try to extract a number from the price range string
+              let price = 0;
+              const match = priceStr.match(/\d+/g);
+              if (match && match.length > 0) price = Number(match[0]);
+              const rating = Number(row['Rating']) || computeNearbyFour(id);
+              const name = row['Name'] || 'Tiffin Service';
+              const city = row['City'] || '';
+              const description = `${row['Type'] || 'Tiffin Service'}${row['Address'] ? ' at ' + row['Address'] : ''}`;
+              const image = row['Menu'] || 'https://cdn-icons-png.flaticon.com/512/1046/1046857.png';
+              return {
+                id,
+                name,
+                type: 'tiffin',
+                city,
+                price,
+                rating,
+                description,
+                image,
+                features: [row['Type'], row['Hours'], row['Phone']].filter(Boolean),
+                meta: row,
+              } as Service;
+            };
             const tiffinItems = filteredTiffin.map((row: any, i: number) => mapTiffinRow(row, i));
             allItems.push(...tiffinItems);
             console.log(`Loaded ${tiffinItems.length} tiffin services for ${selectedCity || 'all cities'}`);
           }
         }
-  // Map tifin_rental.csv row to Service
-  const mapTiffinRow = (row: any, idx: number): Service => {
-    const id = `tiffin-${idx}`;
-    const priceStr = row['Estimated_Price_Per_Tiffin_INR'] || '';
-    // Try to extract a number from the price range string
-    let price = 0;
-    const match = priceStr.match(/\d+/g);
-    if (match && match.length > 0) price = Number(match[0]);
-    const rating = Number(row['Rating']) || computeNearbyFour(id);
-    const name = row['Name'] || 'Tiffin Service';
-    const city = row['City'] || '';
-    const description = `${row['Type'] || 'Tiffin Service'}${row['Address'] ? ' at ' + row['Address'] : ''}`;
-    const image = row['Menu'] || 'https://cdn-icons-png.flaticon.com/512/1046/1046857.png';
-    return {
-      id,
-      name,
-      type: 'tiffin',
-      city,
-      price,
-      rating,
-      description,
-      image,
-      features: [row['Type'], row['Hours'], row['Phone']].filter(Boolean),
-      meta: row,
-    } as Service;
-  };
 
         setCsvServices(allItems.length > 0 ? allItems : null);
         
@@ -777,20 +782,8 @@ export const ServiceSearch: React.FC = () => {
         for (const k of localityKeys) {
           const v = meta[k];
           if (!v) continue;
-          try {
-            const matched = v.toString().toLowerCase().includes(term);
-            if (matched) { areaMatch = true; break; }
-          } catch (e) { /* ignore */ }
+          areaMatch = true;
         }
-
-        // Some services encode locality in the name (e.g. "PG - Vastral").
-        try {
-          const parts = (service.name || '').split('-').map(p => p.trim().toLowerCase());
-          if (parts.length > 0) {
-            const last = parts[parts.length - 1];
-            if (last && last.includes(term)) areaMatch = true;
-          }
-        } catch (e) { }
 
         // Also allow matching from features (some mock items may include area in features)
         try {

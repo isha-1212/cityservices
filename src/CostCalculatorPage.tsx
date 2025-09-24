@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { CostCalculator } from './components/CostCalculator';
-import mockServices, { Service } from './data/mockServices';
+import { mockServices, Service } from './data/mockServices';
 
 // Simple page wrapper for the Cost Calculator.
 // For now, we prefill with bookmarked services if available; otherwise show top items.

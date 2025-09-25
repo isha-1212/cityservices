@@ -35,32 +35,6 @@ import { Search, MapPin, Star, Bookmark, BookmarkCheck } from 'lucide-react';
 // shared Service type is available in data module if needed
 
 export const ServiceSearch: React.FC = () => {
-  // Map tifin_rental.csv row to Service
-  const mapTiffinRow = (row: any, idx: number): Service => {
-    const id = `tiffin-${idx}`;
-    const priceStr = row['Estimated_Price_Per_Tiffin_INR'] || '';
-      // Always get city from last column
-      let price = 0;
-      const match = priceStr.match(/\d+/g);
-      if (match && match.length > 0) price = Number(match[0]);
-    const rating = Number(row['Rating']) || computeNearbyFour(id);
-    const name = row['Name'] || 'Tiffin Service';
-    const city = row['City'] || '';
-  const description = `${row['Type'] || 'Tiffin Service'}${row['Address'] ? ' at ' + row['Address'] : ''}`;
-  const image = row['Menu'] || 'https://via.placeholder.com/300x200?text=Tiffin+Service';
-  return {
-    id,
-    name,
-    type: 'tiffin',
-    city: row['City'] || '',
-    price,
-    rating,
-    description,
-    image,
-    features: [row['Type'], row['Hours'], row['Phone']].filter(Boolean),
-    meta: row,
-  } as Service;
-  };
   const [selectedCity, setSelectedCity] = useState('');
   const [minBudget, setMinBudget] = useState(() => {
     try { return Number(localStorage.getItem('search_min_budget')) || 0; } catch { return 0; }
@@ -554,24 +528,29 @@ export const ServiceSearch: React.FC = () => {
     return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAD_kasqlYXaDOWO1rCq96ZJ77o2_3xYy1Tw&s';
   };
 
-  // normalize food CSV (swiggy_Ahm.csv) row to Service-like item
-  const mapFoodRow = (row: any, idx: number): Service => {
-    const id = `food-${idx}`;
-    const price = Number(row['Price (INR)']) || 0;
-    const rating = Number(row['Rating']) || 0;
-    const ratingCount = Number(row['Rating Count']) || 0;
-    const dishName = row['Dish Name'] || 'Unknown Dish';
+  // Map gujarati food data CSV row to Service
+  const mapGujaratiFoodRow = (row: any, idx: number): Service => {
+    const id = `guj-food-${idx}`;
+    const price = Number(row['price_after_offer']) || Number(row['price']) || 0;
+    const rating = Number(row['rating']) || 0;
+    const dishName = row['item_name'] || 'Unknown Dish';
+    const restaurantName = row['restaurant_name'] || 'Unknown Restaurant';
+    const city = row['city'] || '';
+    const cuisine = row['primary_cuisine'] || 'Food';
+    const platform = row['platform'] || '';
+    const deliveryTime = row['est_delivery_min'] ? `${row['est_delivery_min']} min` : '';
 
     return {
       id,
-      name: `${dishName} - ${row['Restaurant Name']}`,
+      name: `${dishName} - ${restaurantName}`,
       type: 'food',
-      city: row['City'] || 'Ahmedabad',
+      city: city,
       price: price,
       rating: rating > 0 ? rating : computeNearbyFour(id),
-      description: `${row['Category']} dish from ${row['Restaurant Name']} in ${row['Location']}. ${ratingCount > 0 ? `Based on ${ratingCount} ratings.` : ''}`,
+      description: `${cuisine} from ${restaurantName} on ${platform}${deliveryTime ? ` - ${deliveryTime} delivery` : ''}`,
       image: getFoodImage(dishName),
-      features: [row['Restaurant Name'], row['Location'], row['Category']],
+      features: [restaurantName, cuisine, platform, deliveryTime].filter(Boolean),
+      meta: row,
     } as Service;
   };
 
@@ -629,43 +608,31 @@ export const ServiceSearch: React.FC = () => {
               }));
             } catch {}
           }
-          if (selectedCity && selectedCity !== 'Ahmedabad') {
-            // Skip loading food CSV for other cities
-          } else {
-            const path = `/data/Food/swiggy_Ahm.csv`;
-            const res = await fetch(path);
-            if (res.ok) {
-              const text = await res.text();
-              const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-              // ...existing code...
-              const allData = parsed.data || [];
-              const categoryGroups: Record<string, any[]> = {};
-              allData.forEach((item: any) => {
-                const category = item['Category'] || 'Other';
-                if (!categoryGroups[category]) {
-                  categoryGroups[category] = [];
-                }
-                categoryGroups[category].push(item);
-              });
-              const categories = Object.keys(categoryGroups);
-              const totalDesired = 500;
-              const sampledData: any[] = [];
-              const itemsPerCategory = Math.floor(totalDesired / categories.length);
-              const remainder = totalDesired % categories.length;
-              categories.forEach((category, index) => {
-                const categoryItems = categoryGroups[category];
-                const itemsToTake = itemsPerCategory + (index < remainder ? 1 : 0);
-                const taken = categoryItems.slice(0, Math.min(itemsToTake, categoryItems.length));
-                sampledData.push(...taken);
-              });
-              const items = sampledData.map((r: any, i: number) => {
-                const s = mapFoodRow(r, i);
-                s.meta = r;
-                return s;
-              });
-              allItems.push(...items);
-              console.log(`Loaded ${items.length} food items for Ahmedabad`);
-            }
+          // Load gujarat food data for all cities
+          const path = `/data/Food/gujarat_fooddata_4cities_500.csv`;
+          const res = await fetch(path);
+          if (res.ok) {
+            const text = await res.text();
+            const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+            const allData = parsed.data || [];
+            
+            // Filter by selected city if one is chosen
+            const filteredData = selectedCity 
+              ? allData.filter((item: any) => {
+                  const itemCity = (item['city'] || '').trim().toLowerCase();
+                  const selectedCityLower = selectedCity.trim().toLowerCase();
+                  return itemCity === selectedCityLower;
+                })
+              : allData;
+
+            const items = filteredData.map((r: any, i: number) => {
+              const s = mapGujaratiFoodRow(r, i);
+              s.meta = r;
+              return s;
+            });
+            
+            allItems.push(...items);
+            console.log(`Loaded ${items.length} food items${selectedCity ? ` for ${selectedCity}` : ' for all cities'}`);
           }
         }
 

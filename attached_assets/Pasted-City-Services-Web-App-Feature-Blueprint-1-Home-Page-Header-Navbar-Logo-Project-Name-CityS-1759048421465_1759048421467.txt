@@ -1,0 +1,208 @@
+City Services Web App – Feature Blueprint
+🌍 1. Home Page
+
+Header/Navbar
+
+Logo + Project Name (CityServices)
+
+Navigation: Dashboard | Find Services | Cost Calculator | Bookmarks | Profile | Sign Out
+
+Hero Section
+
+Catchy tagline: “Find Your Perfect City Services”
+
+Short description: “Discover accommodation, food, transport, coworking spaces, and utilities.”
+
+CTA buttons: “Get Started” | “Explore Services”
+
+🔎 2. Find Services Page
+
+Purpose: Search, filter, and compare city services (Accommodation, Food, Transport, Utilities, etc.)
+
+Filters Section
+
+Dropdown: City
+
+Dropdown: Service Types (multi-select: Accommodation, Food, Transport, etc.)
+
+Text Input: Area (with autocomplete suggestions)
+
+Budget Filter:
+
+Slider for min–max budget range (e.g., 8,000–15,000)
+
+Show live value (₹X–₹Y/month)
+
+Sort By: Price (low–high, high–low), Rating, Newest
+
+Results Section
+
+Grid/List view of cards
+
+Each card:
+
+Image
+
+Title (e.g., Flat – Vastral)
+
+City + Area
+
+Price per month
+
+Rating ★
+
+Facilities / tags (e.g., Gated Community, Water Supply)
+
+Bookmark button
+
+Additional Features
+
+Map View with pins (optional)
+
+Save Search / Alerts
+
+Compare Services (select 2–3 and view side by side)
+
+Clear All Filters Button
+
+📊 3. Dashboard Page
+
+Purpose: Overview of costs, comparisons, and insights
+
+Top Stats Cards
+
+Cities Analyzed (50+)
+
+Avg. Monthly Savings (₹8,500)
+
+Active Users (2.4K)
+
+Prediction Accuracy (95%)
+
+Charts & Graphs
+
+City Cost Comparison (Bar Chart)
+
+Monthly Expense Breakdown (Pie/Donut)
+
+AI-Powered Insights
+
+Savings Tip (e.g., “Switching to public transport in Mumbai saves you ₹3,200/month”)
+
+City Recommendation (e.g., “Pune offers 35% lower living costs than Mumbai”)
+
+Accommodation Insight (average rent in preferred area)
+
+Trend Alerts (e.g., “Food costs in Bangalore increased 5% this month”)
+
+User Personalization
+
+Last searched city & budget insights
+
+Your Budget vs. Average chart
+
+Recent activity (e.g., “You searched 3 accommodations in Vastral”)
+
+Extra Features
+
+City filter dropdown (updates dashboard data)
+
+Export Dashboard (PDF/Excel)
+
+Share Insights
+
+🧮 4. Cost Calculator Page
+
+Purpose: Calculate expected living expenses
+
+Inputs
+
+City selection
+
+Service type checkboxes (Accommodation, Food, Transport, Utilities, etc.)
+
+Budget input sliders
+
+Outputs
+
+Estimated monthly cost breakdown (chart + list)
+
+Comparison vs average city cost
+
+Savings recommendations (AI tip)
+
+Extra Features
+
+Allow saving cost estimate to Profile
+
+Download as PDF
+
+📌 5. Bookmarks Page
+
+Purpose: Save and manage favorite services
+
+Saved Services Grid/List
+
+Same card design as Find Service
+
+Remove from bookmarks button
+
+Features
+
+Categorize by service type
+
+Quick compare
+
+Export bookmarks list
+
+👤 6. Profile Page
+
+Purpose: User account management
+
+Profile Info
+
+Name, Email, City preference, Budget preference
+
+Option to update details
+
+History / Activity
+
+Last searches
+
+Bookmarked services
+
+Cost calculator history
+
+Settings
+
+Notification preferences (e.g., “send alert if new flat under 12k in Ahmedabad”)
+
+Password change
+
+Delete account
+
+⚙️ 7. Backend Requirements
+
+API Endpoints
+
+/api/services → supports filters (city, type, area, budget_min, budget_max, sort)
+
+/api/bookmarks → CRUD bookmarks
+
+/api/costs → fetch cost comparison data
+
+/api/user → profile data
+
+/api/insights → AI-powered tips
+
+Database Schema
+
+Users (id, name, email, preferences, etc.)
+
+Services (id, type, city, area, price, rating, facilities, etc.)
+
+Bookmarks (userId, serviceId)
+
+CityCosts (city, accommodation, food, transport, utilities, others)
+
+Insights (userId, city, tips, recommendations)

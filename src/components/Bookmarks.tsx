@@ -55,8 +55,8 @@ export const Bookmarks: React.FC = () => {
     try {
       localStorage.setItem('local_bookmarks', JSON.stringify(next.map(x => x.id)));
       window.dispatchEvent(new CustomEvent('bookmarks:changed'));
-      window.dispatchEvent(new CustomEvent('toast:show', { 
-        detail: { message: 'Removed from bookmarks', type: 'success' } 
+      window.dispatchEvent(new CustomEvent('toast:show', {
+        detail: { message: 'Removed from bookmarks', type: 'success' }
       }));
     } catch (e) { }
 
@@ -71,14 +71,14 @@ export const Bookmarks: React.FC = () => {
         const data = await res.json();
         const found = (data.bookmarks || []).find((b: any) => b.service_id === id);
         if (!found) return;
-        const del = await fetch(`/api/bookmarks/${found.id}`, { 
-          method: 'DELETE', 
-          headers: { 'Authorization': `Bearer ${token}` } 
+        const del = await fetch(`/api/bookmarks/${found.id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!del.ok) {
           console.warn('Backend failed to delete bookmark', await del.text());
-          window.dispatchEvent(new CustomEvent('toast:show', { 
-            detail: { message: 'Failed to remove from server', type: 'error' } 
+          window.dispatchEvent(new CustomEvent('toast:show', {
+            detail: { message: 'Failed to remove from server', type: 'error' }
           }));
         }
       } catch (err) {
@@ -112,15 +112,33 @@ export const Bookmarks: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookmarkedServices.map((service) => (
-            <div key={service.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 card-hover">
+            <div
+              key={service.id}
+              className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 card-hover cursor-pointer group"
+              onClick={(e) => {
+                // Prevent opening details if trash button is clicked
+                if ((e.target as HTMLElement).closest('button[data-trash]')) return;
+                setSelected(service);
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label={`View details for ${service.name}`}
+            >
               {/* Image */}
               <div className="relative">
+                {/* Source tag logic */}
+                {(() => {
+                  let sourceTag = 'General';
+                  if (service.type === 'accommodation') sourceTag = 'Housing.com';
+                  else if (service.type === 'food') sourceTag = 'Swiggy';
+                  else if (service.type === 'tiffin') sourceTag = 'General';
+                  return (
+                    <span className="absolute top-3 left-3 z-10 bg-slate-200 text-slate-900 text-xs font-semibold px-2 py-1 rounded shadow-md">
+                      {sourceTag}
+                    </span>
+                  );
+                })()}
                 <img src={service.image} alt={service.name} className="w-full h-48 object-cover" />
-                <div className="absolute top-3 left-3">
-                  <span className="bg-white/90 backdrop-blur-sm text-slate-700 px-3 py-1 rounded-full text-xs font-semibold capitalize">
-                    {service.type}
-                  </span>
-                </div>
               </div>
 
               {/* Content */}
@@ -163,14 +181,21 @@ export const Bookmarks: React.FC = () => {
                     <span className="text-sm text-slate-500 ml-1">/month</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <button 
-                      onClick={() => setSelected(service)} 
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelected(service);
+                      }}
                       className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition-colors"
                     >
                       View Details
                     </button>
-                    <button 
-                      onClick={() => removeLocal(service.id)} 
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeLocal(service.id);
+                      }}
+                      data-trash
                       className="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />

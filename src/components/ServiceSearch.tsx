@@ -275,10 +275,21 @@ const ServiceCard: React.FC<{
   else if (service.type === 'tiffin') sourceTag = 'General';
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow">
+    <div
+      className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group flex flex-col"
+      onClick={(e) => {
+        // Prevent opening details if bookmark button is clicked
+        if ((e.target as HTMLElement).closest('button[data-bookmark]')) return;
+        onViewDetails();
+      }}
+      tabIndex={0}
+      role="button"
+      aria-label={`View details for ${service.name}`}
+      style={{ minHeight: '370px' }}
+    >
       <div className="relative">
         {/* Source tag badge */}
-        <span className="absolute top-3 left-3 z-10 bg-slate-900 text-white text-xs font-semibold px-2 py-1 rounded shadow-md opacity-90">
+        <span className="absolute top-3 left-3 z-10 bg-slate-200 text-slate-900 text-xs font-semibold px-2 py-1 rounded shadow-md">
           {sourceTag}
         </span>
         <img
@@ -287,7 +298,11 @@ const ServiceCard: React.FC<{
           className="w-full h-48 object-cover rounded-xl"
         />
         <button
-          onClick={onToggleBookmark}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleBookmark();
+          }}
+          data-bookmark
           className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm ${isBookmarked
             ? 'bg-red-500/20 text-red-500'
             : 'bg-white/20 text-white hover:bg-white/30'
@@ -297,7 +312,7 @@ const ServiceCard: React.FC<{
         </button>
       </div>
 
-      <div className="p-4">
+      <div className="flex-1 flex flex-col p-4">
         <div className="flex items-start justify-between mb-2">
           <h3 className="font-semibold text-slate-900 text-lg">{service.name}</h3>
           <div className="flex items-center gap-1">
@@ -313,7 +328,7 @@ const ServiceCard: React.FC<{
 
         <p className="text-sm text-slate-600 mb-4 line-clamp-2">{service.description}</p>
 
-        <div className="flex items-center justify-between">
+        <div className="mt-auto flex items-center justify-between">
           <div>
             <div className="text-xl font-bold text-slate-900">
               ₹{service.price.toLocaleString()}
@@ -321,7 +336,10 @@ const ServiceCard: React.FC<{
             <div className="text-sm text-slate-600">{getPriceUnit(service.type)}</div>
           </div>
           <button
-            onClick={onViewDetails}
+            onClick={(e) => {
+              e.stopPropagation();
+              onViewDetails();
+            }}
             className="px-4 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors"
           >
             View Details

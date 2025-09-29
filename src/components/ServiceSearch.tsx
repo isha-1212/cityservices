@@ -258,7 +258,7 @@ const ServiceCard: React.FC<{
             </button>
             <button
               onClick={onViewDetails}
-              className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
+              className="px-3 py-1 bg-slate-900 text-white text-sm rounded hover:bg-slate-800 transition-colors"
             >
               View Details
             </button>
@@ -268,13 +268,23 @@ const ServiceCard: React.FC<{
     );
   }
 
+  // Source tag logic
+  let sourceTag = 'General';
+  if (service.type === 'accommodation') sourceTag = 'Housing.com';
+  else if (service.type === 'food') sourceTag = 'Swiggy';
+  else if (service.type === 'tiffin') sourceTag = 'General';
+
   return (
     <div className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow">
       <div className="relative">
+        {/* Source tag badge */}
+        <span className="absolute top-3 left-3 z-10 bg-slate-900 text-white text-xs font-semibold px-2 py-1 rounded shadow-md opacity-90">
+          {sourceTag}
+        </span>
         <img
           src={service.image}
           alt={service.name}
-          className="w-full h-48 object-cover"
+          className="w-full h-48 object-cover rounded-xl"
         />
         <button
           onClick={onToggleBookmark}
@@ -312,7 +322,7 @@ const ServiceCard: React.FC<{
           </div>
           <button
             onClick={onViewDetails}
-            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors"
           >
             View Details
           </button>

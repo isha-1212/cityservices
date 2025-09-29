@@ -351,6 +351,12 @@ const ServiceCard: React.FC<{
 };
 
 const ServiceSearch: React.FC = () => {
+  // Pagination state for individual services
+  const [individualPage, setIndividualPage] = useState(1);
+  const INDIVIDUALS_PER_PAGE = 20;
+  // Pagination state for combined services
+  const [combinationPage, setCombinationPage] = useState(1);
+  const COMBINATIONS_PER_PAGE = 20;
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -687,9 +693,22 @@ const ServiceSearch: React.FC = () => {
   );
 
   // Filter food suggestions based on query - PREFIX MATCH ONLY
-  const filteredFoodSuggestions = foodSuggestions.filter(food =>
-    food.toLowerCase().startsWith(foodQuery.toLowerCase())
-  );
+  // Filter food suggestions based on query - SUBSTRING MATCH, show full dish names
+  let filteredFoodSuggestions: string[] = [];
+  if (foodQuery.trim()) {
+    // Gather all food dish names from filtered services
+    const allFoodNames = allServices
+      .filter(s => s.type === 'food' || s.type === 'tiffin')
+      .map(s => s.name)
+      .filter(Boolean);
+    filteredFoodSuggestions = allFoodNames.filter(name =>
+      name.toLowerCase().includes(foodQuery.toLowerCase())
+    );
+    // Remove duplicates and sort
+    filteredFoodSuggestions = Array.from(new Set(filteredFoodSuggestions)).sort();
+  } else {
+    filteredFoodSuggestions = foodSuggestions;
+  }
 
   // Create service combinations when multiple types are selected
   const serviceCombinations = useMemo(() => {
@@ -777,7 +796,14 @@ const ServiceSearch: React.FC = () => {
     const selectedTypeServices: Record<string, Service[]> = {};
     selectedTypes.forEach(type => {
       if (servicesByType[type]) {
-        selectedTypeServices[type] = servicesByType[type].slice(0, 10); // Limit for performance
+        // If both accommodation and food are selected, exclude tiffin data from food
+        if (type === 'food' && selectedTypes.includes('accommodation') && !selectedTypes.includes('tiffin')) {
+          selectedTypeServices[type] = servicesByType[type].filter(s => s.meta && s.meta['Restaurant Name']);
+        } else if (type === 'tiffin') {
+          selectedTypeServices[type] = servicesByType[type].filter(s => s.meta && s.meta['Estimated_Price_Per_Tiffin_INR']);
+        } else {
+          selectedTypeServices[type] = servicesByType[type];
+        }
       }
     });
 
@@ -788,6 +814,7 @@ const ServiceSearch: React.FC = () => {
       const services2 = selectedTypeServices[type2] || [];
 
       const seenCombinations = new Set<string>();
+      let allPairs: Array<{ id: string; services: Service[]; totalPrice: number; types: string[] }> = [];
 
       services1.forEach(service1 => {
         services2.forEach(service2 => {
@@ -802,7 +829,7 @@ const ServiceSearch: React.FC = () => {
 
             if (!seenCombinations.has(combinationKey)) {
               seenCombinations.add(combinationKey);
-              combinations.push({
+              allPairs.push({
                 id: combinationKey,
                 services: [service1, service2],
                 totalPrice,
@@ -812,6 +839,9 @@ const ServiceSearch: React.FC = () => {
           }
         });
       });
+      // Sort all pairs by totalPrice ascending and add to combinations
+      allPairs.sort((a, b) => a.totalPrice - b.totalPrice);
+      combinations.push(...allPairs);
     }
 
     // Generate combinations for 3 service types
@@ -940,7 +970,7 @@ const ServiceSearch: React.FC = () => {
     }
 
     // Sort by total price and return results
-    const finalCombinations = combinations.sort((a, b) => a.totalPrice - b.totalPrice).slice(0, 20);
+    const finalCombinations = combinations.sort((a, b) => a.totalPrice - b.totalPrice);
 
     console.log('=== FINAL COMBINATION RESULTS ===');
     console.log(`Selected types: ${selectedTypes.join(', ')}`);
@@ -1296,16 +1326,28 @@ const ServiceSearch: React.FC = () => {
               </div>
 
               <div className="grid gap-4">
-                {serviceCombinations.map((combination) => (
-                  <ServiceCombinationCard
-                    key={combination.id}
-                    combination={combination}
-                    onViewDetails={setSelectedService}
-                    onToggleBookmark={toggleBookmark}
-                    isBookmarked={(serviceId: string) => bookmarkedIds.has(serviceId)}
-                  />
-                ))}
+                {serviceCombinations
+                  .slice(0, combinationPage * COMBINATIONS_PER_PAGE)
+                  .map((combination) => (
+                    <ServiceCombinationCard
+                      key={combination.id}
+                      combination={combination}
+                      onViewDetails={setSelectedService}
+                      onToggleBookmark={toggleBookmark}
+                      isBookmarked={(serviceId: string) => bookmarkedIds.has(serviceId)}
+                    />
+                  ))}
               </div>
+              {serviceCombinations.length > combinationPage * COMBINATIONS_PER_PAGE && (
+                <div className="flex justify-center mt-6">
+                  <button
+                    className="px-6 py-3 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition-colors"
+                    onClick={() => setCombinationPage(combinationPage + 1)}
+                  >
+                    Load More
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -1326,7 +1368,7 @@ const ServiceSearch: React.FC = () => {
                 ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
                 : 'grid-cols-1'
                 }`}>
-                {filteredServices.map((service) => (
+                {filteredServices.slice(0, individualPage * INDIVIDUALS_PER_PAGE).map((service) => (
                   <ServiceCard
                     key={service.id}
                     service={service}
@@ -1337,6 +1379,16 @@ const ServiceSearch: React.FC = () => {
                   />
                 ))}
               </div>
+              {filteredServices.length > individualPage * INDIVIDUALS_PER_PAGE && (
+                <div className="flex justify-center mt-6">
+                  <button
+                    className="px-6 py-3 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition-colors"
+                    onClick={() => setIndividualPage(individualPage + 1)}
+                  >
+                    Load More
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>

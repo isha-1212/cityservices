@@ -13,13 +13,20 @@ interface BookmarksProps {
 export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) => {
   const [bookmarkedServices, setBookmarkedServices] = useState<Service[]>([]);
   const [selected, setSelected] = useState<Service | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadBookmarks = async () => {
     try {
       if (!user) {
-        // Show empty bookmarks for unauthenticated users
         setBookmarkedServices([]);
+        setIsLoading(false);
         return;
+      }
+
+      // Try to load from cache first
+      const cachedBookmarks = UserStorage.getItemAsJSON<Service[]>('cached_bookmarks', []);
+      if (cachedBookmarks.length > 0) {
+        setBookmarkedServices(cachedBookmarks);
       }
 
       // First try to migrate any local data to database
@@ -34,9 +41,13 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
         .filter((s): s is Service => Boolean(s));
 
       setBookmarkedServices(items);
+      // Cache the latest bookmarks
+      UserStorage.setItem('cached_bookmarks', items);
     } catch (e) {
       console.warn('Failed to load user bookmarks from database', e);
       setBookmarkedServices([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -64,30 +75,27 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
     try {
       const success = await UserStorage.removeFromWishlistDB(id);
       if (success) {
-        window.dispatchEvent(new CustomEvent('toast:show', {
-          detail: { message: 'Removed from bookmarks', type: 'success' }
-        }));
-        // Also update the local state immediately for better UX
+        // Just update the local state immediately for better UX
         setBookmarkedServices(prev => prev.filter(service => service.id !== id));
       } else {
         throw new Error('Failed to remove from database');
       }
     } catch (error) {
       console.error('Failed to remove from bookmarks:', error);
-      window.dispatchEvent(new CustomEvent('toast:show', {
-        detail: { message: 'Failed to remove from bookmarks', type: 'error' }
-      }));
     }
-  };
-
-  return (
+  }; return (
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-slate-800 mb-2">Your Bookmarks</h2>
         <p className="text-slate-600">Saved services you added to your bookmarks</p>
       </div>
 
-      {!user ? (
+      {isLoading ? (
+        <div className="text-center py-12">
+          <div className="w-16 h-16 border-4 border-slate-700 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading your bookmarks...</p>
+        </div>
+      ) : !user ? (
         <div className="text-center py-12">
           <div className="max-w-md mx-auto">
             <div className="mb-6">

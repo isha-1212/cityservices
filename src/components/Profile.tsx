@@ -11,7 +11,6 @@ interface ProfileProps {
     phone?: string;
     city?: string;
     profession?: string;
-    company?: string;
   } | null;
   onAuthRequired: () => void;
 }
@@ -24,14 +23,12 @@ interface ProfileTabProps {
     phone: string;
     city: string;
     profession: string;
-    company: string;
   };
   onNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onPhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onCityChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onProfessionChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onCompanyChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSave: () => void;
   isEditing: boolean;
   onToggleEdit: () => void;
@@ -46,7 +43,6 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
   onPhoneChange,
   onCityChange,
   onProfessionChange,
-  onCompanyChange,
   onSave,
   isEditing,
   onToggleEdit,
@@ -145,15 +141,11 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
               key="city-select"
               options={[
                 { value: '', label: 'Select a city' },
-                { value: 'Mumbai', label: 'Mumbai' },
-                { value: 'Delhi', label: 'Delhi' },
-                { value: 'Bangalore', label: 'Bangalore' },
-                { value: 'Pune', label: 'Pune' },
                 { value: 'Ahmedabad', label: 'Ahmedabad' },
                 { value: 'Gandhinagar', label: 'Gandhinagar' },
                 { value: 'Surat', label: 'Surat' },
                 { value: 'Rajkot', label: 'Rajkot' },
-                { value: 'Vadodara', label: 'Vadodara' }
+                { value: 'Baroda/Vadodra', label: 'Baroda/Vadodra' }
               ]}
               value={profileData.city}
               onChange={(value) => {
@@ -180,21 +172,7 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
                 }`}
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Company</label>
-            <input
-              key="company-input"
-              type="text"
-              value={profileData.company}
-              onChange={onCompanyChange}
-              placeholder="Enter your company"
-              disabled={!isEditing}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-slate-700 ${isEditing
-                ? 'border-slate-300 bg-white'
-                : 'border-slate-200 bg-slate-50 text-slate-600'
-                }`}
-            />
-          </div>
+
         </div>
       </div>
 
@@ -236,7 +214,6 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
     phone: user?.phone || '',
     city: user?.city || '',
     profession: user?.profession || '',
-    company: user?.company || '',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -270,7 +247,6 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
             phone: metadata.phone || user.phone || '',
             city: metadata.city || user.city || '',
             profession: metadata.profession || user.profession || '',
-            company: metadata.company || user.company || '',
           });
         } else {
           console.log('🔍 No authenticated user found, using local user data');
@@ -280,7 +256,6 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
             phone: user.phone || '',
             city: user.city || '',
             profession: user.profession || '',
-            company: user.company || '',
           });
         }
       } catch (error) {
@@ -291,8 +266,7 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
           email: user.email || '',
           phone: user.phone || '',
           city: user.city || '',
-          profession: user.profession || '',
-          company: user.company || '',
+          profession: user.profession || ''
         });
       }
     };
@@ -306,7 +280,6 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
     phone: string;
     city: string;
     profession: string;
-    company: string;
   }
 
   // Simple change handlers that don't use useCallback
@@ -330,10 +303,6 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
     setProfileData((prev: ProfileData) => ({ ...prev, profession: e.target.value }));
   };
 
-  const handleCompanyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProfileData((prev: ProfileData) => ({ ...prev, company: e.target.value }));
-  };
-
   // Handle edit toggle
   const handleToggleEdit = () => {
     if (isEditing) {
@@ -344,7 +313,6 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
         phone: user?.phone || '',
         city: user?.city || '',
         profession: user?.profession || '',
-        company: user?.company || '',
       });
     }
     setIsEditing(!isEditing);
@@ -363,8 +331,7 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
           name: profileData.name,
           phone: profileData.phone,
           city: profileData.city,
-          profession: profileData.profession,
-          company: profileData.company,
+          profession: profileData.profession
         }
       });
 
@@ -383,8 +350,7 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
         name: profileData.name,
         phone: profileData.phone,
         city: profileData.city,
-        profession: profileData.profession,
-        company: profileData.company,
+        profession: profileData.profession
       };
       localStorage.setItem('user', JSON.stringify(updatedUser));
 
@@ -574,7 +540,6 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
               onPhoneChange={handlePhoneChange}
               onCityChange={handleCityChange}
               onProfessionChange={handleProfessionChange}
-              onCompanyChange={handleCompanyChange}
               onSave={handleSaveProfile}
               isLoading={isLoading}
               message={message}

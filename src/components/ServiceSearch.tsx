@@ -3,6 +3,7 @@ import { Search, MapPin, Star, Heart, Grid2x2 as Grid, List, SlidersHorizontal, 
 import Papa from 'papaparse';
 import mockServices, { Service } from '../data/mockServices';
 import { ServiceDetails } from './ServiceDetails';
+import { UserStorage } from '../utils/userStorage';
 
 interface ServiceSearchProps {
   user?: any;
@@ -569,15 +570,37 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     'Tiffin Service', 'Home Cooked', 'Vegan', 'Jain Food', 'Continental', 'Fast Food'
   ];
 
-  // Load bookmarks from localStorage
+  // Load bookmarks and listen for changes
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem('local_bookmarks');
-      if (raw) setBookmarkedIds(new Set(JSON.parse(raw)));
-    } catch (e) {
-      console.warn('Failed to load bookmarks', e);
-    }
-  }, []);
+    const loadBookmarks = async () => {
+      try {
+        if (user) {
+          // Load from database
+          const ids = await UserStorage.getWishlistFromDB();
+          setBookmarkedIds(new Set(ids));
+        } else {
+          // Load from localStorage for non-logged in users
+          const raw = localStorage.getItem('local_bookmarks');
+          if (raw) setBookmarkedIds(new Set(JSON.parse(raw)));
+        }
+      } catch (e) {
+        console.warn('Failed to load bookmarks', e);
+      }
+    };
+
+    // Load initial bookmarks
+    loadBookmarks();
+
+    // Listen for bookmark changes
+    const handleBookmarkChange = () => {
+      loadBookmarks();
+    };
+
+    window.addEventListener('bookmarks:changed', handleBookmarkChange);
+    return () => {
+      window.removeEventListener('bookmarks:changed', handleBookmarkChange);
+    };
+  }, [user]);
 
   // Load CSV data
   useEffect(() => {
@@ -893,7 +916,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     setSelectedTypes(prev => prev.filter(t => t !== type));
   };
 
-  const toggleBookmark = (serviceId: string, service: Service) => {
+  const toggleBookmark = async (serviceId: string, service: Service) => {
     // Check if user is authenticated
     if (!user) {
       if (onAuthRequired) {
@@ -905,28 +928,56 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     const newBookmarksSet = new Set(bookmarkedIds);
     const isCurrentlyBookmarked = bookmarkedIds.has(serviceId);
 
-    if (isCurrentlyBookmarked) {
-      newBookmarksSet.delete(serviceId);
-    } else {
-      newBookmarksSet.add(serviceId);
-      // Store service data for dynamic items
-      try {
-        const existingMap = JSON.parse(localStorage.getItem('local_bookmark_items') || '{}');
-        existingMap[serviceId] = service;
-        localStorage.setItem('local_bookmark_items', JSON.stringify(existingMap));
-      } catch (e) {
-        console.warn('Failed to store bookmark item', e);
+    try {
+      // Optimistically update the UI
+      if (isCurrentlyBookmarked) {
+        newBookmarksSet.delete(serviceId);
+      } else {
+        newBookmarksSet.add(serviceId);
       }
+      setBookmarkedIds(newBookmarksSet);
+
+      // Attempt database operation
+      let success = false;
+      if (isCurrentlyBookmarked) {
+        success = await UserStorage.removeFromWishlistDB(serviceId);
+      } else {
+        success = await UserStorage.addToWishlistDB(serviceId, {
+          id: service.id,
+          name: service.name,
+          type: service.type,
+          city: service.city,
+          description: service.description,
+          price: service.price,
+          rating: service.rating,
+          image: service.image,
+          features: service.features
+        });
+      }
+
+      if (!success) {
+        // Revert the optimistic update if the operation failed
+        if (isCurrentlyBookmarked) {
+          newBookmarksSet.add(serviceId);
+        } else {
+          newBookmarksSet.delete(serviceId);
+        }
+        setBookmarkedIds(newBookmarksSet);
+        throw new Error(`Failed to ${isCurrentlyBookmarked ? 'remove from' : 'add to'} bookmarks`);
+      }
+
+      // Update local storage and notify components
+      localStorage.setItem('local_bookmarks', JSON.stringify([...newBookmarksSet]));
+      window.dispatchEvent(new CustomEvent('bookmarks:changed'));
+    } catch (error) {
+      console.error('Failed to toggle bookmark:', error);
+      window.dispatchEvent(new CustomEvent('toast:show', {
+        detail: {
+          message: error instanceof Error ? error.message : 'Failed to update bookmark',
+          type: 'error'
+        }
+      }));
     }
-
-    setBookmarkedIds(newBookmarksSet);
-    localStorage.setItem('local_bookmarks', JSON.stringify([...newBookmarksSet]));
-    window.dispatchEvent(new CustomEvent('bookmarks:changed'));
-
-    const message = isCurrentlyBookmarked ? 'Removed from bookmarks' : 'Added to bookmarks';
-    window.dispatchEvent(new CustomEvent('toast:show', {
-      detail: { message, type: 'success' }
-    }));
   };
 
   // Filter area suggestions based on query - PREFIX MATCH ONLY

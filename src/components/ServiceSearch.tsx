@@ -2,6 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, MapPin, Star, Heart, Grid2x2 as Grid, List, SlidersHorizontal, ChevronDown, X } from 'lucide-react';
 import Papa from 'papaparse';
 import mockServices, { Service } from '../data/mockServices';
+import {
+  applyAdvancedFilters,
+  getAllCombinationsSorted,
+  convertToMonthlyPrice,
+  FilterCriteria
+} from '../utils/serviceFilteringLogic';
 import { ServiceDetails } from './ServiceDetails';
 import { UserStorage } from '../utils/userStorage';
 import { TransportModal } from './TransportModal';
@@ -536,13 +542,6 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   // Pagination state for combined services
   const [combinationPage, setCombinationPage] = useState(1);
   const COMBINATIONS_PER_PAGE = 20;
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState([0, 100000]);
-  const [minRating, setMinRating] = useState(0);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [showFilters, setShowFilters] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
   const [csvServices, setCsvServices] = useState<Service[]>([]);
@@ -556,6 +555,31 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   const [serviceTypeDropdownOpen, setServiceTypeDropdownOpen] = useState(false);
   const [activeView, setActiveView] = useState<'combined' | 'individual'>('combined');
   const [showTransportModal, setShowTransportModal] = useState(false);
+
+  // Unified filter criteria state for robust filtering
+  const [criteria, setCriteria] = useState<FilterCriteria>({
+    searchQuery: '',
+    selectedCity: '',
+    selectedTypes: [],
+    priceRange: [0, 100000],
+    minRating: 0,
+    areaQuery: '',
+    foodQuery: ''
+  });
+
+  // Derive common pieces for backward-compatible usage in the UI
+  // Backward-compatible setters used throughout the component
+  const setSearchQuery = (v: string) => setCriteria(prev => ({ ...prev, searchQuery: v }));
+  const setSelectedCity = (v: string) => setCriteria(prev => ({ ...prev, selectedCity: v }));
+  const setSelectedTypes = (v: string[]) => setCriteria(prev => ({ ...prev, selectedTypes: v }));
+  const setPriceRange = (v: [number, number]) => setCriteria(prev => ({ ...prev, priceRange: v }));
+  const setMinRating = (v: number) => setCriteria(prev => ({ ...prev, minRating: v }));
+
+  // Backward-compatible local variables used by existing JSX
+  const selectedTypes = criteria.selectedTypes || [];
+  const priceRange = criteria.priceRange as [number, number];
+  const minRating = criteria.minRating ?? 0;
+  const selectedCity = criteria.selectedCity || '';
 
   // Area suggestions for Ahmedabad
   const areaSuggestions = [
@@ -571,6 +595,10 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     'Gujarati Thali', 'South Indian', 'North Indian', 'Chinese', 'Pizza', 'Burger',
     'Tiffin Service', 'Home Cooked', 'Vegan', 'Jain Food', 'Continental', 'Fast Food'
   ];
+
+  // Local UI-only states
+  const [showFilters, setShowFilters] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Load bookmarks and listen for changes
   useEffect(() => {
@@ -702,7 +730,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
               const priceRange = row['Estimated_Price_Per_Tiffin_INR'] || '₹70 - ₹120';
               const avgPrice = priceRange.includes('-')
                 ? (parseInt(priceRange.split('-')[0].replace(/[^\d]/g, '')) + parseInt(priceRange.split('-')[1].replace(/[^\d]/g, ''))) / 2
-                : parseInt(priceRange.replace(/[^\d]/g, '')) || 95;
+                : parseInt(priceRange.replace(/[^\d]/g, '')) || 95 * 30;
 
               const service: Service = {
                 id: `tiffin-${Date.now()}-${idx}`, // More unique ID
@@ -860,55 +888,22 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     return uniqueServices;
   }, [mockServices, csvServices]);
 
-  // Enhanced filtering logic
+  // Use robust filtering utility for filtered services
   const filteredServices = useMemo(() => {
-    console.log('Filtering services:', {
-      totalServices: allServices.length,
-      selectedTypes,
-      selectedCity,
-      priceRange
-    });
+    const filterCriteria: FilterCriteria = {
+      searchQuery: criteria.searchQuery,
+      selectedCity: criteria.selectedCity,
+      selectedTypes: criteria.selectedTypes,
+      priceRange: criteria.priceRange,
+      minRating: criteria.minRating,
+      areaQuery: areaQuery || criteria.areaQuery,
+      foodQuery: foodQuery || criteria.foodQuery
+    };
 
-    return allServices.filter(service => {
-      const matchesQuery = !searchQuery ||
-        service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        service.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        service.description.toLowerCase().includes(searchQuery.toLowerCase());
-
-      const matchesCity = !selectedCity || service.city === selectedCity;
-      const matchesType = selectedTypes.length === 0 || selectedTypes.includes(service.type);
-      const matchesPrice = service.price >= priceRange[0] && service.price <= priceRange[1];
-      const matchesRating = service.rating >= minRating;
-
-      // Area filtering (only for accommodation)
-      const matchesArea = !areaQuery ||
-        !selectedTypes.includes('accommodation') ||
-        (service.meta && (
-          (service.meta['Locality / Area'] || '').toLowerCase().includes(areaQuery.toLowerCase()) ||
-          (service.meta['Area'] || '').toLowerCase().includes(areaQuery.toLowerCase())
-        )) ||
-        service.name.toLowerCase().includes(areaQuery.toLowerCase()) ||
-        service.description.toLowerCase().includes(areaQuery.toLowerCase());
-
-      // Food filtering (only for food/tiffin services)
-      const matchesFood = !foodQuery ||
-        (!selectedTypes.includes('food') && !selectedTypes.includes('tiffin')) ||
-        service.name.toLowerCase().includes(foodQuery.toLowerCase()) ||
-        service.description.toLowerCase().includes(foodQuery.toLowerCase()) ||
-        service.features.some(feature => feature.toLowerCase().includes(foodQuery.toLowerCase()));
-
-      return matchesQuery && matchesCity && matchesType && matchesPrice && matchesRating && matchesArea && matchesFood;
-    });
-  }, [JSON.stringify({
-    serviceIds: allServices.map(s => s.id),
-    query: searchQuery,
-    city: selectedCity,
-    types: selectedTypes,
-    price: priceRange,
-    rating: minRating,
-    area: areaQuery,
-    food: foodQuery
-  })]);
+    const result = applyAdvancedFilters(allServices, filterCriteria);
+    // Keep existing behavior: sort by monthly price ascending
+    return result.sort((a, b) => convertToMonthlyPrice(a) - convertToMonthlyPrice(b));
+  }, [allServices, criteria.searchQuery, criteria.selectedCity, JSON.stringify(criteria.selectedTypes), JSON.stringify(criteria.priceRange), criteria.minRating, areaQuery, foodQuery]);
 
   const cities = [...new Set(allServices.map(s => s.city))].sort();
   const serviceTypes = [
@@ -925,16 +920,16 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
       return;
     }
 
-    setSelectedTypes(prev => {
-      const newTypes = prev.includes(type)
-        ? prev.filter(t => t !== type)
-        : [...prev, type];
+    setCriteria(prev => {
+      const newTypes = prev.selectedTypes.includes(type)
+        ? prev.selectedTypes.filter(t => t !== type)
+        : [...prev.selectedTypes, type];
 
       // Reset area and food queries when service types change
       if (!newTypes.includes('accommodation')) setAreaQuery('');
       if (!newTypes.includes('food') && !newTypes.includes('tiffin')) setFoodQuery('');
 
-      return newTypes;
+      return { ...prev, selectedTypes: newTypes };
     });
   };
 
@@ -944,15 +939,15 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     setCsvServices(prev => [...prev, transportService]);
 
     // Add transport to selected types to show it in results
-    if (!selectedTypes.includes('transport')) {
-      setSelectedTypes(prev => [...prev, 'transport']);
+    if (!criteria.selectedTypes.includes('transport')) {
+      setCriteria(prev => ({ ...prev, selectedTypes: [...prev.selectedTypes, 'transport'] }));
     }
 
     setShowTransportModal(false);
   };
 
   const removeServiceType = (type: string) => {
-    setSelectedTypes(prev => prev.filter(t => t !== type));
+    setCriteria(prev => ({ ...prev, selectedTypes: prev.selectedTypes.filter(t => t !== type) }));
   };
 
   const toggleBookmark = async (serviceId: string, service: Service) => {
@@ -1042,158 +1037,24 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     filteredFoodSuggestions = foodSuggestions;
   }
 
-  // Filter services by type with all criteria
-  const getFilteredServicesByType = (type: string) => {
-    return allServices.filter(service => {
-      if (service.type !== type) return false;
+  // Per-type filtering and matching logic removed - using centralized utilities instead
 
-      const matchesCity = !selectedCity || service.city === selectedCity;
-      const matchesRating = service.rating >= minRating;
-      const matchesPrice = service.price >= priceRange[0] && service.price <= priceRange[1];
-
-      if (!matchesCity || !matchesRating || !matchesPrice) return false;
-
-      // Area filtering for accommodation
-      if (type === 'accommodation' && areaQuery) {
-        const matchesArea = (service.meta && (
-          (service.meta['Locality / Area'] || '').toLowerCase().includes(areaQuery.toLowerCase()) ||
-          (service.meta['Area'] || '').toLowerCase().includes(areaQuery.toLowerCase())
-        )) ||
-          service.name.toLowerCase().includes(areaQuery.toLowerCase()) ||
-          service.description.toLowerCase().includes(areaQuery.toLowerCase());
-
-        if (!matchesArea) return false;
-      }
-
-      // Food filtering
-      if (type === 'food' && foodQuery) {
-        const matchesFood = service.name.toLowerCase().includes(foodQuery.toLowerCase()) ||
-          service.description.toLowerCase().includes(foodQuery.toLowerCase()) ||
-          (service.meta && (
-            (service.meta['Dish Name'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
-            (service.meta['Restaurant Name'] || '').toLowerCase().includes(foodQuery.toLowerCase())
-          ));
-
-        if (!matchesFood) return false;
-      }
-
-      return true;
-    });
-  };
-
-  // Get filtered services for each type
-  const selectedTypeServices = useMemo(() => {
-    const services: Record<string, Service[]> = {};
-    selectedTypes.forEach(type => {
-      services[type] = getFilteredServicesByType(type);
-      console.log(`Filtered services for ${type}:`, services[type].length);
-    });
-    return services;
-  }, [selectedTypes, selectedCity, minRating, priceRange, areaQuery, foodQuery, allServices]);
-
-  // Generate service combinations
-  // Helper function to check if a service matches the filters
-  const matchesFilters = (service: Service) => {
-    const matchesCity = !selectedCity || service.city === selectedCity;
-    const matchesRating = service.rating >= minRating;
-    const matchesPrice = service.price >= priceRange[0] && service.price <= priceRange[1];
-
-    // Area filtering for accommodation
-    const matchesArea = !areaQuery ||
-      service.type !== 'accommodation' ||
-      ((service.meta && (
-        (service.meta['Locality / Area'] || '').toLowerCase().includes(areaQuery.toLowerCase()) ||
-        (service.meta['Area'] || '').toLowerCase().includes(areaQuery.toLowerCase())
-      )) ||
-        service.name.toLowerCase().includes(areaQuery.toLowerCase()) ||
-        service.description.toLowerCase().includes(areaQuery.toLowerCase()));
-
-    // Food filtering
-    const matchesFood = !foodQuery ||
-      (service.type !== 'food' && service.type !== 'tiffin') ||
-      service.name.toLowerCase().includes(foodQuery.toLowerCase()) ||
-      service.description.toLowerCase().includes(foodQuery.toLowerCase()) ||
-      (service.meta && Object.values(service.meta).some(value =>
-        value && value.toString().toLowerCase().includes(foodQuery.toLowerCase())
-      ));
-
-    return matchesCity && matchesRating && matchesPrice && matchesArea && matchesFood;
-  };
-
-  // Get filtered services for each type
-  const filteredServicesByType = useMemo(() => {
-    const result: Record<string, Service[]> = {};
-    selectedTypes.forEach(type => {
-      result[type] = allServices
-        .filter(service => service.type === type && matchesFilters(service))
-        .sort((a, b) => a.price - b.price);
-    });
-    return result;
-  }, [selectedTypes, selectedCity, minRating, priceRange, areaQuery, foodQuery, allServices]);
-
-  // Generate service combinations
-  const serviceCombinations = useMemo(() => {
-    if (selectedTypes.length < 2) return [];
-
-    const combinations: Array<{
-      id: string;
-      services: Service[];
-      totalPrice: number;
-      types: string[];
-    }> = [];
-
-    const seenCombos = new Set<string>();
-    const maxServicesPerType = 10;  // Limit for performance
-
-    // Helper function to generate combinations
-    const generateCombos = (
-      typeIndex: number,
-      currentCombo: Service[],
-      currentTotal: number,
-      remainingTypes: string[]
-    ) => {
-      if (currentCombo.length === remainingTypes.length) {
-        const sortedIds = currentCombo.map(s => s.id).sort();
-        const comboKey = sortedIds.join('-');
-
-        if (!seenCombos.has(comboKey) &&
-          currentTotal >= priceRange[0] &&
-          currentTotal <= priceRange[1]) {
-          seenCombos.add(comboKey);
-          combinations.push({
-            id: comboKey,
-            services: [...currentCombo],
-            totalPrice: currentTotal,
-            types: remainingTypes
-          });
-        }
-        return;
-      }
-
-      const currentType = remainingTypes[typeIndex];
-      const services = filteredServicesByType[currentType] || [];
-      const limitedServices = services.slice(0, maxServicesPerType);
-
-      for (const service of limitedServices) {
-        if (!currentCombo.find(s => s.id === service.id)) {
-          const newTotal = currentTotal + service.price;
-          if (newTotal <= priceRange[1]) {
-            generateCombos(
-              typeIndex + 1,
-              [...currentCombo, service],
-              newTotal,
-              remainingTypes
-            );
-          }
-        }
-      }
+  // Generate combinations via utility
+  const combinationResults = useMemo(() => {
+    const filterCriteria: FilterCriteria = {
+      searchQuery: criteria.searchQuery,
+      selectedCity: criteria.selectedCity,
+      selectedTypes: criteria.selectedTypes,
+      priceRange: criteria.priceRange,
+      minRating: criteria.minRating,
+      areaQuery: areaQuery || criteria.areaQuery,
+      foodQuery: foodQuery || criteria.foodQuery
     };
 
-    // Start combination generation
-    generateCombos(0, [], 0, selectedTypes);
+    return getAllCombinationsSorted(allServices, filterCriteria, { maxCombinations: 1000, maxServicesPerType: 10 });
+  }, [allServices, criteria, areaQuery, foodQuery]);
 
-    return combinations.sort((a, b) => a.totalPrice - b.totalPrice);
-  }, [selectedTypes, filteredServicesByType, priceRange]);
+  const serviceCombinations = combinationResults.allCombinations.map(c => ({ id: c.id, services: c.services, totalPrice: c.totalMonthlyPrice, types: c.types }));
 
   // Get service type label
   // @ts-ignore - Will use this function in future implementations
@@ -1219,7 +1080,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
           <input
             type="text"
             placeholder="Search services, cities, or areas..."
-            value={searchQuery}
+            value={criteria.searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-12 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
           />
@@ -1269,10 +1130,8 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
                     onClick={() => setServiceTypeDropdownOpen(!serviceTypeDropdownOpen)}
                     className="w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-left flex items-center justify-between hover:border-slate-300 focus:ring-2 focus:ring-slate-700 focus:border-slate-700"
                   >
-                    <span className="text-slate-900">
-                      {selectedTypes.length === 0 ? 'All Services' : `${selectedTypes.length} selected`}
-                    </span>
-                    <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${serviceTypeDropdownOpen ? 'rotate-180' : ''}`} />
+                    <span className="text-slate-900">Select service types</span>
+                    <ChevronDown className="w-4 h-4 text-slate-400" />
                   </button>
 
                   {serviceTypeDropdownOpen && (

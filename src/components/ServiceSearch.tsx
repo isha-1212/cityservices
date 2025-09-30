@@ -4,6 +4,7 @@ import Papa from 'papaparse';
 import mockServices, { Service } from '../data/mockServices';
 import { ServiceDetails } from './ServiceDetails';
 import { UserStorage } from '../utils/userStorage';
+import { TransportModal } from './TransportModal';
 
 interface ServiceSearchProps {
   user?: any;
@@ -554,6 +555,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   const [showFoodSuggestions, setShowFoodSuggestions] = useState(false);
   const [serviceTypeDropdownOpen, setServiceTypeDropdownOpen] = useState(false);
   const [activeView, setActiveView] = useState<'combined' | 'individual'>('combined');
+  const [showTransportModal, setShowTransportModal] = useState(false);
 
   // Area suggestions for Ahmedabad
   const areaSuggestions = [
@@ -917,6 +919,12 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   ];
 
   const toggleServiceType = (type: string) => {
+    // Special handling for transport - open modal instead of adding to selected types
+    if (type === 'transport') {
+      setShowTransportModal(true);
+      return;
+    }
+
     setSelectedTypes(prev => {
       const newTypes = prev.includes(type)
         ? prev.filter(t => t !== type)
@@ -928,6 +936,19 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
 
       return newTypes;
     });
+  };
+
+  // Handle transport selection
+  const handleTransportSelect = (transportService: Service) => {
+    // Add the transport service to the CSV services list
+    setCsvServices(prev => [...prev, transportService]);
+
+    // Add transport to selected types to show it in results
+    if (!selectedTypes.includes('transport')) {
+      setSelectedTypes(prev => [...prev, 'transport']);
+    }
+
+    setShowTransportModal(false);
   };
 
   const removeServiceType = (type: string) => {
@@ -1615,6 +1636,13 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
           onClose={() => setSelectedService(null)}
         />
       )}
+
+      {/* Transport Modal */}
+      <TransportModal
+        isOpen={showTransportModal}
+        onClose={() => setShowTransportModal(false)}
+        onSelectTransport={handleTransportSelect}
+      />
     </div>
   );
 };

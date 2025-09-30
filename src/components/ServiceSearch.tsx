@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Filter, MapPin, Star, Heart, Grid2x2 as Grid, List, SlidersHorizontal, ChevronDown, X } from 'lucide-react';
+import { Search, MapPin, Star, Heart, Grid2x2 as Grid, List, SlidersHorizontal, ChevronDown, X } from 'lucide-react';
 import Papa from 'papaparse';
 import mockServices, { Service } from '../data/mockServices';
 import { ServiceDetails } from './ServiceDetails';
+
+interface ServiceSearchProps {
+  user?: any;
+  onAuthRequired?: () => void;
+}
 
 // Area image mappings
 import { VAISHNO_IMAGE } from '../data/areas/vaishno_devi_circle';
@@ -207,7 +212,7 @@ const defaultFoodImages = [
   'https://api.pizzahut.io/v1/content/en-in/in-1/images/pizza/mexican-fiesta.cd946a57e6c57c80adb6380aaf9bb7cb.1.jpg',
   'https://www.vikhrolicucina.com/uploads/stories/1641453929_deepfriedfhickenrolldarksurface.jpg',
   'https://hips.hearstapps.com/hmg-prod/images/creamy-gochujang-white-chicken-chili1-1671199708.jpg?crop=0.668xw:1.00xh;0.167xw,0&resize=640:*',
-   'https://images.immediate.co.uk/production/volatile/sites/30/2022/08/Fish-Tacos-1337495.jpg?quality=90&resize=708,643'
+  'https://images.immediate.co.uk/production/volatile/sites/30/2022/08/Fish-Tacos-1337495.jpg?quality=90&resize=708,643'
 ];
 // Function to get image based on food name keywords
 const getFoodImage = (dishName: string): string => {
@@ -274,12 +279,13 @@ const getFoodImage = (dishName: string): string => {
   }
 
   // Default fallback image for other food items
-  
+
   return getRandomImageFromCategory(defaultFoodImages);
 };
 // Helper function to get price unit based on service type
+// @ts-ignore - Will use serviceType parameter in future
 const getPriceUnit = (serviceType: string) => {
-  // All services now show monthly pricing for consistency
+
   return 'per month';
 };
 
@@ -321,7 +327,9 @@ const ServiceCombinationCard: React.FC<{
       </div>
 
       <div className="grid md:grid-cols-2 gap-3">
-        {combination.services.map((service, index) => (
+
+        {combination.services.map((service, // @ts-ignore - Will use index parameter in future implementations
+          index) => (
           <div key={service.id} className="border border-slate-100 rounded-lg p-3">
             <div className="flex items-center gap-3 mb-2">
               <img
@@ -515,8 +523,12 @@ const ServiceCard: React.FC<{
   );
 };
 
-const ServiceSearch: React.FC = () => {
+const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) => {
+
+
   // Pagination state for individual services
+
+
   const [individualPage, setIndividualPage] = useState(1);
   const INDIVIDUALS_PER_PAGE = 20;
   // Pagination state for combined services
@@ -882,6 +894,14 @@ const ServiceSearch: React.FC = () => {
   };
 
   const toggleBookmark = (serviceId: string, service: Service) => {
+    // Check if user is authenticated
+    if (!user) {
+      if (onAuthRequired) {
+        onAuthRequired();
+      }
+      return;
+    }
+
     const newBookmarksSet = new Set(bookmarkedIds);
     const isCurrentlyBookmarked = bookmarkedIds.has(serviceId);
 
@@ -1214,6 +1234,7 @@ const ServiceSearch: React.FC = () => {
   }, [allServices, selectedTypes, priceRange, selectedCity, minRating, areaQuery, foodQuery]);
 
   // Get service type label
+  // @ts-ignore - Will use this function in future implementations
   const getServiceTypeLabel = (type: string) => {
     return serviceTypes.find(t => t.value === type)?.label || type.charAt(0).toUpperCase() + type.slice(1);
   };
@@ -1657,5 +1678,5 @@ const ServiceSearch: React.FC = () => {
   );
 };
 
-export default ServiceSearch;
+export default React.memo(ServiceSearch);
 

@@ -1,13 +1,14 @@
 import React from 'react';
-import { MapPin, User, BookOpen, BarChart3, Calculator, Search } from 'lucide-react';
+import { MapPin, User, BookOpen, BarChart3, Calculator, Search, LogOut } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
   currentPage: string;
   onPageChange: (page: string) => void;
+  onSignOut?: () => void;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut }) => {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'search', label: 'Find Services', icon: Search },
@@ -42,11 +43,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
                   <button
                     key={item.id}
                     onClick={() => onPageChange(item.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive
-                        ? 'bg-slate-700 text-white shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                    }`}
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                      ? 'bg-slate-700 text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                      }`}
                   >
                     <Icon className="w-4 h-4" />
                     <span>{item.label}</span>
@@ -57,9 +57,15 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
 
             {/* User Menu */}
             <div className="flex items-center space-x-3">
-              <button className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
-                <User className="w-4 h-4 text-slate-600" />
-              </button>
+              {onSignOut && (
+                <button
+                  onClick={onSignOut}
+                  className="flex items-center space-x-2 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -82,11 +88,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
               <button
                 key={item.id}
                 onClick={() => onPageChange(item.id)}
-                className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-all duration-200 ${
-                  isActive
-                    ? 'text-slate-700'
-                    : 'text-slate-400 hover:text-slate-600'
-                }`}
+                className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-all duration-200 ${isActive
+                  ? 'text-slate-700'
+                  : 'text-slate-400 hover:text-slate-600'
+                  }`}
               >
                 <Icon className="w-5 h-5" />
                 <span className="text-xs font-medium">{item.label}</span>

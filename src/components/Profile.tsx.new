@@ -1,0 +1,40 @@
+import React, { useState, useEffect, ChangeEvent } from 'react';
+import { User, Settings, Bell, Edit3, Save, X } from 'lucide-react';
+import { supabase } from '../config/supabase';
+import { CustomSelect } from './CustomSelect.tsx';
+
+interface ProfileProps {
+  user: {
+    id?: string;
+    name?: string;
+    email?: string;
+    phone?: string;
+    city?: string;
+    profession?: string;
+    company?: string;
+  } | null;
+  onAuthRequired: () => void;
+}
+
+// Separate ProfileTab component to prevent re-creation
+interface ProfileTabProps {
+  profileData: {
+    name: string;
+    email: string;
+    phone: string;
+    city: string;
+    profession: string;
+    company: string;
+  };
+  onNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onPhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onCityChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onProfessionChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onCompanyChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSave: () => void;
+  isEditing: boolean;
+  onToggleEdit: () => void;
+  isLoading: boolean;
+  message: string;
+}

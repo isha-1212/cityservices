@@ -35,90 +35,248 @@ import { ODHAV_IMAGE } from '../data/areas/odhav';
 import { RAMOL_IMAGE } from '../data/areas/ramol';
 
 // Food image mappings for common food keywords
-const foodImageMappings: { [key: string]: string } = {
-  pizza: 'https://content.jdmagicbox.com/comp/def_content/pizza_outlets/default-pizza-outlets-3.jpg',
-  chicken: 'https://recipes.timesofindia.com/thumb/53096628.cms?imgsize=294753&width=800&height=800',
-  burger: 'https://www.shutterstock.com/image-photo/burger-tomateoes-lettuce-pickles-on-600nw-2309539129.jpg',
-  fries: 'https://whisperofyum.com/wp-content/uploads/2024/10/whisper-of-yum-homemade-french-fries.jpg',
-  roll: 'https://lh4.googleusercontent.com/proxy/EG-kWc7b5gqVrXOriIpVK4ao-jNHc5WfpDzv2g0PV_yIhzAl4tAXAy_9q69f00QG-3odYcWYf2jb7keCIUv5DCp2xp16tSMiXnpn',
-  shake: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCLEHanUKGeUgyUeL11JIOZxhel2wHL6VY0g&s',
-  pasta: 'https://img.freepik.com/free-photo/penne-pasta-tomato-sauce-with-chicken-tomatoes-wooden-table_2829-19739.jpg',
-  paneer: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8WO9N5Dqc4qI0F-DpCgZWDUeA3wted-3GMw&s',
-  strips: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZcMaCXgOU152Hb5a2vcnPCmxwI-AFNtyZxg&s',
-  pepsi: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRejMClxN69ZmomEGbAJMcI-8CjL8Par3l3og&s',
-  bhajipav: 'https://www.cubesnjuliennes.com/wp-content/uploads/2020/07/Instant-Pot-Mumbai-Pav-Bhaji-Recipe.jpg',
-  maggi: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcnHYgh3JBgmJdU8ZYSVj5PJCq8SyiyVubug&s',
-  popcorn: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWh1QyaQlXvE_bi3UJCYX4xo9r__1WgQqgmA&s'
+// Multiple food images for each category - add your links here
+const foodImageMappings: { [key: string]: string[] } = {
+  pizza: [
+    'https://content.jdmagicbox.com/comp/def_content/pizza_outlets/default-pizza-outlets-3.jpg',
+    // Add more pizza image links here
+    'https://www.allrecipes.com/thmb/fFW1o307WSqFFYQ3-QXYVpnFj6E=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/48727-Mikes-homemade-pizza-DDMFS-beauty-4x3-BG-2974-a7a9842c14e34ca699f3b7d7143256cf.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXSH5sF5LdtmDfNxiht4k2WWrOr7Ykr5ewkQ&s',
+    'https://recipesblob.oetker.in/assets/d8a4b00c292a43adbb9f96798e028f01/1272x764/pizza-pollo-arrostojpg.webp',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQugXpVRngY9P616NZ57jyx2kl-Xoq_DbC58A&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmomF1DksRYo9MLTC6zi2qx1XjX7R5PSqPYQ&s',
+    'https://cdn.loveandlemons.com/wp-content/uploads/2025/02/white-pizza.jpg',
+    'https://hips.hearstapps.com/hmg-prod/images/del090121artofpanpizza-001-1631547220.jpg?crop=0.668xw:1.00xh;0.0913xw,0&resize=1200:*',
+    'https://images.prismic.io/eataly-us/527aa8aa-73b6-42f4-89ec-18d96fd88502_ech-quattro-mani-matt-roan-pizza-horizontal-web.jpg?auto=compress,format',
+    'https://imgmediagumlet.lbb.in/media/2025/04/67ecf7bfab0f38157d4cdc5b_1743583167585.jpg'
+  ],
+  chicken: [
+    'https://recipes.timesofindia.com/thumb/53096628.cms?imgsize=294753&width=800&height=800',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBSL5dNEelGfIuqAC7BvXxZycMoI4XWh8KvA&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmAKp5o2Y7s06s6aKQBCkPDB4p9bGvgXlCHw&s',
+    'https://static.vecteezy.com/system/resources/thumbnails/015/933/661/small_2x/tandoori-chicken-is-an-indian-non-vegetarian-spicy-food-free-photo.jpg',
+    'https://static.toiimg.com/thumb/msid-62710927,width-1070,height-580,resizemode-75/62710927,pt-32,y_pad-40/62710927.jpg',
+    'https://media.istockphoto.com/id/1036815628/photo/cook-taking-ready-chicken-from-the-oven.jpg?s=612x612&w=0&k=20&c=EiLeypRgbBfFN9NimEm7GaKEjWaBOEeCSXtWInVXDy0=',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrGsgaAjq45IbuQVsRwxbTDazNZ3gRERjY9g&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1f3JSaRMk3XihEICcXyHboQv4alcyxxPK5A&s',
+    'https://img.freepik.com/free-psd/roasted-chicken-thighs-with-roasted-cherry-tomatoes_191095-86607.jpg?semt=ais_hybrid&w=740&q=80'
+    // Add more chicken image links here
+  ],
+  burger: [
+    'https://www.shutterstock.com/image-photo/burger-tomateoes-lettuce-pickles-on-600nw-2309539129.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI2FdiY1km0OdguHDQaSZIP_iHcM397h9elw&s',
+    'https://www.bigbasket.com/media/uploads/recipe/w-l/1647_1.jpg',
+    'https://b.zmtcdn.com/data/pictures/chains/6/18664896/4e0c0bafb3fe233938991cf1af655e79.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV8_Q9_dhNnojwi4KjDfPCyRs3ceY0QqGD4g&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuK-VOYVGWS0wNoZwBHlAHCYrk3E1NR7nNOg&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxxDEPDlN25j8MlaczpleFLzbgqaqnwgQaXw&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbXuD6uM0dMlaQkFm97QtW4wtIebQhm_iCEA&s',
+
+    // Add more burger image links here
+  ],
+  fries: [
+    'https://whisperofyum.com/wp-content/uploads/2024/10/whisper-of-yum-homemade-french-fries.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLetnQTeyzm8StHzS_UpZDjW5m9M1uP4uPxg&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOx-SR5j_W3-oFysSIgllwLEe8lSGzG7TU5A&s',
+    'https://www.simplyrecipes.com/thmb/MDEiuGvXNqCBBwNFHvz5vqlc0rI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Simply-Recipes-Crispy-French-Fries-LEAD-01-fa6a74d4412a41348e68d17ac200dc7f.jpg',
+    'https://kirbiecravings.com/wp-content/uploads/2019/09/easy-french-fries-1.jpg',
+    'https://www.savoryexperiments.com/wp-content/uploads/2024/02/Cajun-Fries-19.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZhqLCRsvKX-CYLu6BN4f064rukBiH4FYOTQ&s',
+    'https://www.seriouseats.com/thmb/ORAPWUIPpK1rm9cFByHagEFIPj4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20220202-shoestring-fries-vicky-wasik-14-b95af9af5f11476d87e6e6511a399f95.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAlM5JIxhwwaK0UzleeA0jrfQD6C7HCa93Vw&s',
+    'https://howtofeedaloon.com/wp-content/uploads/2022/06/poutine-IG-1.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjJxxpPvBl9zHYr41r18II57CTsz4pU1H1PQ&s'
+    // Add more fries image links here
+  ],
+  roll: [
+    'https://lh4.googleusercontent.com/proxy/EG-kWc7b5gqVrXOriIpVK4ao-jNHc5WfpDzv2g0PV_yIhzAl4tAXAy_9q69f00QG-3odYcWYf2jb7keCIUv5DCp2xp16tSMiXnpn',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaUuzcZwWQ198llZiWZ_BERbIuC6z6MJ6oQQ&s',
+    'https://www.cubesnjuliennes.com/wp-content/uploads/2021/01/Spring-Roll-Recipe.jpg',
+    'https://recipesblob.oetker.in/assets/b777acee3b1b47299ae7f47715e926fd/1272x764/roti-roll.webp',
+    'https://i.ytimg.com/vi/4vKiaay10EQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAX3Z070tzUnBhofnXzYSzCejXDoQ',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlr0ST4xI-WCWr9eH6IogXXlZpJ-KJPxJfqA&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_EQl6ami9nhmOXqKW1usTFI5RqVSAaHJIrQ&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgjVBlOKPYOcNfYK8cccuy9BLvS7Y-gK1Jhg&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFqpkAuY1KG60DIk1vH3UEfQ7DOp5ayCgSzg&s',
+    'https://i.ytimg.com/vi/NfQ7p_LzpUA/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDenQlVPqAu4VbSianFVxHPptlW8g',
+
+    // Add more roll image links here
+  ],
+  shake: [
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCLEHanUKGeUgyUeL11JIOZxhel2wHL6VY0g&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN4S8wWC1GZJDXq1Ex4K-v7gCmH7ieNfaMhg&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJjT7cbdKqsDepmmVNRtCnxozaB00TqaUm7Q&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2VH7WVaPdeuBfJ1KlHLrZYl0vxPdGnHZKbw&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_q3ORZ12s4Ozv6W8-ElJOwTyHOsZt7v3EUg&s',
+    'https://www.indianhealthyrecipes.com/wp-content/uploads/2021/04/mango-milkshake-recipe.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnYBUoc16NBjnEP1DFoaFi6Gh_Vp9OnetkKA&s',
+    'https://assets.epicurious.com/photos/54b02985766062b203446f26/1:1/w_2560%2Cc_limit/51155560_date-shake_1x1.jpg',
+    'https://www.indianhealthyrecipes.com/wp-content/uploads/2022/11/apple-milkshake-apple-shake.jpg',
+    'https://allthehealthythings.com/wp-content/uploads/2024/10/Vanilla-Protein-Shake-5-scaled.jpg',
+    'https://www.allrecipes.com/thmb/3JB5nGgpQciN2JcQpkYcGMUQlPo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Delicious-Healthy-Strawberry-Shake-Yoly-2000-7a3028d448b743ffaa7a378a53cf6376.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmbh66lV-fgsU2ctGFgyET17hxm0vWmA6LiQ&s'
+    // Add more shake image links here
+  ],
+  pasta: [
+    'https://img.freepik.com/free-photo/penne-pasta-tomato-sauce-with-chicken-tomatoes-wooden-table_2829-19739.jpg',
+    // Add more pasta image links here
+    'https://img.freepik.com/free-photo/penne-pasta-tomato-sauce-with-chicken-tomatoes-wooden-table_2829-19744.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuseICmSRDz0bNzjiDhhZjYAug1Qx0MdF_Ww&s',
+    'https://www.freepik.com/premium-photo/penne-pasta-tomato-sauce-with-chicken-tomatoes-wooden-table_7252875.htm#fromView=keyword&page=1&position=12&uuid=f1099a61-3719-4836-8cb4-7f7150ae1c3f&query=Pasta',
+    'https://www.freepik.com/free-ai-image/fresh-pasta-with-hearty-bolognese-parmesan-cheese-generated-by-ai_40967605.htm#fromView=keyword&page=1&position=17&uuid=f1099a61-3719-4836-8cb4-7f7150ae1c3f&query=Pasta',
+    'https://www.freepik.com/premium-photo/fusilli-pasta-with-bolognese-sauces-black-iron-pan_2821729.htm#fromView=keyword&page=1&position=22&uuid=f1099a61-3719-4836-8cb4-7f7150ae1c3f&query=Pasta',
+    'https://www.freepik.com/free-photo/front-view-rotini-pasta-plate-fork-dark-isolated-surface_12060457.htm#fromView=keyword&page=1&position=26&uuid=f1099a61-3719-4836-8cb4-7f7150ae1c3f&query=Pasta',
+    'https://www.freepik.com/premium-photo/penne-pasta-tomato-sauce-with-meat-tomatoes-decorated-with-pea-sprouts-dark-table_7599900.htm#fromView=keyword&page=1&position=29&uuid=f1099a61-3719-4836-8cb4-7f7150ae1c3f&query=Pasta',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGj5fp8DwKOgB02Y1w-suEvsEg_E0eYYdO_A&s'
+  ],
+  paneer: [
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8WO9N5Dqc4qI0F-DpCgZWDUeA3wted-3GMw&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4YXoM3ZxWpIE9enBRkY8N-RZuy35I2Ajc3A&s',
+    'https://www.cookwithmanali.com/wp-content/uploads/2019/08/Palak-Paneer-500x500.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQz70vemAQK_bB8Z1LAeoJd19XTzijuMz8e-g&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT6PUkvg0J_GTu6E3IiW5L3N8SCSuwjnfzBg&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgoib6oQaPydhbij7L7yaf39mqlH6iUsVIdw&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROx2aMRQ5lDjBeRfHjSlRBt2v408ZO-rWLLA&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJhtmxchl8lVryRqskmS8LFkmjuoIIouH5kw&s'
+    // Add more paneer image links here
+  ],
+  strips: [
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZcMaCXgOU152Hb5a2vcnPCmxwI-AFNtyZxg&s',
+    'https://www.licious.in/blog/wp-content/uploads/2022/09/Shutterstock_11203319452.jpg',
+    'https://www.thespruceeats.com/thmb/c86z_0bK4zKAU70EdvqFeHftXpE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/spicy-fried-chicken-strips-3056880-hero-01-e5bad43e0d3441749f17c1b98b5486c2.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlO5G7QQvbkb5VfPPj1nENgBjS87jjiilaKA&s',
+    'https://thesaltedpepper.com/wp-content/uploads/2022/10/Ninja-Foodi-Chicken-Tenders-sq.jpg',
+    'https://www.licious.in/blog/wp-content/uploads/2022/06/shutterstock_1839684667.jpg'
+    // Add more strips image links here
+  ],
+  pepsi: [
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRejMClxN69ZmomEGbAJMcI-8CjL8Par3l3og&s',
+    'https://www.shutterstock.com/image-photo/poznan-pol-aug-13-2019-600w-1481415659.jpg',
+    'https://design.pepsico.com/prod/s3fs-public/2023-07/Hero.jpg',
+    'https://static-www.adweek.com/wp-content/uploads/2025/04/sprite-soft-drink-3-2025.jpg?w=600&h=315&crop=1'
+    // Add more pepsi image links here
+  ],
+  bhajipav: [
+    'https://www.cubesnjuliennes.com/wp-content/uploads/2020/07/Instant-Pot-Mumbai-Pav-Bhaji-Recipe.jpg',
+    'https://content.jdmagicbox.com/comp/ahmedabad/j3/079pxx79.xx79.180829133404.i3j3/catalogue/ganesh-bhajipav-and-pulav-gota-gam-ahmedabad-pav-bhaji-centres-zd2ikhh085.jpg',
+    'https://b.zmtcdn.com/data/pictures/6/112976/f2c77dc7db1795c2fa187c14bf561673_o2_featured_v2.jpg?fit=around|960:500&crop=960:500;*,*',
+    'https://5.imimg.com/data5/WV/CF/MY-6552690/pav-bhaji-masala-500x500.jpg',
+    'https://media-assets.swiggy.com/swiggy/image/upload/f_auto,q_auto,fl_lossy/gnsx50vklhyvplnjx9b7',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSarhq0U7_Y8rjIjGgkMrznM3g4w0J_E6i-Qg&s',
+    'https://img.freepik.com/premium-photo/cheese-pav-bhaji-recipe-is-street-food-bhajipav-recipe-with-addition-cheese_466689-86301.jpg',
+    'https://content.jdmagicbox.com/comp/ahmedabad/k4/079pxx79.xx79.180118200041.b5k4/catalogue/maa-anjani-bhajipav-amraiwadi-ahmedabad-fast-food-v4o41.jpg',
+    'https://content.jdmagicbox.com/comp/ahmedabad/z5/079pxx79.xx79.200207190034.q8z5/catalogue/shree-kailash-bhajipav-raipur-ahmedabad-pav-bhaji-centres-3nwhzfkylm.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAlzDMlqg8DnDoPjY6_tQ7gdKo-5CNA_xdKw&s'
+    // Add more bhajipav image links here
+  ],
+  maggi: [
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcnHYgh3JBgmJdU8ZYSVj5PJCq8SyiyVubug&s',
+    'https://www.chefkunalkapur.com/wp-content/uploads/2024/08/lemon-coriander-noodles-1300x731.jpg?v=1723945390',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU6393z7EWuTVKCpcbhgKrfXxKL9Bi1vO4EQ&s',
+    'https://motionsandemotions.com/wp-content/uploads/2023/01/Untitled-design-2023-01-20T185.jpg',
+    'https://i.ytimg.com/vi/T09CbMLq6Wo/maxresdefault.jpg',
+    'https://www.licious.in/blog/wp-content/uploads/2020/12/Egg-Maggi.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfHoqo_FfJG9UnKLOtX6Trqxq7iHkd-h6ung&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUDUsGVGBR-qbYIiQEZBMwJt1Lro1cOMCV3A&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcUD9gPGF4s6pG1v9z4B9O1qwtz41Z4TFktg&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUd3ybGQYZGuQko9ylolfmyaM72lOR1Ne63Q&s',
+    'https://peekncooksa.blob.core.windows.net/index-recipe/chilli_garlic_maggi.jpg'
+
+    // Add more maggi image links here
+  ],
+  popcorn: [
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWh1QyaQlXvE_bi3UJCYX4xo9r__1WgQqgmA&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcdmOeiDvsiUDMzKIS8TkzMP_OgM6DZgOKbw&s',
+    'https://m.media-amazon.com/images/I/71WCHcFxA8L._UF894,1000_QL80_.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7tRfKQkmRi1FtZoB0ekYXAJLgWcpeXbUZ9Q&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStP5cfolcILyd8ZHskkzHuMKI8F5P-aTV7KQ&s'
+    // Add more popcorn image links here
+  ]
 };
 
+// Function to get random image from a category
+const getRandomImageFromCategory = (images: string[]): string => {
+  return images[Math.floor(Math.random() * images.length)];
+};
+
+const defaultFoodImages = [
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAD_kasqlYXaDOWO1rCq96ZJ77o2_3xYy1Tw&s',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsyIsecYsOE_HeJ4OeHJMOhHkbbaduCKLeSQ&s',
+  'https://hips.hearstapps.com/hmg-prod/images/del029924-grilled-teriyaki-cauliflower-steaks-099-rv-hires-index-65ec5a1b5cd03.jpg?crop=0.502xw:1.00xh;0.232xw,0&resize=640:*',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeybvEcRbCiMabkDDeAjOKpgeZLT74gWdkzA&s',
+  'https://api.pizzahut.io/v1/content/en-in/in-1/images/pizza/mexican-fiesta.cd946a57e6c57c80adb6380aaf9bb7cb.1.jpg',
+  'https://www.vikhrolicucina.com/uploads/stories/1641453929_deepfriedfhickenrolldarksurface.jpg',
+  'https://hips.hearstapps.com/hmg-prod/images/creamy-gochujang-white-chicken-chili1-1671199708.jpg?crop=0.668xw:1.00xh;0.167xw,0&resize=640:*',
+   'https://images.immediate.co.uk/production/volatile/sites/30/2022/08/Fish-Tacos-1337495.jpg?quality=90&resize=708,643'
+];
 // Function to get image based on food name keywords
 const getFoodImage = (dishName: string): string => {
   const name = dishName.toLowerCase();
 
   // Check for pizza variations first (especially from Pizza Hut)
   if (name.includes('pizza') || name.includes('- pizza') || name.includes('pizza hut')) {
-    return foodImageMappings.pizza;
+    return getRandomImageFromCategory(foodImageMappings.pizza);
   }
 
   // Check for roll variations (prioritized over chicken)
   if (name.includes('roll') || name.includes('wrap') || name.includes('kathi')) {
-    return foodImageMappings.roll;
+    return getRandomImageFromCategory(foodImageMappings.roll);
   }
 
   if (name.includes('maggi')) {
-    return foodImageMappings.maggi;
+    return getRandomImageFromCategory(foodImageMappings.maggi);
   }
 
   // Check for burger variations
   if (name.includes('burger') || name.includes('burg')) {
-    return foodImageMappings.burger;
+    return getRandomImageFromCategory(foodImageMappings.burger);
   }
 
   // Check for chicken variations (including common misspellings)
   if (name.includes('chicken') || name.includes('chiken') || name.includes('tikka') || name.includes('ckn')) {
-    return foodImageMappings.chicken;
+    return getRandomImageFromCategory(foodImageMappings.chicken);
   }
 
   // Check for fries variations
   if (name.includes('fries') || name.includes('fry') || name.includes('french')) {
-    return foodImageMappings.fries;
+    return getRandomImageFromCategory(foodImageMappings.fries);
   }
 
   // Check for shake variations
   if (name.includes('shake') || name.includes('smoothie') || name.includes('milkshake')) {
-    return foodImageMappings.shake;
+    return getRandomImageFromCategory(foodImageMappings.shake);
   }
 
   // Check for pasta variations
   if (name.includes('pasta') || name.includes('penne') || name.includes('spaghetti') || name.includes('macaroni')) {
-    return foodImageMappings.pasta;
+    return getRandomImageFromCategory(foodImageMappings.pasta);
   }
 
   // Check for paneer variations
   if (name.includes('paneer') || name.includes('cottage cheese') || name.includes('panir')) {
-    return foodImageMappings.paneer;
+    return getRandomImageFromCategory(foodImageMappings.paneer);
   }
 
   if (name.includes('popcorn')) {
-    return foodImageMappings.popcorn;
+    return getRandomImageFromCategory(foodImageMappings.popcorn);
   }
 
   if (name.includes('strips')) {
-    return foodImageMappings.strips;
+    return getRandomImageFromCategory(foodImageMappings.strips);
   }
 
   if (name.includes('pepsi')) {
-    return foodImageMappings.pepsi;
+    return getRandomImageFromCategory(foodImageMappings.pepsi);
   }
 
   if (name.includes('bhajipav') || name.includes('bhaji pav')) {
-    return foodImageMappings.bhajipav;
+    return getRandomImageFromCategory(foodImageMappings.bhajipav);
   }
 
   // Default fallback image for other food items
-  return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAD_kasqlYXaDOWO1rCq96ZJ77o2_3xYy1Tw&s';
+  
+  return getRandomImageFromCategory(defaultFoodImages);
 };
-
 // Helper function to get price unit based on service type
 const getPriceUnit = (serviceType: string) => {
   // All services now show monthly pricing for consistency
@@ -271,7 +429,14 @@ const ServiceCard: React.FC<{
   // Source tag logic
   let sourceTag = 'General';
   if (service.type === 'accommodation') sourceTag = 'Housing.com';
-  else if (service.type === 'food') sourceTag = 'Swiggy';
+  else if (service.type === 'food') {
+    // Check if it's Gujarat food data or Swiggy data
+    if (service.meta && service.meta['platform']) {
+      sourceTag = service.meta['platform']; // Swiggy, Zomato, UberEats
+    } else {
+      sourceTag = 'Swiggy'; // Default for old Swiggy data
+    }
+  }
   else if (service.type === 'tiffin') sourceTag = 'General';
 
   return (
@@ -407,16 +572,18 @@ const ServiceSearch: React.FC = () => {
     const loadCsvData = async () => {
       setLoading(true);
       try {
-        const [accommodationRes, tiffinRes, swiggyRes] = await Promise.all([
+        const [accommodationRes, tiffinRes, swiggyRes, gujaratFoodRes] = await Promise.all([
           fetch('/data/Accomodation/Ahmedabad-with-images.csv'),
           fetch('/data/Food/tifin_rental.csv'),
-          fetch('/data/Food/swiggy_Ahm.csv')
+          fetch('/data/Food/swiggy_Ahm.csv'),
+          fetch('/data/Food/gujrat_food.csv')
         ]);
 
-        const [accommodationText, tiffinText, swiggyText] = await Promise.all([
+        const [accommodationText, tiffinText, swiggyText, gujaratFoodText] = await Promise.all([
           accommodationRes.text(),
           tiffinRes.text(),
-          swiggyRes.text()
+          swiggyRes.text(),
+          gujaratFoodRes.text()
         ]);
 
         const services: Service[] = [];
@@ -573,6 +740,49 @@ const ServiceSearch: React.FC = () => {
           }
         });
 
+        // Parse Gujarat food data
+        Papa.parse(gujaratFoodText, {
+          header: true,
+          complete: (results: any) => {
+            results.data.forEach((row: any, idx: number) => {
+              if (!row['item_name'] || !row['restaurant_name']) return;
+
+              const serviceKey = `gujaratfood-${row['item_name']}-${row['restaurant_name']}-${row['city']}`;
+              if (seenServices.has(serviceKey)) return; // Skip duplicates
+              seenServices.add(serviceKey);
+
+              const price = Number(row['price']) || 0;
+              const rating = Number(row['rating']) || 0;
+              const itemName = row['item_name'] || 'Unknown Dish';
+
+              // Standardize city names and filter out unwanted cities
+              let city = (row['city'] || 'Ahmedabad').trim();
+
+              // Skip Anand city
+              if (city.toLowerCase() === 'anand') return;
+
+              // Standardize Vadodara to Baroda
+              if (city.toLowerCase() === 'vadodara') {
+                city = 'Baroda';
+              }
+
+              const service: Service = {
+                id: `gujaratfood-${Date.now()}-${idx}`,
+                name: `${itemName} - ${row['restaurant_name']}`,
+                type: 'food',
+                city: city,
+                price: price * 15, // Convert to monthly cost (assuming 15 orders per month)
+                rating: rating > 0 ? rating : 4.2 + Math.random() * 0.6,
+                description: `${row['primary_cuisine']} dish from ${row['restaurant_name']} in ${city}. Available on ${row['platform']}. (₹${price}/item, ~15 orders/month)`,
+                image: getFoodImage(itemName),
+                features: [row['restaurant_name'], city, row['primary_cuisine'], row['platform']].filter(Boolean),
+                meta: row
+              };
+              services.push(service);
+            });
+          }
+        });
+
         setCsvServices(services);
       } catch (error) {
         console.error('Failed to load CSV data:', error);
@@ -584,7 +794,7 @@ const ServiceSearch: React.FC = () => {
     loadCsvData();
   }, []);
 
-  // Combine and filter services - Remove duplicates by ID
+  // Combine and filter services - Remove duplicates by ID and standardize city names
   const allServices = useMemo(() => {
     const combined = [...mockServices, ...csvServices];
     const seen = new Set<string>();
@@ -593,6 +803,20 @@ const ServiceSearch: React.FC = () => {
         return false;
       }
       seen.add(service.id);
+
+      // Standardize city names and filter out unwanted cities
+      let city = service.city.toLowerCase().trim();
+
+      // Remove Anand from the list
+      if (city === 'anand') {
+        return false;
+      }
+
+      // Standardize Vadodara to Baroda
+      if (city === 'vadodara') {
+        service.city = 'Baroda';
+      }
+
       return true;
     });
   }, [csvServices]);
@@ -636,9 +860,7 @@ const ServiceSearch: React.FC = () => {
     { value: 'accommodation', label: 'Accommodation' },
     { value: 'food', label: 'Food' },
     { value: 'tiffin', label: 'Tiffin Service' },
-    { value: 'transport', label: 'Transport' },
-    { value: 'coworking', label: 'Co-working' },
-    { value: 'utilities', label: 'Utilities' }
+    { value: 'transport', label: 'Transport' }
   ];
 
   const toggleServiceType = (type: string) => {
@@ -753,7 +975,10 @@ const ServiceSearch: React.FC = () => {
         (service.meta && (
           (service.meta['Dish Name'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
           (service.meta['Category'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
-          (service.meta['Restaurant Name'] || '').toLowerCase().includes(foodQuery.toLowerCase())
+          (service.meta['Restaurant Name'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
+          (service.meta['item_name'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
+          (service.meta['primary_cuisine'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
+          (service.meta['restaurant_name'] || '').toLowerCase().includes(foodQuery.toLowerCase())
         ));
 
       return matchesType && matchesCity && matchesRating && matchesArea && matchesFood;
@@ -798,7 +1023,9 @@ const ServiceSearch: React.FC = () => {
       if (servicesByType[type]) {
         // If both accommodation and food are selected, exclude tiffin data from food
         if (type === 'food' && selectedTypes.includes('accommodation') && !selectedTypes.includes('tiffin')) {
-          selectedTypeServices[type] = servicesByType[type].filter(s => s.meta && s.meta['Restaurant Name']);
+          selectedTypeServices[type] = servicesByType[type].filter(s =>
+            s.meta && (s.meta['Restaurant Name'] || s.meta['restaurant_name'])
+          );
         } else if (type === 'tiffin') {
           selectedTypeServices[type] = servicesByType[type].filter(s => s.meta && s.meta['Estimated_Price_Per_Tiffin_INR']);
         } else {

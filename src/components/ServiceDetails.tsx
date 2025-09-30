@@ -21,7 +21,14 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
     // Source tag logic
     let sourceTag = 'General';
     if (service.type === 'accommodation') sourceTag = 'Housing.com';
-    else if (service.type === 'food') sourceTag = 'Swiggy';
+    else if (service.type === 'food') {
+        // Check if it's Gujarat food data or Swiggy data
+        if (service.meta && service.meta['platform']) {
+            sourceTag = service.meta['platform']; // Swiggy, Zomato, UberEats
+        } else {
+            sourceTag = 'Swiggy'; // Default for old Swiggy data
+        }
+    }
     else if (service.type === 'tiffin') sourceTag = 'General';
 
     return (

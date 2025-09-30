@@ -1,0 +1,501 @@
+restaurant_name,platform,city,primary_cuisine,item_name,price,rating
+Raju Omlet,Swiggy,Baroda,Fast Food,Cheesy Burger (Spicy),138,4.3
+Dil Se Re Restaurant,Zomato,Surat,Fast Food,Fries,580,3.4
+Seven Seas Restaurant,Zomato,Baroda,Continental,Steak Sandwich,692,3.9
+Subway,UberEats,Baroda,Continental,Fish and Chips (Special),241,3.7
+Hotel Surya,UberEats,Baroda,Continental,Pasta Primavera,606,3.8
+Lemon Tree Hotel,Zomato,Rajkot,North Indian,Dal Makhani (Combo),243,3.8
+Orchid,UberEats,Rajkot,Desserts,Rasmalai,301,4.5
+Sweet Truth - Cake and Desserts,UberEats,Rajkot,Italian,Garlic Bread (Special),446,3.9
+Sargam Food,UberEats,Rajkot,Italian,Pasta Alfredo (Combo),359,3.5
+Barbeque Nation,UberEats,Rajkot,Fast Food,Veg Wrap (Half),133,3.7
+Subway,UberEats,Baroda,Continental,Steak Sandwich (Spicy),193,3.7
+Domino's Pizza,Swiggy,Baroda,Continental,Steak Sandwich (Spicy),527,4.5
+Tandoor Palace,UberEats,Baroda,Italian,Pesto Pasta (Spicy),451,3.7
+Jani Locho,UberEats,Surat,Desserts,Rasmalai,503,3.7
+RV's Kitchen,UberEats,Rajkot,Gujarati,Dhokla,204,3.8
+Temptations Restaurant,Swiggy,Rajkot,Fast Food,Cheesy Burger (Special),150,4.4
+Cafe Coffee Day,Zomato,Baroda,Continental,Grilled Chicken (Special),416,3.5
+Sargam Kitchen,Zomato,Rajkot,Gujarati,Khandvi (Full),284,3.5
+The Banyan Deli,Zomato,Baroda,Fast Food,Club Sandwich,344,4.5
+The Imperial Palace,UberEats,Rajkot,Chinese,Fried Rice,684,3.9
+The Burger Company,UberEats,Rajkot,Desserts,Kulfi (Half),162,4.2
+Cafe Coffee Day,Swiggy,Baroda,Continental,Pasta Primavera (Half),319,3.5
+Jay Khodiyar Hotel & Restaurant,UberEats,Rajkot,Bakery,Cheesecake Slice,348,3.5
+Punjab Grill,UberEats,Baroda,Bakery,Chocolate Brownie (Spicy),380,3.7
+Patel Vihar Restaurant,UberEats,Rajkot,North Indian,Butter Chicken (Spicy),200,3.4
+Shree Kathiyawadi Khadki,UberEats,Baroda,Desserts,Gulab Jamun (Half),79,3.5
+Barbeque Nation,UberEats,Surat,Continental,Grilled Chicken,295,3.5
+Gopal Locho Khaman House,UberEats,Surat,Gujarati,Khandvi,261,3.9
+Mandap Dining Hall,Zomato,Baroda,North Indian,Paneer Butter Masala (Full),609,4.7
+Domino's Pizza,UberEats,Baroda,Continental,Grilled Chicken (Half),524,4.5
+Jay Khodiyar Hotel & Restaurant,Zomato,Rajkot,Bakery,Chocolate Brownie (Half),179,3.5
+Orchid,Swiggy,Rajkot,Desserts,Ice Cream Scoop (Full),456,4.5
+Cafe Coffee Day,UberEats,Baroda,Continental,Grilled Chicken (Special),329,3.5
+Raju Omlet,Zomato,Baroda,Fast Food,Chicken Nuggets (Combo),389,4.3
+Azure - The Gateway Hotel,Swiggy,Baroda,Biryani,Chicken Biryani,749,3.6
+Azure - The Gateway Hotel,Zomato,Baroda,Biryani,Mutton Biryani,608,3.6
+Big Bite,Swiggy,Rajkot,Continental,Caesar Salad,166,3.4
+Barbeque Nation,Zomato,Surat,Continental,Fish and Chips,228,3.8
+The Burger Company,Zomato,Rajkot,Desserts,Rasmalai,181,4.2
+RV's Kitchen,UberEats,Rajkot,Gujarati,Thepla,143,3.8
+Barbeque Nation,Zomato,Baroda,Desserts,Rasmalai,197,4
+Havmor Restaurant,Zomato,Baroda,Bakery,Blueberry Muffin (Combo),79,4
+Azure - The Gateway Hotel,Zomato,Baroda,Biryani,Veg Biryani,537,3.6
+Shree Maruti Nandan Kathiyawadi,Swiggy,Baroda,Continental,Steak Sandwich,665,4.6
+Barbeque Nation,Swiggy,Gandhinagar,North Indian,Paneer Butter Masala,415,3.4
+Sargam Kitchen,Zomato,Rajkot,Gujarati,Dhokla (Half),744,3.5
+Mahi Tandoor Village,UberEats,Baroda,Fast Food,Cheesy Burger (Half),102,4.3
+Havmor Ice Cream,Zomato,Baroda,Italian,Veggie Pizza,550,4
+Punjab Grill,UberEats,Baroda,Bakery,Cheesecake Slice,308,3.7
+Sayaji Hotel Restaurant,Swiggy,Baroda,Italian,Garlic Bread (Spicy),342,4.7
+Patel Vihar Restaurant,UberEats,Rajkot,North Indian,Paneer Butter Masala (Spicy),149,3.4
+Bayleaf Restaurant,UberEats,Baroda,Desserts,Kulfi,387,4.1
+McDonald's,Zomato,Baroda,Italian,Pasta Alfredo (Combo),310,3.5
+Orchid,UberEats,Rajkot,Desserts,Ice Cream Scoop (Full),202,4.5
+Shree Balaji Sandwich,UberEats,Surat,Bakery,Cheesecake Slice,359,4.7
+La Pino'z Pizza,Swiggy,Baroda,Chinese,Fried Rice (Special),346,4.7
+The Imperial Palace,UberEats,Rajkot,Chinese,Chilli Paneer (Full),280,3.9
+Azure - The Gateway Hotel,UberEats,Baroda,Biryani,Mutton Biryani (Half),503,3.6
+Barbeque Nation,Swiggy,Rajkot,Fast Food,Cheesy Burger (Combo),135,3.7
+Orchid,Swiggy,Rajkot,Desserts,Kulfi (Special),541,4.5
+The Chocolate Room,UberEats,Baroda,Italian,Veggie Pizza (Spicy),417,4.2
+Domino's Pizza,UberEats,Gandhinagar,Gujarati,Gujarati Thali,317,4.3
+Bayleaf Restaurant,Zomato,Baroda,Desserts,Gulab Jamun,339,4.1
+The Imperial Palace,UberEats,Rajkot,Chinese,Chow Mein (Spicy),338,3.9
+Shree Balaji Sandwich,Zomato,Surat,Gujarati,Thepla,278,3.4
+Pizza Hut,UberEats,Gandhinagar,Chinese,Chow Mein,133,4.4
+Pizza Hut,UberEats,Gandhinagar,Continental,Steak Sandwich,201,4.6
+Honest Restaurant,Swiggy,Rajkot,North Indian,Butter Chicken,216,3.9
+The Grand Thakkar Restaurant,UberEats,Rajkot,North Indian,Tandoori Roti,487,4.5
+That Place,UberEats,Baroda,Gujarati,Undhiyu (Half),613,4.6
+Sargam Kitchen,UberEats,Rajkot,Gujarati,Undhiyu,526,3.5
+Hotel Surya,Zomato,Baroda,Continental,Pasta Primavera,865,3.8
+Raju Omlet,Zomato,Baroda,Fast Food,Chicken Nuggets,354,4.3
+The Chocolate Room,Swiggy,Baroda,Italian,Pesto Pasta (Spicy),418,4.2
+Rasthal Food,UberEats,Baroda,Gujarati,Undhiyu (Half),401,3.3
+Barbeque Nation,Swiggy,Baroda,Desserts,Ice Cream Scoop,311,4
+Big Bite,Zomato,Rajkot,Continental,Fish and Chips,263,3.4
+Premvatika Restaurant,Swiggy,Rajkot,Bakery,Blueberry Muffin (Combo),68,3.6
+The Grand Thakkar Restaurant,Swiggy,Rajkot,North Indian,Tandoori Roti (Special),481,4.5
+The Burger Company,Zomato,Rajkot,Desserts,Chocolate Lava Cake,106,4.2
+Eva Cafe,Swiggy,Baroda,Italian,Pesto Pasta (Half),181,4
+The Blue Oven,Zomato,Rajkot,North Indian,Kadai Chicken (Special),339,3.6
+Barbeque Nation,Swiggy,Rajkot,Fast Food,Club Sandwich (Special),52,3.7
+Havmor Restaurant,Swiggy,Baroda,Bakery,Cheesecake Slice (Half),76,4
+Barbeque Nation,Swiggy,Rajkot,Fast Food,Cheesy Burger,102,3.7
+The Imperial Palace,UberEats,Rajkot,Chinese,Fried Rice (Special),207,3.9
+Varietea,Zomato,Baroda,Continental,Steak Sandwich (Half),296,3.4
+Patang Restaurant,UberEats,Gandhinagar,Continental,Steak Sandwich,738,3.5
+Domino's Pizza,UberEats,Baroda,Continental,Steak Sandwich (Special),436,4.5
+Shree Balaji Sandwich,Zomato,Surat,Bakery,Cheesecake Slice,187,4.7
+Subway,Zomato,Baroda,Continental,Steak Sandwich (Spicy),272,3.7
+Jalaram Khichdi,UberEats,Surat,North Indian,Kadai Chicken,380,4.1
+Domino's Pizza,UberEats,Baroda,Continental,Fish and Chips (Spicy),380,4.5
+Punjab Grill,Zomato,Baroda,Bakery,Sourdough Bread (Half),203,3.7
+Sargam Food,UberEats,Rajkot,Italian,Garlic Bread (Half),555,3.5
+Jalaram Khichdi,Zomato,Surat,Italian,Veggie Pizza,238,3.6
+The Grand Thakkar Restaurant,UberEats,Rajkot,North Indian,Kadai Chicken,696,4.5
+McDonald's,Zomato,Rajkot,North Indian,Kadai Chicken,113,4.1
+Tandoor Palace,UberEats,Baroda,Italian,Veggie Pizza,211,3.7
+Pizza Hut,Zomato,Baroda,Desserts,Rasmalai,318,3.8
+Pizza Hut,Zomato,Rajkot,Bakery,Cheesecake Slice,537,4.6
+Domino's Pizza,UberEats,Baroda,Continental,Steak Sandwich,301,4.5
+Hotel Surya,Zomato,Baroda,Continental,Fish and Chips,831,3.8
+Sankalp,Swiggy,Baroda,Bakery,Cheesecake Slice,441,3.9
+Blue Lagoon,UberEats,Baroda,Chinese,Spring Rolls,372,4.3
+Starbucks Coffee,Zomato,Rajkot,Bakery,Chocolate Brownie (Special),182,4.6
+The Imperial Palace,UberEats,Rajkot,Chinese,Chow Mein,286,3.9
+Barbeque Nation,UberEats,Rajkot,Fast Food,Veg Wrap,149,3.7
+The Blue Oven,Zomato,Rajkot,North Indian,Paneer Butter Masala,323,3.6
+Barbeque Nation,Swiggy,Baroda,Desserts,Kulfi (Full),229,4
+The Burger Company,Zomato,Rajkot,Desserts,Gulab Jamun,139,4.2
+Mahi Tandoor Village,Swiggy,Baroda,Fast Food,Chicken Nuggets,184,4.3
+Bayleaf Restaurant,Swiggy,Baroda,Desserts,Rasmalai,308,4.1
+Neelkanth Restaurant,Swiggy,Baroda,North Indian,Dal Makhani (Spicy),289,3.5
+McDonald's,Zomato,Rajkot,North Indian,Paneer Butter Masala,216,4.1
+Tandoor Palace,Zomato,Baroda,Italian,Pasta Alfredo,469,3.7
+Rasthal Food,Swiggy,Baroda,Gujarati,Thepla,585,3.3
+Havmor Restaurant,Swiggy,Baroda,Bakery,Sourdough Bread,191,4
+La Pino'z Pizza,Swiggy,Rajkot,Bakery,Blueberry Muffin (Special),400,4.1
+Shree Maruti Nandan Kathiyawadi,Swiggy,Baroda,Continental,Grilled Chicken (Half),625,4.6
+McDonald's,Swiggy,Gandhinagar,North Indian,Butter Chicken,926,3.7
+Barbeque Nation,Zomato,Baroda,Desserts,Ice Cream Scoop,562,4
+Tandoor Palace,UberEats,Baroda,Italian,Pesto Pasta (Combo),333,3.7
+Mahesh Pav Bhaji,UberEats,Surat,Chinese,Spring Rolls,644,4.6
+Balaji Sandwich,Zomato,Rajkot,Bakery,Sourdough Bread,432,3.8
+Mainland China,Zomato,Baroda,North Indian,Kadai Chicken (Half),94,4.2
+Domino's Pizza,UberEats,Surat,Italian,Margherita Pizza,624,4.2
+La Pino'z Pizza,Swiggy,Baroda,Chinese,Spring Rolls,617,4.7
+McDonald's,Zomato,Baroda,Italian,Pasta Alfredo,320,3.5
+Sweet Truth - Cake and Desserts,UberEats,Rajkot,Italian,Margherita Pizza (Full),683,3.9
+Huber & Holly,Zomato,Rajkot,Chinese,Chilli Paneer (Combo),479,4.1
+Theobroma,UberEats,Rajkot,Fast Food,Club Sandwich,88,4.5
+Pizza Hut,Swiggy,Baroda,Desserts,Ice Cream Scoop,352,3.8
+The Banyan Deli,Swiggy,Baroda,Fast Food,Fries (Full),178,4.5
+Mandap - Express Towers,UberEats,Baroda,Italian,Pesto Pasta,340,4.7
+The Blue Oven,Zomato,Rajkot,North Indian,Kadai Chicken (Half),653,3.6
+Hotel Surya,UberEats,Baroda,Continental,Fish and Chips (Spicy),330,3.8
+Sizzling Salsa,Zomato,Surat,Fast Food,Chicken Nuggets,123,4.4
+The Banyan Deli,Zomato,Baroda,Fast Food,Chicken Nuggets,162,4.5
+Temptations Restaurant,Swiggy,Rajkot,Fast Food,Chicken Nuggets,196,4.4
+Rasthal Food,UberEats,Baroda,Gujarati,Gujarati Thali (Full),587,3.3
+Temptations Restaurant,Zomato,Rajkot,Fast Food,Cheesy Burger (Special),100,4.4
+Rasoi Restaurant,UberEats,Surat,Desserts,Ice Cream Scoop,318,3.7
+The Grand Thakkar Restaurant,Zomato,Rajkot,North Indian,Tandoori Roti,936,4.5
+Drizzle's Pizza,Swiggy,Rajkot,Continental,Grilled Chicken,258,4.4
+Azure - The Gateway Hotel,Zomato,Baroda,Biryani,Egg Biryani (Special),787,3.6
+The Burger Company,UberEats,Rajkot,Desserts,Chocolate Lava Cake,206,4.2
+Pizza Hut,Swiggy,Baroda,Desserts,Chocolate Lava Cake (Half),510,3.8
+Purohit Thali,UberEats,Surat,Italian,Veggie Pizza,209,4.5
+Subway,UberEats,Baroda,Continental,Caesar Salad,332,3.7
+Bayleaf Restaurant,Swiggy,Baroda,Desserts,Rasmalai (Combo),275,4.1
+Big Bite,Zomato,Rajkot,Continental,Steak Sandwich,303,3.4
+Shree Maruti Nandan Kathiyawadi,Zomato,Baroda,Continental,Fish and Chips,191,4.6
+Shree Maruti Nandan Kathiyawadi,Zomato,Baroda,Continental,Grilled Chicken,512,4.6
+Mahi Tandoor Village,UberEats,Baroda,Fast Food,Club Sandwich,132,4.3
+The Banyan Deli,Swiggy,Baroda,Fast Food,Club Sandwich,361,4.5
+The Banyan Deli,Zomato,Baroda,Fast Food,Fries (Full),245,4.5
+The Burger Company,Zomato,Rajkot,Desserts,Kulfi (Spicy),78,4.2
+Starbucks Coffee,UberEats,Rajkot,Bakery,Chocolate Brownie (Special),172,4.6
+National Restaurant,UberEats,Rajkot,Continental,Steak Sandwich,770,4.5
+Sargam Kitchen,UberEats,Rajkot,Gujarati,Dhokla (Combo),500,3.5
+Huber & Holly,UberEats,Rajkot,Chinese,Chow Mein (Spicy),342,4.1
+National Restaurant,Swiggy,Rajkot,Continental,Grilled Chicken,384,4.5
+La Pino'z Pizza,Swiggy,Rajkot,Bakery,Chocolate Brownie (Half),207,4.1
+La Pino'z Pizza,Swiggy,Rajkot,Bakery,Croissant,182,4.1
+The Burger Company,UberEats,Rajkot,Desserts,Rasmalai,57,4.2
+Rasthal Food,Zomato,Baroda,Gujarati,Undhiyu (Half),747,3.3
+Cafe Coffee Day,Swiggy,Gandhinagar,Italian,Veggie Pizza,594,4.2
+Barbeque Nation,Swiggy,Baroda,Desserts,Gulab Jamun (Half),469,4
+Mandap - Express Towers,Swiggy,Baroda,Italian,Garlic Bread,585,4.7
+Seven Seas Restaurant,Swiggy,Baroda,Continental,Caesar Salad (Combo),869,3.9
+The Burger Company,UberEats,Rajkot,Desserts,Kulfi (Spicy),210,4.2
+The Grand Bhagwati,UberEats,Surat,Desserts,Rasmalai,179,4.2
+"Faasos - Wraps, Rolls & Shawarma",UberEats,Rajkot,Biryani,Mutton Biryani,500,4.1
+Shree Kathiyawadi Restaurant,Swiggy,Gandhinagar,Continental,Steak Sandwich,594,4.5
+Domino's Pizza,Zomato,Baroda,Continental,Steak Sandwich (Special),449,4.5
+La Pino'z Pizza,Swiggy,Baroda,Chinese,Chilli Paneer,226,4.7
+Patel Vihar Restaurant,Zomato,Rajkot,North Indian,Kadai Chicken,236,3.4
+McDonald's,Zomato,Baroda,Italian,Veggie Pizza (Half),326,3.5
+Temptations Restaurant,Zomato,Rajkot,Fast Food,Club Sandwich,118,4.4
+Barbeque Nation,UberEats,Baroda,Desserts,Gulab Jamun (Half),356,4
+The Chocolate Room,Swiggy,Gandhinagar,Biryani,Mutton Biryani,185,3.3
+Starbucks Coffee,Zomato,Rajkot,Bakery,Cheesecake Slice,206,4.6
+Mahi Tandoor Village,Swiggy,Baroda,Fast Food,Fries (Special),177,4.3
+Azure - The Gateway Hotel,Zomato,Baroda,Biryani,Hyderabadi Biryani,302,3.6
+Barbeque Nation,Swiggy,Baroda,Desserts,Kulfi,400,4
+The Burger Company,Zomato,Rajkot,Desserts,Kulfi (Half),93,4.2
+Rasthal Food,Zomato,Baroda,Gujarati,Gujarati Thali (Full),757,3.3
+Big Bite,Swiggy,Rajkot,Continental,Steak Sandwich,322,3.4
+Temptations Restaurant,Swiggy,Rajkot,Fast Food,Fries,175,4.4
+Eva Cafe,Swiggy,Baroda,Italian,Garlic Bread (Half),122,4
+Varietea,Zomato,Baroda,Continental,Pasta Primavera,486,3.4
+Hotel Isherwood,UberEats,Gandhinagar,Fast Food,Fries,69,4.6
+McDonald's,UberEats,Surat,Desserts,Ice Cream Scoop,206,4.1
+Drizzle's Pizza,Swiggy,Rajkot,Continental,Caesar Salad (Full),512,4.4
+Swati Family Restaurant,UberEats,Rajkot,Bakery,Chocolate Brownie,413,3.6
+Temptations Restaurant,Swiggy,Rajkot,Fast Food,Cheesy Burger (Full),205,4.4
+Sweet Truth - Cake and Desserts,UberEats,Rajkot,Italian,Margherita Pizza (Half),754,3.9
+Urban Tandoor,Zomato,Surat,Continental,Fish and Chips,454,4.1
+Pizza Hut,Zomato,Surat,Bakery,Sourdough Bread,296,3.8
+Punjab Grill,Swiggy,Baroda,Bakery,Blueberry Muffin,405,3.7
+Barbeque Nation,UberEats,Baroda,Desserts,Gulab Jamun,250,4
+Big Bite,Zomato,Rajkot,Continental,Grilled Chicken,319,3.4
+Pizza Hut,Swiggy,Gandhinagar,Italian,Pesto Pasta,157,3.8
+Big Bite,Swiggy,Rajkot,Continental,Fish and Chips (Half),244,3.4
+Jay Khodiyar Hotel & Restaurant,Swiggy,Rajkot,Bakery,Chocolate Brownie (Combo),249,3.5
+La Pino'z Pizza,Zomato,Baroda,Chinese,Spring Rolls,253,4.7
+Mandap - Express Towers,Swiggy,Baroda,Italian,Garlic Bread (Combo),875,4.7
+Rasthal Food,Zomato,Baroda,Gujarati,Gujarati Thali,383,3.3
+The Imperial Palace,UberEats,Rajkot,Chinese,Spring Rolls (Half),498,3.9
+La Pino'z Pizza,Swiggy,Baroda,Chinese,Chilli Paneer (Special),602,4.7
+Rasthal Food,UberEats,Baroda,Gujarati,Thepla,738,3.3
+Sizzling Salsa,UberEats,Surat,Italian,Margherita Pizza,125,4.7
+Eva Cafe,UberEats,Baroda,Italian,Pasta Alfredo,242,4
+Seven Seas Restaurant,UberEats,Baroda,Continental,Steak Sandwich (Half),661,3.9
+Nanavati Restaurant,Zomato,Surat,Chinese,Manchurian,630,4.2
+Taste of Bhagwati,UberEats,Surat,Fast Food,Fries,179,4.8
+Domino's Pizza,Swiggy,Baroda,Continental,Grilled Chicken,378,4.5
+Jay Khodiyar Hotel & Restaurant,Swiggy,Rajkot,Bakery,Cheesecake Slice (Combo),306,3.5
+Temptations Restaurant,Swiggy,Rajkot,Fast Food,Club Sandwich,57,4.4
+Pizza Hut,UberEats,Gandhinagar,Bakery,Blueberry Muffin,304,4.4
+Hotel Surya,Zomato,Baroda,Continental,Steak Sandwich,281,3.8
+Lemon Tree Hotel,UberEats,Rajkot,North Indian,Paneer Butter Masala (Combo),558,3.8
+Huber & Holly,UberEats,Rajkot,Chinese,Chow Mein,333,4.1
+Patang Restaurant,UberEats,Gandhinagar,Continental,Fish and Chips,885,4.7
+The Blue Oven,UberEats,Rajkot,North Indian,Kadai Chicken (Special),408,3.6
+The Imperial Palace,Swiggy,Rajkot,Chinese,Manchurian (Special),457,3.9
+Sayaji Hotel Restaurant,Swiggy,Baroda,Italian,Margherita Pizza,663,4.7
+Subway,Zomato,Baroda,Continental,Caesar Salad,170,3.7
+Blue Lagoon,Zomato,Baroda,Chinese,Fried Rice,642,4.3
+The Burger Company,UberEats,Rajkot,Desserts,Ice Cream Scoop,84,4.2
+Shree Maruti Nandan Kathiyawadi,Zomato,Baroda,Continental,Pasta Primavera,368,4.6
+Shree Maruti Nandan Kathiyawadi,Zomato,Baroda,Continental,Fish and Chips (Half),543,4.6
+Raju Omlet,UberEats,Baroda,Fast Food,Chicken Nuggets (Combo),121,4.3
+Seven Seas Restaurant,Swiggy,Baroda,Continental,Steak Sandwich (Half),721,3.9
+Blue Lagoon,Zomato,Baroda,Chinese,Fried Rice (Combo),311,4.3
+Eva Cafe,UberEats,Baroda,Italian,Pesto Pasta (Combo),117,4
+That Place,UberEats,Baroda,Gujarati,Gujarati Thali (Special),269,4.6
+Taste of Bhagwati,UberEats,Surat,Italian,Pesto Pasta,902,3.8
+Barbeque Nation,Zomato,Baroda,Desserts,Kulfi,188,4
+Sargam Food,UberEats,Rajkot,Italian,Pesto Pasta,507,3.5
+That Place,Swiggy,Baroda,Gujarati,Undhiyu,333,4.6
+La Pino'z Pizza,Swiggy,Rajkot,Bakery,Sourdough Bread (Full),441,4.1
+The Grand Thakkar Restaurant,Swiggy,Rajkot,North Indian,Tandoori Roti,384,4.5
+Shreeji Locho,Zomato,Surat,Fast Food,Club Sandwich,156,3.4
+Bayleaf Restaurant,UberEats,Baroda,Desserts,Gulab Jamun,220,4.1
+The Chocolate Room,Swiggy,Baroda,Italian,Pesto Pasta (Full),324,4.2
+That Place,Swiggy,Baroda,Gujarati,Thepla,803,4.6
+Shree Maruti Nandan Kathiyawadi,Zomato,Baroda,Continental,Grilled Chicken (Half),228,4.6
+Shree Kathiyawadi Khadki,UberEats,Baroda,Desserts,Chocolate Lava Cake (Special),193,3.5
+The Banyan Deli,Swiggy,Baroda,Fast Food,Cheesy Burger (Full),262,4.5
+Mahi Tandoor Village,Swiggy,Baroda,Fast Food,Cheesy Burger (Half),118,4.3
+The Chocolate Room,UberEats,Baroda,Italian,Pesto Pasta (Full),298,4.2
+Cafe Coffee Day,Zomato,Baroda,Continental,Pasta Primavera,447,3.5
+Havmor Ice Cream,Zomato,Baroda,Italian,Pasta Alfredo,238,4
+Swati Family Restaurant,Swiggy,Rajkot,Bakery,Cheesecake Slice (Half),212,3.6
+Barbeque Nation,Swiggy,Baroda,Desserts,Chocolate Lava Cake,321,4
+Oven Magick,Zomato,Surat,Desserts,Gulab Jamun,226,4.1
+Hotel Surya,Zomato,Baroda,Continental,Caesar Salad (Spicy),296,3.8
+Eva Cafe,UberEats,Baroda,Italian,Garlic Bread (Half),249,4
+Barbeque Nation,UberEats,Rajkot,Fast Food,Cheesy Burger,105,3.7
+Mahesh Pav Bhaji,UberEats,Surat,Italian,Veggie Pizza,535,3.7
+Gopal Locho Khaman House,UberEats,Surat,Italian,Garlic Bread,187,3.6
+Pizza Hut,UberEats,Surat,Italian,Pasta Alfredo,998,4.1
+National Restaurant,UberEats,Rajkot,Continental,Pasta Primavera (Spicy),927,4.5
+Honest Restaurant,Swiggy,Rajkot,North Indian,Tandoori Roti (Full),127,3.9
+Jay Khodiyar Hotel & Restaurant,UberEats,Rajkot,Bakery,Blueberry Muffin (Combo),134,3.5
+Orchid,Swiggy,Rajkot,Desserts,Chocolate Lava Cake (Spicy),337,4.5
+Patel Vihar Restaurant,Swiggy,Rajkot,North Indian,Butter Chicken (Spicy),280,3.4
+Sargam Kitchen,UberEats,Rajkot,Gujarati,Gujarati Thali,584,3.5
+The Imperial Palace,Swiggy,Rajkot,Chinese,Chilli Paneer,617,3.9
+Shree Kathiyawadi Khadki,Zomato,Baroda,Desserts,Kulfi,112,3.5
+Shree Maruti Nandan Kathiyawadi,Zomato,Baroda,Continental,Caesar Salad (Full),337,4.6
+Blue Lagoon,Zomato,Baroda,Chinese,Chilli Paneer (Combo),385,4.3
+Pizza Hut,Swiggy,Baroda,Desserts,Kulfi,198,3.8
+Domino's Pizza,Zomato,Baroda,Continental,Caesar Salad,603,4.5
+Sayaji Hotel Restaurant,Swiggy,Baroda,Italian,Garlic Bread,241,4.7
+La Pino'z Pizza,UberEats,Baroda,Chinese,Chilli Paneer (Special),646,4.7
+Cafe Coffee Day,Zomato,Baroda,Continental,Fish and Chips (Combo),535,3.5
+Sankalp,Swiggy,Rajkot,Italian,Garlic Bread,210,4.3
+Cafe Frespresso,Swiggy,Baroda,Desserts,Rasmalai (Special),277,3.6
+Cafe Coffee Day,Zomato,Baroda,Continental,Pasta Primavera (Half),263,3.5
+La Pino'z Pizza,UberEats,Surat,Chinese,Chilli Paneer,575,4.1
+Huber & Holly,Zomato,Rajkot,Chinese,Fried Rice (Combo),372,4.1
+The Chocolate Room,Swiggy,Rajkot,Bakery,Croissant,369,4.2
+Jay Khodiyar Hotel & Restaurant,UberEats,Rajkot,Bakery,Chocolate Brownie (Full),280,3.5
+Mocha,UberEats,Gandhinagar,Gujarati,Khandvi,208,4.7
+Theobroma,UberEats,Rajkot,Fast Food,Cheesy Burger,56,4.5
+Leonardo Italian Mediterranean Dining,Zomato,Surat,North Indian,Tandoori Roti,300,3.7
+That Place,UberEats,Baroda,Gujarati,Dhokla (Half),674,4.6
+Poco Loco,UberEats,Surat,Biryani,Veg Biryani,227,4
+La Pino'z Pizza,Swiggy,Rajkot,Bakery,Blueberry Muffin (Full),620,4.1
+Cafe Coffee Day,Swiggy,Gandhinagar,Italian,Garlic Bread,430,4.3
+Havmor Restaurant,Swiggy,Baroda,Bakery,Cheesecake Slice,113,4
+Raju Omlet,Zomato,Baroda,Fast Food,Fries (Spicy),226,4.3
+Mahi Tandoor Village,UberEats,Baroda,Fast Food,Veg Wrap,100,4.3
+Ristretto Cafe,UberEats,Gandhinagar,Continental,Fish and Chips,414,3.9
+Shree Maruti Nandan Kathiyawadi,Swiggy,Gandhinagar,Gujarati,Gujarati Thali,153,4.3
+Barbeque Nation,UberEats,Baroda,Desserts,Rasmalai,276,4
+The Grand Thakkar Restaurant,UberEats,Rajkot,North Indian,Dal Makhani (Spicy),503,4.5
+The Grand Thakkar Restaurant,Swiggy,Rajkot,North Indian,Dal Makhani (Spicy),604,4.5
+Barbeque Nation,Swiggy,Gandhinagar,North Indian,Dal Makhani,664,3.8
+Orchid,UberEats,Rajkot,Desserts,Kulfi,581,4.5
+Eva Cafe,UberEats,Baroda,Italian,Pasta Alfredo (Full),102,4
+Surti 12 Handi,Zomato,Surat,Italian,Pesto Pasta,590,3.4
+Shree Kathiyawadi Khadki,UberEats,Baroda,Desserts,Chocolate Lava Cake (Full),182,3.5
+Havmor Restaurant,UberEats,Baroda,Bakery,Croissant,147,4
+The Chocolate Room,Swiggy,Rajkot,Bakery,Sourdough Bread,289,4.2
+Bayleaf Restaurant,Swiggy,Baroda,Desserts,Kulfi (Special),186,4.1
+Barbeque Nation,Swiggy,Gandhinagar,Fast Food,Cheesy Burger,400,4.2
+National Restaurant,Swiggy,Rajkot,Continental,Pasta Primavera,538,4.5
+Poco Loco,UberEats,Surat,Italian,Pasta Alfredo,430,4.3
+The Banyan Deli,Zomato,Baroda,Fast Food,Fries (Half),206,4.5
+La Pino'z Pizza,Zomato,Baroda,Chinese,Chow Mein,243,4.7
+Shree Kathiyawadi Khadki,Zomato,Baroda,Desserts,Chocolate Lava Cake (Special),88,3.5
+Punjab Grill,Swiggy,Baroda,Bakery,Chocolate Brownie (Combo),319,3.7
+Barbeque Nation,UberEats,Rajkot,Fast Food,Club Sandwich (Full),129,3.7
+Shree Maruti Nandan Kathiyawadi,Swiggy,Baroda,Continental,Caesar Salad (Half),199,4.6
+Orchid,Swiggy,Rajkot,Desserts,Rasmalai,611,4.5
+The Chocolate Room,UberEats,Gandhinagar,Biryani,Mutton Biryani,117,3.3
+Jay Mahakali Sev Usal,UberEats,Gandhinagar,Fast Food,Cheesy Burger,199,4.2
+Sargam Kitchen,UberEats,Rajkot,Gujarati,Khandvi,802,3.5
+Lemon Tree Hotel,Zomato,Rajkot,North Indian,Tandoori Roti (Special),238,3.8
+Lieto - Artisan Pizza & More,Zomato,Rajkot,Fast Food,Chicken Nuggets (Full),129,4.4
+Jalaram Khichdi,Zomato,Surat,Chinese,Fried Rice,862,4.7
+Temptations Restaurant,Swiggy,Rajkot,Fast Food,Cheesy Burger (Combo),193,4.4
+Sweet Truth - Cake and Desserts,UberEats,Rajkot,Italian,Margherita Pizza (Combo),728,3.9
+Poco Loco,UberEats,Surat,Italian,Margherita Pizza,401,4
+Eva Cafe,Swiggy,Baroda,Italian,Veggie Pizza,300,4
+The Grand Bhagwati,Zomato,Surat,Italian,Margherita Pizza,273,3.6
+The Grand Thakkar Restaurant,UberEats,Rajkot,North Indian,Butter Chicken (Half),616,4.5
+Sankalp,Zomato,Rajkot,Italian,Margherita Pizza (Special),198,4.3
+Varietea,UberEats,Gandhinagar,Bakery,Blueberry Muffin,78,4.4
+Huber & Holly,Zomato,Rajkot,Chinese,Chow Mein (Spicy),241,4.1
+La Pino'z Pizza,Swiggy,Rajkot,Bakery,Cheesecake Slice (Full),362,4.1
+Blue Lagoon,Swiggy,Baroda,Chinese,Chow Mein (Special),533,4.3
+Hotel Surya,UberEats,Baroda,Continental,Pasta Primavera (Combo),792,3.8
+Pizza Hut,Zomato,Rajkot,Bakery,Blueberry Muffin (Combo),469,4.6
+Eva Cafe,Swiggy,Baroda,Italian,Garlic Bread,282,4
+Sargam Kitchen,Zomato,Rajkot,Gujarati,Khandvi,475,3.5
+Neelkanth Restaurant,Swiggy,Baroda,North Indian,Dal Makhani (Half),774,3.5
+Raju Omlet,Swiggy,Baroda,Fast Food,Fries (Full),388,4.3
+Hotel Golden Star,Zomato,Surat,Gujarati,Undhiyu,170,4.1
+Sweet Truth - Cake and Desserts,UberEats,Rajkot,Italian,Pasta Alfredo,805,3.9
+Mahi Tandoor Village,Swiggy,Baroda,Fast Food,Cheesy Burger,163,4.3
+Cafe Frespresso,Swiggy,Baroda,Desserts,Ice Cream Scoop,441,3.6
+Seven Seas Restaurant,UberEats,Baroda,Continental,Caesar Salad (Full),301,3.9
+Starbucks Coffee,UberEats,Rajkot,Bakery,Cheesecake Slice,212,4.6
+Barbeque Nation,Swiggy,Baroda,Desserts,Kulfi (Half),204,4
+Huber & Holly,UberEats,Rajkot,Chinese,Chilli Paneer,376,4.1
+Blue Lagoon,Swiggy,Baroda,Chinese,Spring Rolls (Spicy),369,4.3
+Tea Post,Swiggy,Rajkot,Continental,Steak Sandwich,289,4.1
+That Place,UberEats,Baroda,Gujarati,Dhokla,597,4.6
+National Restaurant,UberEats,Rajkot,Continental,Fish and Chips,702,4.5
+That Place,UberEats,Baroda,Gujarati,Gujarati Thali (Half),340,4.6
+Swati Family Restaurant,Swiggy,Rajkot,Bakery,Blueberry Muffin,176,3.6
+Jay Khodiyar Hotel & Restaurant,Zomato,Rajkot,Bakery,Chocolate Brownie (Special),220,3.5
+Bayleaf Restaurant,Swiggy,Baroda,Desserts,Gulab Jamun,126,4.1
+That Place,UberEats,Baroda,Gujarati,Undhiyu,510,4.6
+Orchid,Swiggy,Rajkot,Desserts,Chocolate Lava Cake (Half),330,4.5
+Shree Maruti Nandan Kathiyawadi,UberEats,Baroda,Continental,Pasta Primavera,293,4.6
+Swati Family Restaurant,Swiggy,Rajkot,Bakery,Cheesecake Slice (Special),140,3.6
+Rasthal Food,Zomato,Baroda,Gujarati,Gujarati Thali (Half),732,3.3
+Lieto - Artisan Pizza & More,Zomato,Rajkot,Fast Food,Fries,89,4.4
+Raju Omlet,Zomato,Baroda,Fast Food,Fries (Full),197,4.3
+Starbucks Coffee,Zomato,Rajkot,Bakery,Croissant,72,4.6
+Balaji Sandwich,Swiggy,Rajkot,Bakery,Cheesecake Slice (Special),371,3.8
+Patel Vihar Restaurant,Swiggy,Rajkot,North Indian,Dal Makhani (Spicy),289,3.4
+Tandoor Palace,Zomato,Baroda,Italian,Pasta Alfredo (Half),554,3.7
+Honest Restaurant,UberEats,Baroda,Gujarati,Gujarati Thali,545,3.8
+Rasthal Food,UberEats,Baroda,Gujarati,Gujarati Thali,266,3.3
+KFC,Swiggy,Gandhinagar,Fast Food,Fries,367,3.5
+Ristretto Cafe,UberEats,Gandhinagar,Italian,Pesto Pasta,338,4.6
+Jalaram Khichdi,UberEats,Surat,Desserts,Rasmalai,72,4.4
+Barbeque Nation,Swiggy,Baroda,Desserts,Gulab Jamun,166,4
+Jay Khodiyar Hotel & Restaurant,Zomato,Rajkot,Bakery,Blueberry Muffin,412,3.5
+Premvatika Restaurant,Swiggy,Rajkot,Bakery,Cheesecake Slice,195,3.6
+Oven Magick,UberEats,Surat,Italian,Pasta Alfredo,494,4
+Mahi Tandoor Village,Swiggy,Baroda,Fast Food,Veg Wrap,110,4.3
+Premvatika Restaurant,UberEats,Rajkot,Bakery,Chocolate Brownie (Combo),69,3.6
+Cafe Coffee Day,Swiggy,Baroda,Continental,Grilled Chicken (Special),405,3.5
+Swati Family Restaurant,Swiggy,Rajkot,Bakery,Sourdough Bread (Half),321,3.6
+Neelkanth Restaurant,Swiggy,Baroda,North Indian,Paneer Butter Masala,844,3.5
+Seven Seas Restaurant,Zomato,Baroda,Continental,Caesar Salad (Full),914,3.9
+Sargam Kitchen,UberEats,Rajkot,Gujarati,Gujarati Thali (Full),555,3.5
+Punjab Grill,Zomato,Baroda,Bakery,Sourdough Bread,405,3.7
+Azure - The Gateway Hotel,UberEats,Baroda,Biryani,Mutton Biryani,712,3.6
+Raju Omlet,Swiggy,Baroda,Fast Food,Cheesy Burger,317,4.3
+Barbeque Nation,Zomato,Baroda,Desserts,Chocolate Lava Cake,346,4
+Havmor Restaurant,Swiggy,Baroda,Bakery,Croissant (Special),98,4
+The Chocolate Room,Swiggy,Baroda,Italian,Margherita Pizza,670,4.2
+Barbeque Nation,Swiggy,Rajkot,Fast Food,Cheesy Burger (Special),84,3.7
+Cafe Coffee Day,Swiggy,Baroda,Continental,Fish and Chips,520,3.5
+The Grand Thakkar Restaurant,UberEats,Rajkot,North Indian,Dal Makhani (Combo),905,4.5
+Punjab Grill,Zomato,Baroda,Bakery,Blueberry Muffin (Half),362,3.7
+Raju Omlet,UberEats,Baroda,Fast Food,Club Sandwich,314,4.3
+Mahi Tandoor Village,Swiggy,Baroda,Fast Food,Veg Wrap (Spicy),58,4.3
+Purohit Thali,Zomato,Surat,North Indian,Tandoori Roti,361,4.4
+Cafe Coffee Day,UberEats,Baroda,Continental,Fish and Chips (Combo),395,3.5
+Big Bite,UberEats,Rajkot,Continental,Fish and Chips,278,3.4
+That Place,UberEats,Baroda,Gujarati,Gujarati Thali,417,4.6
+Patel Vihar Restaurant,Zomato,Rajkot,North Indian,Butter Chicken,123,3.4
+Swati Family Restaurant,UberEats,Rajkot,Bakery,Chocolate Brownie (Spicy),201,3.6
+The Imperial Palace,Swiggy,Rajkot,Chinese,Manchurian,428,3.9
+Lemon Tree Hotel,UberEats,Rajkot,North Indian,Paneer Butter Masala (Half),552,3.8
+Mahi Tandoor Village,Swiggy,Baroda,Fast Food,Veg Wrap (Combo),96,4.3
+Big Bite,Zomato,Rajkot,Continental,Fish and Chips (Half),180,3.4
+That Place,Swiggy,Baroda,Gujarati,Khandvi (Combo),359,4.6
+La Pino'z Pizza,Swiggy,Rajkot,Bakery,Cheesecake Slice (Half),557,4.1
+That Place,Swiggy,Baroda,Gujarati,Gujarati Thali,472,4.6
+Barbeque Nation,UberEats,Surat,Gujarati,Dhokla,108,3.5
+La Pino'z Pizza,Zomato,Rajkot,Bakery,Sourdough Bread (Full),432,4.1
+Jani Locho,UberEats,Surat,Chinese,Spring Rolls,479,4.5
+La Pino'z Pizza,UberEats,Baroda,Chinese,Fried Rice,556,4.7
+Leonardo Italian Mediterranean Dining,UberEats,Surat,Gujarati,Gujarati Thali,513,4
+Temptations Restaurant,Zomato,Rajkot,Fast Food,Cheesy Burger (Spicy),61,4.4
+Punjab Grill,UberEats,Baroda,Bakery,Sourdough Bread,154,3.7
+Sweet Truth - Cake and Desserts,Swiggy,Rajkot,Italian,Margherita Pizza (Full),560,3.9
+McDonald's,UberEats,Baroda,Italian,Pesto Pasta,282,3.5
+Varietea,Zomato,Baroda,Continental,Grilled Chicken,214,3.4
+Domino's Pizza,Zomato,Baroda,Continental,Pasta Primavera,465,4.5
+Varietea,Zomato,Baroda,Continental,Caesar Salad (Special),199,3.4
+Patel Vihar Restaurant,Zomato,Rajkot,North Indian,Tandoori Roti,156,3.4
+Sweet Truth - Cake and Desserts,Swiggy,Rajkot,Italian,Margherita Pizza (Combo),1001,3.9
+Surti 12 Handi,Zomato,Surat,Chinese,Manchurian,138,3.6
+Oven Magick,UberEats,Surat,Desserts,Gulab Jamun,312,4.1
+"Faasos - Wraps, Rolls & Shawarma",UberEats,Rajkot,Biryani,Egg Biryani (Full),181,4.1
+Big Bite,Zomato,Rajkot,Continental,Pasta Primavera,208,3.4
+Sweet Truth - Cake and Desserts,Swiggy,Rajkot,Italian,Veggie Pizza,497,3.9
+The Grand Thakkar Restaurant,UberEats,Rajkot,North Indian,Paneer Butter Masala (Special),648,4.5
+Domino's Pizza,UberEats,Baroda,Continental,Grilled Chicken,500,4.5
+Raju Omlet,Zomato,Baroda,Fast Food,Cheesy Burger,358,4.3
+Sargam Kitchen,Zomato,Rajkot,Gujarati,Thepla,321,3.5
+Pizza Hut,Zomato,Rajkot,Bakery,Croissant (Combo),577,4.6
+Pizza Hut,Swiggy,Baroda,Desserts,Rasmalai (Spicy),494,3.8
+That Place,Swiggy,Baroda,Gujarati,Thepla (Full),264,4.6
+Eva Cafe,UberEats,Baroda,Italian,Garlic Bread,299,4
+Jay Khodiyar Hotel & Restaurant,Zomato,Rajkot,Bakery,Blueberry Muffin (Combo),168,3.5
+Barbeque Nation,UberEats,Baroda,Desserts,Chocolate Lava Cake (Full),430,4
+Balaji Sandwich,Swiggy,Rajkot,Bakery,Chocolate Brownie (Half),173,3.8
+Shree Maruti Nandan Kathiyawadi,UberEats,Baroda,Continental,Fish and Chips (Half),562,4.6
+Raju Omlet,UberEats,Baroda,Fast Food,Cheesy Burger (Half),363,4.3
+Sankalp Restaurant,Swiggy,Gandhinagar,Desserts,Ice Cream Scoop,280,3.9
+Hotel Golden Star,Zomato,Surat,North Indian,Tandoori Roti,228,4.2
+Surti 12 Handi,Zomato,Surat,Chinese,Fried Rice,173,4.6
+Jay Mahakali Sev Usal,UberEats,Baroda,Desserts,Rasmalai (Combo),577,3.4
+The Grand Thakkar Restaurant,Swiggy,Rajkot,North Indian,Dal Makhani,664,4.5
+Jay Khodiyar Hotel & Restaurant,UberEats,Rajkot,Bakery,Cheesecake Slice (Combo),419,3.5
+Bayleaf Restaurant,UberEats,Baroda,Desserts,Ice Cream Scoop (Half),284,4.1
+Orchid,Swiggy,Rajkot,Desserts,Rasmalai (Special),510,4.5
+Shree Kathiyawadi Khadki,Zomato,Baroda,Desserts,Ice Cream Scoop,87,3.5
+Orchid,Zomato,Rajkot,Desserts,Chocolate Lava Cake (Spicy),383,4.5
+Orchid,UberEats,Rajkot,Desserts,Kulfi (Special),552,4.5
+TGT - The Grand Thakar (Jubilee Chowk),Swiggy,Rajkot,Chinese,Chow Mein,904,4.3
+Balaji Sandwich,Zomato,Rajkot,Bakery,Chocolate Brownie (Spicy),512,3.8
+Seven Seas Restaurant,Zomato,Baroda,Continental,Caesar Salad (Combo),324,3.9
+Sweet Truth - Cake and Desserts,Swiggy,Rajkot,Italian,Pesto Pasta,450,3.9
+Sweet Truth - Cake and Desserts,Swiggy,Rajkot,Italian,Veggie Pizza (Half),507,3.9
+Havmor Restaurant,Zomato,Baroda,Bakery,Cheesecake Slice (Half),135,4
+Sweet Truth - Cake and Desserts,UberEats,Rajkot,Italian,Veggie Pizza (Spicy),343,3.9
+Blue Lagoon,UberEats,Baroda,Chinese,Fried Rice (Combo),419,4.3
+Barbeque Nation,UberEats,Baroda,Desserts,Kulfi (Special),375,4
+Havmor Ice Cream,Zomato,Baroda,Italian,Garlic Bread (Combo),325,4
+The Grand Thakkar Restaurant,Zomato,Rajkot,North Indian,Kadai Chicken (Combo),735,4.5
+Hotel Surya,UberEats,Baroda,Continental,Fish and Chips,808,3.8
+"Faasos - Wraps, Rolls & Shawarma",UberEats,Rajkot,Biryani,Veg Biryani,173,4.1
+Mandap - Express Towers,UberEats,Baroda,Italian,Veggie Pizza,401,4.7
+Sargam Food,UberEats,Rajkot,Italian,Garlic Bread,683,3.5
+Big Bite,UberEats,Rajkot,Continental,Steak Sandwich,238,3.4
+Honest Restaurant,Zomato,Surat,Desserts,Gulab Jamun,288,4.8
+Ristretto Cafe,Swiggy,Gandhinagar,Continental,Grilled Chicken,487,4.1
+Bayleaf Restaurant,UberEats,Baroda,Desserts,Chocolate Lava Cake (Combo),145,4.1
+Balaji Sandwich,Zomato,Rajkot,Bakery,Chocolate Brownie (Combo),407,3.8
+Pizza Hut,Zomato,Baroda,Desserts,Gulab Jamun,275,3.8
+Lemon Tree Hotel,UberEats,Rajkot,North Indian,Dal Makhani (Combo),278,3.8
+Domino's Pizza,Zomato,Baroda,Continental,Grilled Chicken,438,4.5
+Tea Post,Swiggy,Rajkot,Continental,Pasta Primavera (Combo),213,4.1
+Cafe Frespresso,Swiggy,Baroda,Desserts,Gulab Jamun (Combo),604,3.6
+McDonald's,Zomato,Baroda,Italian,Pesto Pasta,163,3.5
+Barbeque Nation,Zomato,Baroda,Desserts,Chocolate Lava Cake (Special),485,4
+McDonald's,UberEats,Baroda,Italian,Veggie Pizza (Half),318,3.5
+Balaji Sandwich,Swiggy,Rajkot,Bakery,Chocolate Brownie,217,3.8
+Raju Omlet,UberEats,Baroda,Fast Food,Fries (Full),327,4.3
+Shree Kathiyawadi Restaurant,Swiggy,Gandhinagar,Italian,Veggie Pizza,367,3.7
+Mandap - Express Towers,UberEats,Baroda,Italian,Margherita Pizza (Full),1004,4.7
+Sargam Kitchen,UberEats,Rajkot,Gujarati,Dhokla (Half),272,3.5
+Domino's Pizza,Swiggy,Baroda,Continental,Fish and Chips (Combo),306,4.5
+Ristretto Cafe,Swiggy,Gandhinagar,Desserts,Ice Cream Scoop,200,3.5
+Purohit Thali,UberEats,Surat,North Indian,Dal Makhani,946,4.5
+Mandap - Express Towers,Swiggy,Baroda,Italian,Pesto Pasta,941,4.7
+The Banyan Deli,Zomato,Baroda,Fast Food,Veg Wrap,160,4.5
+Havmor Ice Cream,Zomato,Baroda,Italian,Margherita Pizza,395,4
+Jay Khodiyar Hotel & Restaurant,Swiggy,Rajkot,Bakery,Chocolate Brownie (Full),417,3.5
+Eva Cafe,UberEats,Baroda,Italian,Pasta Alfredo (Special),135,4
+Jalaram Khichdi,Zomato,Surat,Desserts,Rasmalai,189,4.4
+Tea Post,Zomato,Rajkot,Continental,Steak Sandwich,100,4.1
+Mandap - Express Towers,Swiggy,Baroda,Italian,Pesto Pasta (Special),1008,4.7
+Azure - The Gateway Hotel,Swiggy,Baroda,Biryani,Hyderabadi Biryani,261,3.6
+La Pino'z Pizza,Zomato,Rajkot,Bakery,Chocolate Brownie,333,4.1
+Shree Maruti Nandan Kathiyawadi,Swiggy,Baroda,Continental,Caesar Salad (Full),621,4.6

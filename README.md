@@ -1,103 +1,152 @@
-Frontend overview (one-line)
-A Vite + React + TypeScript single-page app (Tailwind CSS) that provides: dashboard + charts, a searchable services catalog, service cards, bookmarks (local + server-backed), and a profile/auth flow.
+# City Services Recommendation System
 
-High-level features (what the frontend must support)
-Responsive app shell with navigation (Dashboard, Search, Bookmarks, Profile).
-Searchable, filterable list of services (city, category, price range, rating, text query).
-Service card UI with details, rating, price, image(s), and a bookmark toggle.
-Bookmarks page showing saved services in the same card layout.
-Local persistence of bookmarks for unauthenticated users (local_bookmarks).
-Server-backed bookmarks for authenticated users (sync/merge logic).
-Authentication UI: Register, Login, token storage (demo uses localStorage).
-Profile view + edit page (protected).
-Small charts on Dashboard (cost comparison, expense breakdown) using demo data.
-Accessibility, error handling, mobile-first responsive layout.
-App structure & routing
-src/main.tsx — mounts app, Router, and global providers (AuthProvider recommended).
-src/App.tsx — routes:
-/ → Dashboard
-/search → ServiceSearch
-/services/:id → ServiceDetail (optional)
-/bookmarks → Bookmarks
-/profile → Profile (protected)
-/auth/login, /auth/register → auth pages
-Use lazy loading for heavy pages to speed initial load.
-Global state & utilities
-Auth context/provider (AuthContext) exposes: user, token, login(), logout(), isAuthenticated.
-API helper src/utils/api.ts:
-apiFetch(path, opts) attaches Authorization: Bearer <token> if available and returns structured JSON or throws an ApiError.
-Local storage keys:
-local_bookmarks — Array<string> (service_id)
-auth_token — JWT token (demo only)
-Debounce utility (300ms) for search input.
-Component catalog (each “little box” described)
-Note: for each component I give Purpose, Props/state, API calls, UI states, and Edge cases.
+A modern, intelligent city services platform built with React, TypeScript, and Vite that helps users discover, compare, and bookmark various city services including accommodation, food delivery, and more.
 
-Layout.tsx
+## 🌟 Features
 
-Purpose: app shell (header, nav, footer).
-Props: children
-State: reads AuthContext to show login / user menu.
-Notes: responsive nav, focus management for accessibility.
-ServiceSearch.tsx
+### 🔍 Service Search & Discovery
+- Advanced search with multiple filters:
+  - Location/Area-based filtering
+  - Price range selection
+  - Rating-based filtering
+  - Category-based filtering
+- Real-time search results
+- Interactive service cards with detailed information
+- Modern, responsive grid/list view toggle
 
-Purpose: search/filter UI and service card list.
-Local state:
-q (string) — debounced
-filters: city, category, minPrice, maxPrice, minRating
-sort, page, limit
-loading, error, data[]
-localBookmarks: Set<string> (from local_bookmarks)
-serverBookmarkMap: Record<service_id, bookmark_id> (when logged in)
-API:
-GET /api/services?q=&city=&category=&minPrice=&maxPrice=&minRating=&sort=&page=&limit=
-If logged in, fetch /api/bookmarks on mount to build serverBookmarkMap.
-UI states: loading spinner, empty list (with CTA), paginated controls, inline error toast.
-Actions:
-bookmark toggle:
-If logged out: update local_bookmarks in localStorage and local set.
-If logged in & service not bookmarked: POST /api/bookmarks → store returned bookmark id in serverBookmarkMap.
-If logged in & service bookmarked: DELETE /api/bookmarks/:bookmarkId → remove from map.
-On click card → navigate to /services/:id.
-Edge cases:
-Double-tap add (handle idempotency / show loading on button).
-Offline: queue local action and show indicator.
-ServiceCard (used by list & bookmarks)
+### 📊 Smart Dashboard
+- Cost comparison charts
+- Expense breakdown visualization
+- Service popularity metrics
+- Interactive data visualizations
 
-Props: service, isBookmarked (bool), onToggleBookmark()
-Renders: image, title, city, price range, rating, bookmark icon button.
-Accessibility: bookmark button with aria-pressed and label.
-ServiceDetail.tsx (optional)
+### 🔖 Bookmarking System
+- Save favorite services
+- Synchronized bookmarks for logged-in users
+- Local storage for guest users
+- Easy access to saved services
 
-Purpose: single service view, full description, images, map/address.
-API: GET /api/services/:id
-Actions: bookmark toggle (as above).
-Bookmarks.tsx
+### 👤 User Authentication & Profile
+- Secure user registration and login
+- Profile management
+- Password recovery functionality
+- Protected routes for authenticated users
+### 💰 Cost Calculator
+- Compare service prices
+- Calculate estimated expenses
+- Budget planning tools
+- Cost breakdown analysis
 
-Purpose: show saved services in card layout.
-Behavior:
-Logged out: read local_bookmarks → map ids to service objects (from mockServices or fetch /api/services/:id).
-Logged in: GET /api/bookmarks → for each record either get embedded service snapshot or fetch service detail.
-UI: empty state with suggestion to browse/search.
-Edge cases: bookmark id used to delete when logged in.
-Profile.tsx
+### 🏘️ Accommodation Services
+- Property listings across multiple cities:
+  - Ahmedabad
+  - Baroda
+  - Gandhinagar
+  - Rajkot
+  - Surat
+- Detailed property information
+- Image galleries
+- Location-based search
 
-Purpose: view/edit profile.
-API:
-GET /api/profile
-PUT /api/profile body { name, email }
-Validation: client-side email format, required name.
-UX: success toast and optimistic field disabling during save.
-Auth pages (Login, Register)
+### 🍽️ Food Services
+- Restaurant listings
+- Tiffin service providers
+- Food delivery options
+- Menu and pricing details
 
-Login:
-POST /api/login → receive { token, user }.
-On success: set auth token in AuthContext; optionally sync local_bookmarks with server.
-Register:
-POST /api/register → { token, user } (auto-login).
-Dashboard + chart components
+## 🛠️ Technical Stack
 
-Accept props for datasets and render charts (bar/pie).
+### Frontend
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Lucide React (for icons)
+- Chart.js (for data visualization)
+
+### Backend
+- Node.js
+- Express
+- PostgreSQL
+- Supabase
+- JWT Authentication
+### Data Management
+- CSV parsing with PapaParse
+- Local storage optimization
+- Supabase real-time updates
+
+## 🚀 Getting Started
+
+1. Clone the repository:
+\`\`\`bash
+git clone https://github.com/isha-1212/cityservices.git
+\`\`\`
+
+2. Install dependencies:
+\`\`\`bash
+npm install
+\`\`\`
+
+3. Set up environment variables:
+\`\`\`bash
+cp .env.example .env
+# Edit .env with your configuration
+\`\`\`
+
+4. Start the development server:
+\`\`\`bash
+npm run dev
+\`\`\`
+
+## 📱 Mobile Responsiveness
+- Fully responsive design
+- Mobile-first approach
+- Touch-friendly interface
+- Adaptive layouts for all screen sizes
+
+## 🔒 Security Features
+- JWT-based authentication
+- Secure password handling
+- Protected API endpoints
+- Data encryption
+
+## 🌐 Supported Cities
+- Ahmedabad
+- Baroda
+- Gandhinagar
+- Rajkot
+- Surat
+
+## 📂 Project Structure
+
+\`\`\`
+src/
+├── components/         # React components
+├── config/            # Configuration files
+├── data/             # Static data and mock services
+├── types/            # TypeScript type definitions
+└── utils/            # Utility functions
+
+backend/
+├── src/              # Backend source code
+├── schema.sql        # Database schema
+└── server.js         # Express server setup
+\`\`\`
+
+## 🤝 Contributing
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+## 📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+- Icons by Lucide React
+- UI components inspired by Tailwind CSS
+- Chart visualizations powered by Chart.js
 If backend present, fetch /api/dashboard/summary.
 Data shapes (canonical)
 Service

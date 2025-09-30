@@ -833,7 +833,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   const allServices = useMemo(() => {
     const combined = [...mockServices, ...csvServices];
     const seen = new Set<string>();
-    return combined.filter(service => {
+    const uniqueServices = combined.filter(service => {
       if (seen.has(service.id)) {
         return false;
       }
@@ -854,10 +854,19 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
 
       return true;
     });
-  }, [csvServices]);
+    console.log('Processed allServices:', uniqueServices.length);
+    return uniqueServices;
+  }, [mockServices, csvServices]);
 
   // Enhanced filtering logic
   const filteredServices = useMemo(() => {
+    console.log('Filtering services:', {
+      totalServices: allServices.length,
+      selectedTypes,
+      selectedCity,
+      priceRange
+    });
+
     return allServices.filter(service => {
       const matchesQuery = !searchQuery ||
         service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -888,7 +897,16 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
 
       return matchesQuery && matchesCity && matchesType && matchesPrice && matchesRating && matchesArea && matchesFood;
     });
-  }, [allServices, searchQuery, selectedCity, selectedTypes, priceRange, minRating, areaQuery, foodQuery]);
+  }, [JSON.stringify({
+    serviceIds: allServices.map(s => s.id),
+    query: searchQuery,
+    city: selectedCity,
+    types: selectedTypes,
+    price: priceRange,
+    rating: minRating,
+    area: areaQuery,
+    food: foodQuery
+  })]);
 
   const cities = [...new Set(allServices.map(s => s.city))].sort();
   const serviceTypes = [
@@ -1003,17 +1021,98 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     filteredFoodSuggestions = foodSuggestions;
   }
 
-  // Create service combinations when multiple types are selected
-  const serviceCombinations = useMemo(() => {
-    console.log('=== SERVICE COMBINATION USEMEMO TRIGGERED ===');
-    console.log('Selected Types Length:', selectedTypes.length);
-    console.log('Selected Types:', selectedTypes);
-    console.log('All Services Count:', allServices.length);
+  // Filter services by type with all criteria
+  const getFilteredServicesByType = (type: string) => {
+    return allServices.filter(service => {
+      if (service.type !== type) return false;
 
-    if (selectedTypes.length <= 1) {
-      console.log('❌ Not enough service types selected for combinations');
-      return [];
-    }
+      const matchesCity = !selectedCity || service.city === selectedCity;
+      const matchesRating = service.rating >= minRating;
+      const matchesPrice = service.price >= priceRange[0] && service.price <= priceRange[1];
+
+      if (!matchesCity || !matchesRating || !matchesPrice) return false;
+
+      // Area filtering for accommodation
+      if (type === 'accommodation' && areaQuery) {
+        const matchesArea = (service.meta && (
+          (service.meta['Locality / Area'] || '').toLowerCase().includes(areaQuery.toLowerCase()) ||
+          (service.meta['Area'] || '').toLowerCase().includes(areaQuery.toLowerCase())
+        )) ||
+          service.name.toLowerCase().includes(areaQuery.toLowerCase()) ||
+          service.description.toLowerCase().includes(areaQuery.toLowerCase());
+
+        if (!matchesArea) return false;
+      }
+
+      // Food filtering
+      if (type === 'food' && foodQuery) {
+        const matchesFood = service.name.toLowerCase().includes(foodQuery.toLowerCase()) ||
+          service.description.toLowerCase().includes(foodQuery.toLowerCase()) ||
+          (service.meta && (
+            (service.meta['Dish Name'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
+            (service.meta['Restaurant Name'] || '').toLowerCase().includes(foodQuery.toLowerCase())
+          ));
+
+        if (!matchesFood) return false;
+      }
+
+      return true;
+    });
+  };
+
+  // Get filtered services for each type
+  const selectedTypeServices = useMemo(() => {
+    const services: Record<string, Service[]> = {};
+    selectedTypes.forEach(type => {
+      services[type] = getFilteredServicesByType(type);
+      console.log(`Filtered services for ${type}:`, services[type].length);
+    });
+    return services;
+  }, [selectedTypes, selectedCity, minRating, priceRange, areaQuery, foodQuery, allServices]);
+
+  // Generate service combinations
+  // Helper function to check if a service matches the filters
+  const matchesFilters = (service: Service) => {
+    const matchesCity = !selectedCity || service.city === selectedCity;
+    const matchesRating = service.rating >= minRating;
+    const matchesPrice = service.price >= priceRange[0] && service.price <= priceRange[1];
+
+    // Area filtering for accommodation
+    const matchesArea = !areaQuery ||
+      service.type !== 'accommodation' ||
+      ((service.meta && (
+        (service.meta['Locality / Area'] || '').toLowerCase().includes(areaQuery.toLowerCase()) ||
+        (service.meta['Area'] || '').toLowerCase().includes(areaQuery.toLowerCase())
+      )) ||
+        service.name.toLowerCase().includes(areaQuery.toLowerCase()) ||
+        service.description.toLowerCase().includes(areaQuery.toLowerCase()));
+
+    // Food filtering
+    const matchesFood = !foodQuery ||
+      (service.type !== 'food' && service.type !== 'tiffin') ||
+      service.name.toLowerCase().includes(foodQuery.toLowerCase()) ||
+      service.description.toLowerCase().includes(foodQuery.toLowerCase()) ||
+      (service.meta && Object.values(service.meta).some(value =>
+        value && value.toString().toLowerCase().includes(foodQuery.toLowerCase())
+      ));
+
+    return matchesCity && matchesRating && matchesPrice && matchesArea && matchesFood;
+  };
+
+  // Get filtered services for each type
+  const filteredServicesByType = useMemo(() => {
+    const result: Record<string, Service[]> = {};
+    selectedTypes.forEach(type => {
+      result[type] = allServices
+        .filter(service => service.type === type && matchesFilters(service))
+        .sort((a, b) => a.price - b.price);
+    });
+    return result;
+  }, [selectedTypes, selectedCity, minRating, priceRange, areaQuery, foodQuery, allServices]);
+
+  // Generate service combinations
+  const serviceCombinations = useMemo(() => {
+    if (selectedTypes.length < 2) return [];
 
     const combinations: Array<{
       id: string;
@@ -1022,267 +1121,58 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
       types: string[];
     }> = [];
 
-    // Filter services to ONLY include the selected types
-    const relevantServices = allServices.filter(service => {
-      const matchesType = selectedTypes.includes(service.type);
-      const matchesCity = !selectedCity || service.city === selectedCity;
-      const matchesRating = service.rating >= minRating;
+    const seenCombos = new Set<string>();
+    const maxServicesPerType = 10;  // Limit for performance
 
-      // Area filtering (only for accommodation)
-      const matchesArea = !areaQuery ||
-        !selectedTypes.includes('accommodation') ||
-        (service.meta && (
-          (service.meta['Locality / Area'] || '').toLowerCase().includes(areaQuery.toLowerCase()) ||
-          (service.meta['Area'] || '').toLowerCase().includes(areaQuery.toLowerCase())
-        )) ||
-        service.name.toLowerCase().includes(areaQuery.toLowerCase()) ||
-        service.description.toLowerCase().includes(areaQuery.toLowerCase());
+    // Helper function to generate combinations
+    const generateCombos = (
+      typeIndex: number,
+      currentCombo: Service[],
+      currentTotal: number,
+      remainingTypes: string[]
+    ) => {
+      if (currentCombo.length === remainingTypes.length) {
+        const sortedIds = currentCombo.map(s => s.id).sort();
+        const comboKey = sortedIds.join('-');
 
-      // Food filtering (only for food/tiffin services)
-      const matchesFood = !foodQuery ||
-        (!selectedTypes.includes('food') && !selectedTypes.includes('tiffin')) ||
-        service.name.toLowerCase().includes(foodQuery.toLowerCase()) ||
-        service.description.toLowerCase().includes(foodQuery.toLowerCase()) ||
-        (service.meta && (
-          (service.meta['Dish Name'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
-          (service.meta['Category'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
-          (service.meta['Restaurant Name'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
-          (service.meta['item_name'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
-          (service.meta['primary_cuisine'] || '').toLowerCase().includes(foodQuery.toLowerCase()) ||
-          (service.meta['restaurant_name'] || '').toLowerCase().includes(foodQuery.toLowerCase())
-        ));
-
-      return matchesType && matchesCity && matchesRating && matchesArea && matchesFood;
-    });
-
-    // Group services by type (only for selected types)
-    const servicesByType: Record<string, Service[]> = {};
-    relevantServices.forEach(service => {
-      if (selectedTypes.includes(service.type)) {
-        if (!servicesByType[service.type]) {
-          servicesByType[service.type] = [];
+        if (!seenCombos.has(comboKey) &&
+          currentTotal >= priceRange[0] &&
+          currentTotal <= priceRange[1]) {
+          seenCombos.add(comboKey);
+          combinations.push({
+            id: comboKey,
+            services: [...currentCombo],
+            totalPrice: currentTotal,
+            types: remainingTypes
+          });
         }
-        servicesByType[service.type].push(service);
+        return;
       }
-    });
 
-    // Debug: Log the services by type
-    if (selectedTypes.length > 1) {
-      console.log('=== COMBINATION DEBUG ===');
-      console.log('Selected Types:', selectedTypes);
-      console.log('Relevant Services Count:', relevantServices.length);
+      const currentType = remainingTypes[typeIndex];
+      const services = filteredServicesByType[currentType] || [];
+      const limitedServices = services.slice(0, maxServicesPerType);
 
-      // Show sample of each service type
-      const serviceTypeBreakdown: Record<string, Service[]> = {};
-      relevantServices.forEach(service => {
-        if (!serviceTypeBreakdown[service.type]) {
-          serviceTypeBreakdown[service.type] = [];
-        }
-        serviceTypeBreakdown[service.type].push(service);
-      });
-
-      console.log('Services by Type:', Object.keys(serviceTypeBreakdown).map(type => ({
-        type,
-        count: serviceTypeBreakdown[type].length,
-        sampleNames: serviceTypeBreakdown[type].slice(0, 2).map((s: Service) => s.name),
-        samplePrices: serviceTypeBreakdown[type].slice(0, 2).map((s: Service) => s.price)
-      })));
-      console.log('Price Range:', priceRange);
-    }    // Get services for selected types only
-    const selectedTypeServices: Record<string, Service[]> = {};
-    selectedTypes.forEach(type => {
-      if (servicesByType[type]) {
-        // If both accommodation and food are selected, exclude tiffin data from food
-        if (type === 'food' && selectedTypes.includes('accommodation') && !selectedTypes.includes('tiffin')) {
-          selectedTypeServices[type] = servicesByType[type].filter(s =>
-            s.meta && (s.meta['Restaurant Name'] || s.meta['restaurant_name'])
-          );
-        } else if (type === 'tiffin') {
-          selectedTypeServices[type] = servicesByType[type].filter(s => s.meta && s.meta['Estimated_Price_Per_Tiffin_INR']);
-        } else {
-          selectedTypeServices[type] = servicesByType[type];
-        }
-      }
-    });
-
-    // Generate combinations for 2 service types
-    if (selectedTypes.length === 2) {
-      const [type1, type2] = selectedTypes;
-      const services1 = selectedTypeServices[type1] || [];
-      const services2 = selectedTypeServices[type2] || [];
-
-      const seenCombinations = new Set<string>();
-      let allPairs: Array<{ id: string; services: Service[]; totalPrice: number; types: string[] }> = [];
-
-      services1.forEach(service1 => {
-        services2.forEach(service2 => {
-          // Avoid combining the same service with itself
-          if (service1.id === service2.id) return;
-
-          const totalPrice = service1.price + service2.price;
-          if (totalPrice >= priceRange[0] && totalPrice <= priceRange[1]) {
-            // Create a consistent combination ID regardless of order
-            const sortedIds = [service1.id, service2.id].sort();
-            const combinationKey = sortedIds.join('-');
-
-            if (!seenCombinations.has(combinationKey)) {
-              seenCombinations.add(combinationKey);
-              allPairs.push({
-                id: combinationKey,
-                services: [service1, service2],
-                totalPrice,
-                types: [type1, type2]
-              });
-            }
-          }
-        });
-      });
-      // Sort all pairs by totalPrice ascending and add to combinations
-      allPairs.sort((a, b) => a.totalPrice - b.totalPrice);
-      combinations.push(...allPairs);
-    }
-
-    // Generate combinations for 3 service types
-    if (selectedTypes.length === 3) {
-      console.log('=== STARTING 3-SERVICE COMBINATIONS ===');
-      const [type1, type2, type3] = selectedTypes;
-      const services1 = selectedTypeServices[type1] || [];
-      const services2 = selectedTypeServices[type2] || [];
-      const services3 = selectedTypeServices[type3] || [];
-
-      console.log('Available services:', {
-        [type1]: services1.length,
-        [type2]: services2.length,
-        [type3]: services3.length
-      });
-
-      // Log sample services for each type
-      console.log(`Sample ${type1} services:`, services1.slice(0, 2).map(s => ({ name: s.name, price: s.price })));
-      console.log(`Sample ${type2} services:`, services2.slice(0, 2).map(s => ({ name: s.name, price: s.price })));
-      console.log(`Sample ${type3} services:`, services3.slice(0, 2).map(s => ({ name: s.name, price: s.price })));
-
-      if (services1.length === 0 || services2.length === 0 || services3.length === 0) {
-        console.log('❌ Skipping 3-service combinations - missing services for one or more types');
-        console.log('Missing types:', {
-          [type1]: services1.length === 0,
-          [type2]: services2.length === 0,
-          [type3]: services3.length === 0
-        });
-      } else {
-        const seenCombinations = new Set<string>();
-        let combinationCount = 0;
-
-        // Use fewer services to ensure we get results
-        const maxServices = 3; // Reduce from 5 to 3 for better performance
-        const limitedServices1 = services1.slice(0, maxServices);
-        const limitedServices2 = services2.slice(0, maxServices);
-        const limitedServices3 = services3.slice(0, maxServices);
-
-        console.log('Processing combinations with limited services:', {
-          [type1]: limitedServices1.length,
-          [type2]: limitedServices2.length,
-          [type3]: limitedServices3.length
-        });
-
-        // Generate all possible combinations
-        for (let i = 0; i < limitedServices1.length; i++) {
-          for (let j = 0; j < limitedServices2.length; j++) {
-            for (let k = 0; k < limitedServices3.length; k++) {
-              const service1 = limitedServices1[i];
-              const service2 = limitedServices2[j];
-              const service3 = limitedServices3[k];
-
-              // Skip if same service appears multiple times
-              if (service1.id === service2.id || service1.id === service3.id || service2.id === service3.id) {
-                continue;
-              }
-
-              const totalPrice = service1.price + service2.price + service3.price;
-              const withinBudget = totalPrice >= priceRange[0] && totalPrice <= priceRange[1];
-
-              // Log ALL combinations for debugging
-              console.log(`🔍 Combination ${combinationCount + 1}:`);
-              console.log(`  ${service1.type}: ${service1.name} (₹${service1.price})`);
-              console.log(`  ${service2.type}: ${service2.name} (₹${service2.price})`);
-              console.log(`  ${service3.type}: ${service3.name} (₹${service3.price})`);
-              console.log(`  Total: ₹${totalPrice}, Budget: ₹${priceRange[0]}-₹${priceRange[1]}, Within budget: ${withinBudget}`);
-
-              if (withinBudget) {
-                // Create unique combination key
-                const sortedIds = [service1.id, service2.id, service3.id].sort();
-                const combinationKey = sortedIds.join('-');
-
-                if (!seenCombinations.has(combinationKey)) {
-                  seenCombinations.add(combinationKey);
-                  combinations.push({
-                    id: combinationKey,
-                    services: [service1, service2, service3],
-                    totalPrice,
-                    types: [type1, type2, type3]
-                  });
-                  combinationCount++;
-
-                  console.log(`✅ ADDED 3-service combination #${combinationCount}:`);
-                  console.log(`   Total Price: ₹${totalPrice}`);
-                }
-              } else {
-                console.log(`❌ Combination rejected: Price ₹${totalPrice} not in budget ₹${priceRange[0]}-₹${priceRange[1]}`);
-              }
-            }
-          }
-        }
-
-        console.log(`🎉 Total 3-service combinations created: ${combinationCount}`);
-      }
-    }
-
-    // For more than 3 service types, create combinations of the first available services from each type
-    if (selectedTypes.length > 3) {
-      const seenCombinations = new Set<string>();
-
-      // Get one service from each type for combinations
-      const typesWithServices = selectedTypes.filter(type => selectedTypeServices[type] && selectedTypeServices[type].length > 0);
-
-      if (typesWithServices.length >= 2) {
-        // Create combinations using the first service from each type
-        const firstServices = typesWithServices.map(type => selectedTypeServices[type][0]);
-
-        // Create one large combination with all types
-        const totalPrice = firstServices.reduce((sum, service) => sum + service.price, 0);
-
-        if (totalPrice >= priceRange[0] && totalPrice <= priceRange[1]) {
-          const sortedIds = firstServices.map(s => s.id).sort();
-          const combinationKey = sortedIds.join('-');
-
-          if (!seenCombinations.has(combinationKey)) {
-            seenCombinations.add(combinationKey);
-            combinations.push({
-              id: combinationKey,
-              services: firstServices,
-              totalPrice,
-              types: typesWithServices
-            });
+      for (const service of limitedServices) {
+        if (!currentCombo.find(s => s.id === service.id)) {
+          const newTotal = currentTotal + service.price;
+          if (newTotal <= priceRange[1]) {
+            generateCombos(
+              typeIndex + 1,
+              [...currentCombo, service],
+              newTotal,
+              remainingTypes
+            );
           }
         }
       }
-    }
+    };
 
-    // Sort by total price and return results
-    const finalCombinations = combinations.sort((a, b) => a.totalPrice - b.totalPrice);
+    // Start combination generation
+    generateCombos(0, [], 0, selectedTypes);
 
-    console.log('=== FINAL COMBINATION RESULTS ===');
-    console.log(`Selected types: ${selectedTypes.join(', ')}`);
-    console.log(`Total combinations generated: ${finalCombinations.length}`);
-    if (finalCombinations.length > 0) {
-      console.log('Price range of combinations:', {
-        lowest: `₹${finalCombinations[0].totalPrice}`,
-        highest: `₹${finalCombinations[finalCombinations.length - 1].totalPrice}`,
-        budget: `₹${priceRange[0]} - ₹${priceRange[1]}`
-      });
-    }
-
-    return finalCombinations;
-  }, [allServices, selectedTypes, priceRange, selectedCity, minRating, areaQuery, foodQuery]);
+    return combinations.sort((a, b) => a.totalPrice - b.totalPrice);
+  }, [selectedTypes, filteredServicesByType, priceRange]);
 
   // Get service type label
   // @ts-ignore - Will use this function in future implementations
@@ -1651,7 +1541,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
           )}
 
           {/* Individual Services Tab Content */}
-          {(activeView === 'individual' || selectedTypes.length <= 1 || serviceCombinations.length === 0) && (
+          {(activeView === 'individual' || serviceCombinations.length === 0) && (
             <div>
               {selectedTypes.length > 1 && serviceCombinations.length > 0 && (
                 <div className="flex items-center justify-between mb-4">

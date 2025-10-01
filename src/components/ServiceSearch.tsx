@@ -310,6 +310,22 @@ const generateBookmarkKey = (service: Service) => {
   return `${service.type}::${normalize(service.name)}::${normalize(service.city)}`;
 };
 
+// Generate a stable unique ID from service properties
+const generateStableId = (type: string, name: string, city: string, additionalInfo: string = '') => {
+  const normalize = (s: string = '') =>
+    s
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
+
+  const parts = [type, normalize(name), normalize(city)];
+  if (additionalInfo) {
+    parts.push(normalize(additionalInfo));
+  }
+  return parts.join('_');
+};
+
 // ServiceCombinationCard component for displaying service combinations
 const ServiceCombinationCard: React.FC<{
   combination: {
@@ -690,9 +706,10 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
                 'ramol': RAMOL_IMAGE,
               };
 
+              const propertyName = `${row['Property Type']} - ${row['Locality / Area']}`;
               const service: Service = {
-                id: `accommodation-${Date.now()}-${idx}`, // More unique ID
-                name: `${row['Property Type']} - ${row['Locality / Area']}`,
+                id: generateStableId('accommodation', propertyName, row['City'], row['Bedrooms'] || ''),
+                name: propertyName,
                 type: 'accommodation',
                 city: row['City'],
                 price: Number(row['Rent Price']) || 0,
@@ -725,7 +742,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
                 : parseInt(priceRange.replace(/[^\d]/g, '')) || 95 * 30;
 
               const service: Service = {
-                id: `tiffin-${Date.now()}-${idx}`, // More unique ID
+                id: generateStableId('tiffin', row.Name, row.City || 'Ahmedabad', row.Address || ''),
                 name: row.Name,
                 type: 'tiffin',
                 city: row.City || 'Ahmedabad',
@@ -779,10 +796,11 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
               const rating = Number(row['Rating']) || 0;
               const ratingCount = Number(row['Rating Count']) || 0;
               const dishName = row['Dish Name'] || 'Unknown Dish';
+              const fullName = `${dishName} - ${row['Restaurant Name']}`;
 
               const service: Service = {
-                id: `food-${Date.now()}-${idx}`,
-                name: `${dishName} - ${row['Restaurant Name']}`,
+                id: generateStableId('food', fullName, row['City'] || 'Ahmedabad', row['Location'] || ''),
+                name: fullName,
                 type: 'food',
                 city: row['City'] || 'Ahmedabad',
                 price: price * 15, // Convert to monthly cost (assuming 15 orders per month)
@@ -823,9 +841,10 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
                 city = 'Baroda';
               }
 
+              const fullName = `${itemName} - ${row['restaurant_name']}`;
               const service: Service = {
-                id: `gujaratfood-${Date.now()}-${idx}`,
-                name: `${itemName} - ${row['restaurant_name']}`,
+                id: generateStableId('food', fullName, city, row['platform'] || ''),
+                name: fullName,
                 type: 'food',
                 city: city,
                 price: price * 15, // Convert to monthly cost (assuming 15 orders per month)

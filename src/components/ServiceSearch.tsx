@@ -1341,13 +1341,31 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
 
         {/* Filter Toggle */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4">
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center justify-center space-x-2 px-4 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
-          >
-            <SlidersHorizontal className="w-4 h-4 text-slate-600" />
-            <span className="text-sm font-medium text-slate-700">Filters</span>
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center justify-center space-x-2 px-4 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+            >
+              <SlidersHorizontal className="w-4 h-4 text-slate-600" />
+              <span className="text-sm font-medium text-slate-700">Filters</span>
+            </button>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCity('');
+                setSelectedTypes([]);
+                setPriceRange([0, 100000]);
+                setMinRating(0);
+                setAreaQuery('');
+                setFoodQuery('');
+                setTiffinQuery('');
+              }}
+              className="flex items-center justify-center space-x-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+            >
+              <X className="w-4 h-4" />
+              <span className="text-sm font-medium">Clear Filters</span>
+            </button>
+          </div>
 
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <span className="text-xs sm:text-sm text-slate-600">{filteredServices.length} results</span>

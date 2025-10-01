@@ -84,31 +84,31 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
       console.error('Failed to remove from bookmarks:', error);
     }
   }; return (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-slate-800 mb-2">Your Bookmarks</h2>
-        <p className="text-slate-600">Saved services you added to your bookmarks</p>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="text-center mb-6 sm:mb-8 px-4">
+        <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">Your Bookmarks</h2>
+        <p className="text-sm sm:text-base text-slate-600">Saved services you added to your bookmarks</p>
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="w-16 h-16 border-4 border-slate-700 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading your bookmarks...</p>
+        <div className="text-center py-8 sm:py-12">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 border-4 border-slate-700 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-sm sm:text-base text-gray-600">Loading your bookmarks...</p>
         </div>
       ) : !user ? (
-        <div className="text-center py-12">
+        <div className="text-center py-8 sm:py-12 px-4">
           <div className="max-w-md mx-auto">
             <div className="mb-6">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-8 h-8 text-gray-400" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Login to View Your Bookmarks</h3>
-              <p className="text-gray-600 mb-6">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Login to View Your Bookmarks</h3>
+              <p className="text-sm sm:text-base text-gray-600 mb-6">
                 Sign in to save your favorite services and access them from anywhere
               </p>
               <button
                 onClick={() => onAuthRequired?.()}
-                className="bg-slate-700 text-white px-6 py-3 rounded-lg hover:bg-slate-800 transition-colors"
+                className="bg-slate-700 text-white px-6 py-3 text-sm sm:text-base rounded-lg hover:bg-slate-800 transition-colors w-full sm:w-auto"
               >
                 Login / Sign Up
               </button>
@@ -116,21 +116,21 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
           </div>
         </div>
       ) : bookmarkedServices.length === 0 ? (
-        <div className="text-center py-12">
+        <div className="text-center py-8 sm:py-12 px-4">
           <div className="max-w-md mx-auto">
             <div className="mb-6">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-8 h-8 text-gray-400" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Your bookmarks list is empty</h3>
-              <p className="text-gray-600">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Your bookmarks list is empty</h3>
+              <p className="text-sm sm:text-base text-gray-600">
                 Start exploring services and add your favorites to see them here
               </p>
             </div>
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {bookmarkedServices.map((service) => (
             <ServiceCard
               key={service.id}

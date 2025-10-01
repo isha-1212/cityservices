@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Settings, Bell, Edit3, Save, X } from 'lucide-react';
+import { User, Settings, Bell, CreditCard as Edit3, Save, X } from 'lucide-react';
 import { supabase } from '../config/supabase';
 import { CustomSelect } from './CustomSelect.tsx';
 
@@ -55,17 +55,17 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between p-6 bg-slate-50 rounded-xl mb-6">
-        <div className="flex items-center space-x-4">
-          <div className="w-20 h-20 bg-slate-700 rounded-full flex items-center justify-center">
-            <User className="w-8 h-8 text-white" />
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-6 bg-slate-50 rounded-xl mb-4 sm:mb-6">
+        <div className="flex items-center space-x-3 sm:space-x-4 w-full sm:w-auto">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-slate-700 rounded-full flex items-center justify-center flex-shrink-0">
+            <User className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
           </div>
-          <div>
-            <h3 className="text-xl font-bold text-slate-900">
+          <div className="flex-1">
+            <h3 className="text-base sm:text-lg md:text-xl font-bold text-slate-900">
               {profileData.name || 'User'}
             </h3>
-            <p className="text-slate-600">
+            <p className="text-xs sm:text-sm text-slate-600 truncate">
               {profileData.email || 'No email provided'}
             </p>
             <span className="inline-block bg-slate-700 text-white text-xs px-2 py-1 rounded-full mt-1">
@@ -75,20 +75,20 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
         </div>
         <button
           onClick={onToggleEdit}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${isEditing
+          className={`flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors w-full sm:w-auto ${isEditing
             ? 'bg-red-100 text-red-700 hover:bg-red-200'
             : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
             }`}
         >
           {isEditing ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
-          <span>{isEditing ? 'Cancel' : 'Edit'}</span>
+          <span className="text-sm sm:text-base">{isEditing ? 'Cancel' : 'Edit'}</span>
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="space-y-3 sm:space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+            <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">Full Name</label>
             <input
               key="name-input"
               type="text"
@@ -96,7 +96,7 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
               onChange={onNameChange}
               placeholder="Enter your full name"
               disabled={!isEditing}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-slate-700 ${isEditing
+              className={`w-full px-3 py-2 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-slate-700 ${isEditing
                 ? 'border-slate-300 bg-white'
                 : 'border-slate-200 bg-slate-50 text-slate-600'
                 }`}
@@ -178,11 +178,11 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
 
       {/* Save Changes Button - Only show when editing */}
       {isEditing && (
-        <div className="flex justify-end pt-4">
+        <div className="flex justify-end pt-3 sm:pt-4">
           <button
             onClick={handleSaveAndToggle}
             disabled={isLoading}
-            className="flex items-center space-x-2 px-6 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-800 focus:ring-2 focus:ring-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-center space-x-2 px-4 sm:px-6 py-2 text-sm sm:text-base bg-slate-700 text-white rounded-lg hover:bg-slate-800 focus:ring-2 focus:ring-slate-700 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
           >
             <Save className="w-4 h-4" />
             <span>{isLoading ? 'Saving...' : 'Save Changes'}</span>
@@ -497,32 +497,32 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-slate-800 mb-2">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="text-center mb-6 sm:mb-8 px-4">
+        <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
           Profile Settings
         </h2>
-        <p className="text-slate-600">
+        <p className="text-sm sm:text-base text-slate-600">
           Manage your account and preferences
         </p>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-100">
         {/* Tab Navigation */}
-        <div className="border-b border-slate-200">
-          <nav className="flex space-x-0">
+        <div className="border-b border-slate-200 overflow-x-auto">
+          <nav className="flex space-x-0 min-w-max sm:min-w-0">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.id
+                  className={`flex items-center space-x-2 px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium border-b-2 transition-colors ${activeTab === tab.id
                     ? 'border-slate-700 text-slate-800 bg-slate-100'
                     : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-slate-50'
                     }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -531,7 +531,7 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
         </div>
 
         {/* Tab Content */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {activeTab === 'profile' && (
             <ProfileTab
               profileData={profileData}

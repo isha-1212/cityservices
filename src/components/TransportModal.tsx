@@ -216,38 +216,38 @@ export const TransportModal: React.FC<TransportModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
-          <h2 className="text-2xl font-bold text-slate-900">Find Transport Options</h2>
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-200">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900">Find Transport Options</h2>
           <button
             onClick={handleClose}
-            className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+            className="p-2 hover:bg-slate-100 rounded-full transition-colors flex-shrink-0"
           >
-            <X className="w-6 h-6 text-slate-600" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6 text-slate-600" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {!showTransportOptions ? (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="text-center">
-                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-slate-600" />
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-slate-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2">
                   Select Your Route
                 </h3>
-                <p className="text-slate-600">
+                <p className="text-sm sm:text-base text-slate-600 px-2">
                   Choose your source and destination cities to find transport options
                 </p>
               </div>
 
               {/* Source City Input */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">
+                <label className="block text-xs sm:text-sm font-medium text-slate-700">
                   From (Source City)
                 </label>
                 <div className="relative">
@@ -256,17 +256,17 @@ export const TransportModal: React.FC<TransportModalProps> = ({
                     value={sourceCity}
                     onChange={(e) => handleSourceCityChange(e.target.value)}
                     placeholder="Enter source city..."
-                    className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
+                    className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
                   />
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
                   
                   {showSourceSuggestions && sourceSuggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg sm:rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
                       {sourceSuggestions.map((city, index) => (
                         <button
                           key={index}
                           onClick={() => selectSourceCity(city)}
-                          className="w-full px-4 py-2 text-left hover:bg-slate-50 first:rounded-t-xl last:rounded-b-xl"
+                          className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base text-left hover:bg-slate-50 first:rounded-t-lg sm:first:rounded-t-xl last:rounded-b-lg sm:last:rounded-b-xl"
                         >
                           {city}
                         </button>
@@ -279,7 +279,7 @@ export const TransportModal: React.FC<TransportModalProps> = ({
               {/* Source Area Input */}
               {sourceCity && (
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
+                  <label className="block text-xs sm:text-sm font-medium text-slate-700">
                     From Area (Optional)
                   </label>
                   <div className="relative">
@@ -288,9 +288,9 @@ export const TransportModal: React.FC<TransportModalProps> = ({
                       value={sourceArea}
                       onChange={(e) => handleSourceAreaChange(e.target.value)}
                       placeholder="Enter source area..."
-                      className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
+                      className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
                     />
-                    <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
                     
                     {showSourceAreaSuggestions && sourceAreaSuggestions.length > 0 && (
                       <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
@@ -374,21 +374,21 @@ export const TransportModal: React.FC<TransportModalProps> = ({
               )}
 
               {/* Search Button */}
-              <div className="pt-4">
+              <div className="pt-2 sm:pt-4">
                 <button
                   onClick={handleSearch}
                   disabled={
-                    !sourceCity || !destinationCity || 
+                    !sourceCity || !destinationCity ||
                     (sourceCity === destinationCity && (!sourceArea || !destinationArea || sourceArea === destinationArea))
                   }
-                  className="w-full bg-slate-700 text-white py-3 px-6 rounded-xl font-medium hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+                  className="w-full bg-slate-700 text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
                 >
-                  <Search className="w-5 h-5" />
+                  <Search className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>Find Transport Options</span>
                 </button>
-                
+
                 {sourceCity && destinationCity && sourceCity === destinationCity && (!sourceArea || !destinationArea || sourceArea === destinationArea) && (
-                  <p className="text-red-500 text-sm mt-2 text-center">
+                  <p className="text-red-500 text-xs sm:text-sm mt-2 text-center">
                     For same city travel, please select different areas
                   </p>
                 )}

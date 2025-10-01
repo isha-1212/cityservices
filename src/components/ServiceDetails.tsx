@@ -33,15 +33,15 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm"
             onClick={onClose}
         >
             <div
-                className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-slide-up"
+                className="bg-white rounded-xl sm:rounded-2xl w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-slide-up"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Image Section */}
-                <div className="relative w-full h-64">
+                <div className="relative w-full h-48 sm:h-56 md:h-64">
                     {/* Source tag badge */}
                     <span className="absolute top-4 left-4 z-10 bg-slate-200 text-slate-900 text-xs font-semibold px-2 py-1 rounded shadow-md">
                         {sourceTag}
@@ -64,70 +64,70 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
                     >
                         <X className="w-5 h-5 text-slate-700" />
                     </button>
-                    <div className="absolute bottom-4 left-4 right-4">
-                        <span className="bg-white/90 backdrop-blur-sm text-slate-700 px-3 py-1 rounded-full text-sm font-semibold capitalize">
+                    <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4">
+                        <span className="bg-white/90 backdrop-blur-sm text-slate-700 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold capitalize">
                             {service.type}
                         </span>
                     </div>
                 </div>
 
                 {/* Content Section */}
-                <div className="flex-1 overflow-y-auto p-6">
-                    <div className="flex items-start justify-between mb-4">
+                <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-4">
                         <div className="flex-1">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-2">
+                            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 mb-2">
                                 {service.name}
                             </h2>
-                            <div className="flex items-center space-x-4 text-slate-600">
+                            <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-slate-600">
                                 <div className="flex items-center space-x-1">
-                                    <MapPin className="w-4 h-4" />
-                                    <span>{service.city}</span>
+                                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
+                                    <span className="text-sm sm:text-base">{service.city}</span>
                                 </div>
                                 <div className="flex items-center space-x-1">
-                                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                                    <span>{service.rating.toFixed(1)}</span>
+                                    <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
+                                    <span className="text-sm sm:text-base">{service.rating.toFixed(1)}</span>
                                 </div>
                             </div>
                         </div>
-                        <div className="text-right">
-                            <div className="text-2xl font-bold text-slate-900">
+                        <div className="text-left sm:text-right">
+                            <div className="text-xl sm:text-2xl font-bold text-slate-900">
                                 ₹{service.price.toLocaleString()}
                             </div>
-                            <div className="text-sm text-slate-500">/month</div>
+                            <div className="text-xs sm:text-sm text-slate-500">/month</div>
                         </div>
                     </div>
 
-                    <div className="mb-6">
-                        <h4 className="font-semibold text-slate-900 mb-2">Description</h4>
-                        <p className="text-slate-700 leading-relaxed">
+                    <div className="mb-4 sm:mb-6">
+                        <h4 className="text-sm sm:text-base font-semibold text-slate-900 mb-2">Description</h4>
+                        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                             {service.description}
                         </p>
                     </div>
 
-                    <div className="mb-6">
-                        <h4 className="font-semibold text-slate-900 mb-3">
+                    <div className="mb-4 sm:mb-6">
+                        <h4 className="text-sm sm:text-base font-semibold text-slate-900 mb-2 sm:mb-3">
                             Features & Amenities
                         </h4>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                             {service.features.map((feature, index) => (
                                 <div
                                     key={index}
                                     className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg"
                                 >
-                                    <div className="w-2 h-2 bg-slate-700 rounded-full"></div>
-                                    <span className="text-sm text-slate-700">{feature}</span>
+                                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-slate-700 rounded-full flex-shrink-0"></div>
+                                    <span className="text-xs sm:text-sm text-slate-700">{feature}</span>
                                 </div>
                             ))}
                         </div>
                     </div>
 
                     {service.meta && (
-                        <div className="mb-6">
-                            <h4 className="font-semibold text-slate-900 mb-3">
+                        <div className="mb-4 sm:mb-6">
+                            <h4 className="text-sm sm:text-base font-semibold text-slate-900 mb-2 sm:mb-3">
                                 Additional Details
                             </h4>
-                            <div className="bg-slate-50 rounded-xl p-4">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div className="bg-slate-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                                     {Object.entries(service.meta)
                                         .filter(([, v]) => {
                                             const s = String(v ?? '').trim();
@@ -138,7 +138,7 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
                                         .map(([k, v]) => (
                                             <div key={k} className="flex flex-col space-y-1">
                                                 <span className="font-medium text-slate-600">{k}</span>
-                                                <span className="text-slate-900">{String(v)}</span>
+                                                <span className="text-slate-900 break-words">{String(v)}</span>
                                             </div>
                                         ))}
                                 </div>
@@ -148,22 +148,22 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
                 </div>
 
                 {/* Footer */}
-                <div className="flex-shrink-0 p-6 border-t border-slate-200 bg-slate-50">
-                    <div className="flex items-center justify-between">
-                        <div>
+                <div className="flex-shrink-0 p-4 sm:p-6 border-t border-slate-200 bg-slate-50">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                        <div className="flex-1">
                             <a
                                 href="#"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors"
+                                className="flex items-center justify-center sm:justify-start space-x-2 text-slate-600 hover:text-slate-900 transition-colors"
                             >
                                 <ExternalLink className="w-4 h-4" />
-                                <span className="text-sm">View original listing</span>
+                                <span className="text-xs sm:text-sm">View original listing</span>
                             </a>
                         </div>
                         <div className="flex items-center space-x-3">
                             <button
-                                className="px-6 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors"
+                                className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-slate-700 text-white text-sm rounded-lg hover:bg-slate-800 transition-colors"
                             >
                                 Contact Provider
                             </button>

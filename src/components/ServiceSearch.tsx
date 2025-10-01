@@ -310,13 +310,13 @@ const ServiceCombinationCard: React.FC<{
   isBookmarked: (serviceId: string) => boolean;
 }> = ({ combination, onViewDetails, onToggleBookmark, isBookmarked }) => {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-lg transition-shadow">
-      <div className="flex justify-between items-start mb-3">
-        <div>
-          <h3 className="font-semibold text-slate-900 mb-1">
+    <div className="bg-white rounded-lg sm:rounded-xl border border-slate-200 p-3 sm:p-4 hover:shadow-lg transition-shadow">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-3 mb-3">
+        <div className="flex-1">
+          <h3 className="text-sm sm:text-base font-semibold text-slate-900 mb-1">
             Service Combination
           </h3>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {combination.types.map(type => (
               <span key={type} className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
                 {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -324,29 +324,29 @@ const ServiceCombinationCard: React.FC<{
             ))}
           </div>
         </div>
-        <div className="text-right">
-          <div className="text-lg font-bold text-slate-900">
+        <div className="text-left sm:text-right">
+          <div className="text-base sm:text-lg font-bold text-slate-900">
             ₹{combination.totalPrice.toLocaleString()}/month
           </div>
-          <div className="text-sm text-green-600 font-medium">
+          <div className="text-xs sm:text-sm text-green-600 font-medium">
             Combined Monthly Cost
           </div>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
 
         {combination.services.map((service, // @ts-ignore - Will use index parameter in future implementations
           index) => (
-          <div key={service.id} className="border border-slate-100 rounded-lg p-3">
-            <div className="flex items-center gap-3 mb-2">
+          <div key={service.id} className="border border-slate-100 rounded-lg p-2 sm:p-3">
+            <div className="flex items-center gap-2 sm:gap-3 mb-2">
               <img
                 src={service.image}
                 alt={service.name}
-                className="w-12 h-12 rounded-lg object-cover"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover flex-shrink-0"
               />
               <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-slate-900 text-sm truncate">
+                <h4 className="font-medium text-slate-900 text-xs sm:text-sm truncate">
                   {service.name}
                 </h4>
                 <div className="flex items-center gap-1">
@@ -357,7 +357,7 @@ const ServiceCombinationCard: React.FC<{
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-slate-900">
+              <span className="text-xs sm:text-sm font-medium text-slate-900">
                 ₹{service.price.toLocaleString()}{getPriceUnit(service.type) ? ` ${getPriceUnit(service.type)}` : ''}
               </span>
               <div className="flex gap-1">
@@ -368,7 +368,7 @@ const ServiceCombinationCard: React.FC<{
                     : 'text-slate-400 hover:bg-slate-50'
                     }`}
                 >
-                  <Heart className={`w-4 h-4 ${isBookmarked(service.id) ? 'fill-current' : ''}`} />
+                  <Heart className={`w-3 h-3 sm:w-4 sm:h-4 ${isBookmarked(service.id) ? 'fill-current' : ''}`} />
                 </button>
                 <button
                   onClick={() => onViewDetails(service)}
@@ -457,7 +457,7 @@ const ServiceCard: React.FC<{
 
   return (
     <div
-      className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group flex flex-col"
+      className="bg-white rounded-lg sm:rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group flex flex-col"
       onClick={(e) => {
         // Prevent opening details if bookmark button is clicked
         if ((e.target as HTMLElement).closest('button[data-bookmark]')) return;
@@ -466,7 +466,7 @@ const ServiceCard: React.FC<{
       tabIndex={0}
       role="button"
       aria-label={`View details for ${service.name}`}
-      style={{ minHeight: '370px' }}
+      style={{ minHeight: '320px' }}
     >
       <div className="relative">
         {/* Source tag badge */}
@@ -476,7 +476,7 @@ const ServiceCard: React.FC<{
         <img
           src={service.image}
           alt={service.name}
-          className="w-full h-48 object-cover rounded-xl"
+          className="w-full h-40 sm:h-48 object-cover"
         />
         <button
           onClick={(e) => {
@@ -493,35 +493,35 @@ const ServiceCard: React.FC<{
         </button>
       </div>
 
-      <div className="flex-1 flex flex-col p-4">
-        <div className="flex items-start justify-between mb-2">
-          <h3 className="font-semibold text-slate-900 text-lg">{service.name}</h3>
-          <div className="flex items-center gap-1">
-            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-            <span className="text-sm text-slate-600">{service.rating}</span>
+      <div className="flex-1 flex flex-col p-3 sm:p-4">
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <h3 className="font-semibold text-slate-900 text-sm sm:text-base lg:text-lg line-clamp-2">{service.name}</h3>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
+            <span className="text-xs sm:text-sm text-slate-600">{service.rating}</span>
           </div>
         </div>
 
         <div className="flex items-center gap-1 text-slate-600 mb-2">
-          <MapPin className="w-4 h-4" />
-          <span className="text-sm">{service.city}</span>
+          <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
+          <span className="text-xs sm:text-sm">{service.city}</span>
         </div>
 
-        <p className="text-sm text-slate-600 mb-4 line-clamp-2">{service.description}</p>
+        <p className="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4 line-clamp-2">{service.description}</p>
 
-        <div className="mt-auto flex items-center justify-between">
+        <div className="mt-auto flex items-center justify-between gap-2">
           <div>
-            <div className="text-xl font-bold text-slate-900">
+            <div className="text-base sm:text-lg lg:text-xl font-bold text-slate-900">
               ₹{service.price.toLocaleString()}
             </div>
-            <div className="text-sm text-slate-600">{getPriceUnit(service.type)}</div>
+            <div className="text-xs sm:text-sm text-slate-600">{getPriceUnit(service.type)}</div>
           </div>
           <button
             onClick={(e) => {
               e.stopPropagation();
               onViewDetails();
             }}
-            className="px-4 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors"
+            className="px-3 sm:px-4 py-1.5 sm:py-2 bg-slate-900 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors whitespace-nowrap"
           >
             View Details
           </button>
@@ -1097,47 +1097,47 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-slate-900 mb-3">Find Services</h1>
-        <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+      <div className="text-center px-4">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2 sm:mb-3">Find Services</h1>
+        <p className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto px-2">
           Discover the best city services tailored to your needs and budget
         </p>
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200">
         {/* Search Bar */}
-        <div className="relative mb-6">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <div className="relative mb-4 sm:mb-6">
+          <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
           <input
             type="text"
             placeholder="Search services, cities, or areas..."
             value={criteria.searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
+            className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
           />
         </div>
 
         {/* Filter Toggle */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center space-x-2 px-4 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+            className="flex items-center justify-center space-x-2 px-4 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
           >
             <SlidersHorizontal className="w-4 h-4 text-slate-600" />
             <span className="text-sm font-medium text-slate-700">Filters</span>
           </button>
 
-          <div className="flex items-center space-x-3">
-            <span className="text-sm text-slate-600">{filteredServices.length} results</span>
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <span className="text-xs sm:text-sm text-slate-600">{filteredServices.length} results</span>
 
             {/* Sort Box */}
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as 'priceLowToHigh' | 'priceHighToLow')}
-              className="px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700"
+              className="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700 flex-1 sm:flex-none"
               aria-label="Sort services by price"
             >
               <option value="priceLowToHigh">Price: Low to High</option>
@@ -1147,17 +1147,19 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
             <div className="flex items-center space-x-1 bg-slate-100 rounded-lg p-1">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
+                className={`flex items-center px-2 py-1 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
                   }`}
               >
                 <Grid className="w-4 h-4" />
+                <span className="ml-2 text-sm md:text-base">Grid</span>
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 rounded-md transition-colors ${viewMode === 'list' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
+                className={`flex items-center px-2 py-1 rounded-md transition-colors ${viewMode === 'list' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
                   }`}
               >
                 <List className="w-4 h-4" />
+                <span className="ml-2 text-sm md:text-base">List</span>
               </button>
             </div>
           </div>
@@ -1165,16 +1167,16 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
 
         {/* Filters Panel */}
         {showFilters && (
-          <div className="space-y-6 p-4 bg-slate-50 rounded-xl animate-slide-up">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 bg-slate-50 rounded-lg sm:rounded-xl animate-slide-up">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
 
               {/* Service Type Filter - Enhanced Multi-Select */}
               <div className="relative">
-                <label className="block text-sm font-medium text-slate-700 mb-2">Service Type</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-2">Service Type</label>
                 <div className="relative">
                   <button
                     onClick={() => setServiceTypeDropdownOpen(!serviceTypeDropdownOpen)}
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-left flex items-center justify-between hover:border-slate-300 focus:ring-2 focus:ring-slate-700 focus:border-slate-700"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-white border border-slate-200 rounded-lg text-left flex items-center justify-between hover:border-slate-300 focus:ring-2 focus:ring-slate-700 focus:border-slate-700"
                   >
                     <span className="text-slate-900">Select service types</span>
                     <ChevronDown className="w-4 h-4 text-slate-400" />
@@ -1217,11 +1219,11 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
 
               {/* City Filter */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">City</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-2">City</label>
                 <select
                   value={selectedCity}
                   onChange={(e) => setSelectedCity(e.target.value)}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 bg-white text-slate-900"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 bg-white text-slate-900"
                 >
                   <option value="">All Cities</option>
                   {cities.map(city => (
@@ -1232,7 +1234,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
 
               {/* Rating Filter */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-2">
                   Min Rating: {minRating}★
                 </label>
                 <input
@@ -1249,7 +1251,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
 
             {/* Enhanced Price Range */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-2">
                 Budget: ₹{priceRange[0].toLocaleString()} - ₹{priceRange[1].toLocaleString()} per month
               </label>
               <div className="relative px-2">
@@ -1311,7 +1313,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
             {/* Conditional Area Filter */}
             {selectedTypes.includes('accommodation') && (
               <div className="relative">
-                <label className="block text-sm font-medium text-slate-700 mb-2">Area Name</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-2">Area Name</label>
                 <input
                   type="text"
                   placeholder="Type area name (e.g., Vaishno, Bodakdev)..."
@@ -1322,7 +1324,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
                   }}
                   onFocus={() => setShowAreaSuggestions(areaQuery.length > 0)}
                   onBlur={() => setTimeout(() => setShowAreaSuggestions(false), 300)}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
                 />
 
                 {showAreaSuggestions && filteredAreaSuggestions.length > 0 && (
@@ -1335,7 +1337,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
                           setAreaQuery(area);
                           setShowAreaSuggestions(false);
                         }}
-                        className="w-full text-left px-4 py-3 hover:bg-slate-50 text-sm text-slate-700"
+                        className="w-full text-left px-3 sm:px-4 py-2 sm:py-3 hover:bg-slate-50 text-xs sm:text-sm text-slate-700"
                       >
                         {area}
                       </button>
@@ -1348,7 +1350,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
             {/* Conditional Food Filter */}
             {(selectedTypes.includes('food')) && (
               <div className="relative">
-                <label className="block text-sm font-medium text-slate-700 mb-2">Food Type</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-2">Food Type</label>
                 <input
                   type="text"
                   placeholder="Type food type (e.g., Gujarati, South Indian)..."
@@ -1359,7 +1361,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
                   }}
                   onFocus={() => setShowFoodSuggestions(foodQuery.length > 0)}
                   onBlur={() => setTimeout(() => setShowFoodSuggestions(false), 300)}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
                 />
 
                 {showFoodSuggestions && filteredFoodSuggestions.length > 0 && (
@@ -1385,7 +1387,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
             {/* Conditional Tiffin Filter */}
             {(selectedTypes.includes('tiffin')) && (
               <div className="relative">
-                <label className="block text-sm font-medium text-slate-700 mb-2">Tiffin Name</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-2">Tiffin Name</label>
                 <input
                   type="text"
                   placeholder="Type tiffin name (e.g., Sharma Tiffin, Patel Tiffin)..."
@@ -1396,7 +1398,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
                   }}
                   onFocus={() => setShowTiffinSuggestions(tiffinQuery.length > 0)}
                   onBlur={() => setTimeout(() => setShowTiffinSuggestions(false), 300)}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
                 />
 
                 {showTiffinSuggestions && filteredTiffinSuggestions.length > 0 && (

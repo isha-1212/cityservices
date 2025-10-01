@@ -23,10 +23,15 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
         return;
       }
 
+      // Clear previous bookmarks to avoid duplicates
+      setBookmarkedServices([]);
+
       // Try to load from cache first
       const cachedBookmarks = UserStorage.getItemAsJSON<Service[]>('cached_bookmarks', []);
       if (cachedBookmarks.length > 0) {
-        setBookmarkedServices(cachedBookmarks);
+        // Filter out invalid or empty services
+        const validCached = cachedBookmarks.filter(s => s && s.id && s.name);
+        setBookmarkedServices(validCached);
       }
 
       // First try to migrate any local data to database
@@ -38,11 +43,16 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
 
       const items = ids
         .map(id => (map[id] as Service) || mockServices.find(s => s.id === id))
-        .filter((s): s is Service => Boolean(s));
+        .filter((s): s is Service => Boolean(s))
+        .filter(s => s.id && s.name); // Filter invalid services
 
       setBookmarkedServices(items);
       // Cache the latest bookmarks
       UserStorage.setItem('cached_bookmarks', items);
+
+      // Dispatch event to notify other components of bookmark changes
+      console.log('Bookmarks: Dispatching bookmarks:changed event after loading bookmarks');
+      window.dispatchEvent(new CustomEvent('bookmarks:changed'));
     } catch (e) {
       console.warn('Failed to load user bookmarks from database', e);
       setBookmarkedServices([]);
@@ -81,13 +91,19 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
       if (success) {
         // Just update the local state immediately for better UX
         setBookmarkedServices(prev => prev.filter(service => service.id !== id));
+
+        // Dispatch event to notify other components of bookmark changes
+        console.log('Bookmarks: Dispatching bookmarks:changed event after removing bookmark');
+        window.dispatchEvent(new CustomEvent('bookmarks:changed'));
       } else {
         throw new Error('Failed to remove from database');
       }
     } catch (error) {
       console.error('Failed to remove from bookmarks:', error);
     }
-  }; return (
+  };
+
+  return (
     <div className="space-y-4 sm:space-y-6">
       <div className="text-center mb-6 sm:mb-8 px-4">
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">Your Bookmarks</h2>

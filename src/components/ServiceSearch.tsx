@@ -297,6 +297,19 @@ const getPriceUnit = (serviceType: string) => {
   return 'per month';
 };
 
+// Generate a stable bookmark key from service properties (type + name + city)
+const generateBookmarkKey = (service: Service) => {
+  const normalize = (s: string = '') =>
+    s
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, ' ')
+      .replace(/[^a-z0-9 ]/g, '')
+      .replace(/\s+/g, '-');
+
+  return `${service.type}::${normalize(service.name)}::${normalize(service.city)}`;
+};
+
 // ServiceCombinationCard component for displaying service combinations
 const ServiceCombinationCard: React.FC<{
   combination: {
@@ -306,8 +319,8 @@ const ServiceCombinationCard: React.FC<{
     types: string[];
   };
   onViewDetails: (service: Service) => void;
-  onToggleBookmark: (serviceId: string, service: Service) => void;
-  isBookmarked: (serviceId: string) => boolean;
+  onToggleBookmark: () => void; // combination-level handler
+  isBookmarked: boolean; // boolean now
 }> = ({ combination, onViewDetails, onToggleBookmark, isBookmarked }) => {
   return (
     <div className="bg-white rounded-lg sm:rounded-xl border border-slate-200 p-3 sm:p-4 hover:shadow-lg transition-shadow">
@@ -362,13 +375,18 @@ const ServiceCombinationCard: React.FC<{
               </span>
               <div className="flex gap-1">
                 <button
-                  onClick={() => onToggleBookmark(service.id, service)}
-                  className={`p-1 rounded ${isBookmarked(service.id)
-                    ? 'text-red-500 hover:bg-red-50'
-                    : 'text-slate-400 hover:bg-slate-50'
-                    }`}
+                  onClick={() => {
+                    // For per-service quick add, call combination-level handler
+                    // Parent may choose to add all missing services in combination
+                    onToggleBookmark();
+                  }}
+                  className={`p-1 rounded ${isBookmarked ? 'text-red-500 hover:bg-red-50' : 'text-slate-400 hover:bg-slate-50'}`}
                 >
-                  <Heart className={`w-3 h-3 sm:w-4 sm:h-4 ${isBookmarked(service.id) ? 'fill-current' : ''}`} />
+                  {isBookmarked ? (
+                    <Heart className="w-3 h-3 sm:w-4 sm:h-4 fill-current text-red-500" />
+                  ) : (
+                    <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-slate-400" />
+                  )}
                 </button>
                 <button
                   onClick={() => onViewDetails(service)}
@@ -604,37 +622,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortOrder, setSortOrder] = useState<'priceLowToHigh' | 'priceHighToLow'>('priceLowToHigh');
 
-  // Load bookmarks and listen for changes
-  useEffect(() => {
-    const loadBookmarks = async () => {
-      try {
-        if (user) {
-          // Load from database
-          const ids = await UserStorage.getWishlistFromDB();
-          setBookmarkedIds(new Set(ids));
-        } else {
-          // Load from localStorage for non-logged in users
-          const raw = localStorage.getItem('local_bookmarks');
-          if (raw) setBookmarkedIds(new Set(JSON.parse(raw)));
-        }
-      } catch (e) {
-        console.warn('Failed to load bookmarks', e);
-      }
-    };
-
-    // Load initial bookmarks
-    loadBookmarks();
-
-    // Listen for bookmark changes
-    const handleBookmarkChange = () => {
-      loadBookmarks();
-    };
-
-    window.addEventListener('bookmarks:changed', handleBookmarkChange);
-    return () => {
-      window.removeEventListener('bookmarks:changed', handleBookmarkChange);
-    };
-  }, [user]);
+  // Bookmarks handling consolidated below (runs after services are loaded)
 
   // Load CSV data
   useEffect(() => {
@@ -892,6 +880,148 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     return uniqueServices;
   }, [mockServices, csvServices]);
 
+  // Load bookmarks and reconcile with current services (runs after allServices is available)
+  useEffect(() => {
+    const loadBookmarks = async () => {
+      try {
+        const resolved = new Set<string>();
+        if (user) {
+          // Load from database (ids) and items map
+          const ids = await UserStorage.getWishlistFromDB();
+          const itemsMap = await UserStorage.getWishlistItemsFromDB();
+          console.log('ServiceSearch: Loaded bookmarks from DB ids:', ids);
+
+          // Start with direct DB ids
+          ids.forEach(id => resolved.add(id));
+
+          // Try to reconcile any DB stored service_data or cached_bookmarks to current services
+          const cached = UserStorage.getItemAsJSON<Service[]>('cached_bookmarks', []);
+
+          // Use itemsMap first
+          Object.keys(itemsMap || {}).forEach(dbId => {
+            const sd = itemsMap[dbId] || {};
+            // If direct match exists, keep it; otherwise try to find via stable key or type/name/city
+            const direct = allServices.find(s => s.id === dbId);
+            if (direct) return resolved.add(direct.id);
+
+            if (sd.__bookmark_key) {
+              const match = allServices.find(s => generateBookmarkKey(s) === sd.__bookmark_key);
+              if (match) return resolved.add(match.id);
+            }
+
+            if (sd.name && sd.type) {
+              const match = allServices.find(s => s.type === (sd.type || '') && s.name === (sd.name || '') && s.city === (sd.city || ''));
+              if (match) return resolved.add(match.id);
+            }
+          });
+
+          // Also reconcile cached_bookmarks (older local cache) similarly
+          (cached || []).forEach(cb => {
+            const match = allServices.find(s => s.type === (cb.type || '') && s.name === (cb.name || '') && s.city === (cb.city || ''));
+            if (match) resolved.add(match.id);
+          });
+
+          setBookmarkedIds(prev => new Set([...Array.from(prev), ...Array.from(resolved)]));
+        } else {
+          // Non-logged in users: prefer local cached IDs
+          const raw = localStorage.getItem('local_bookmarks');
+          if (raw) {
+            try {
+              const ids = JSON.parse(raw) as string[];
+              console.log('ServiceSearch: Loaded bookmarks from localStorage:', ids);
+              ids.forEach(id => resolved.add(id));
+            } catch (e) {
+              console.warn('ServiceSearch: Failed to parse local_bookmarks', e);
+            }
+          }
+
+          // Fallback to cached full objects
+          const cached = UserStorage.getItemAsJSON<Service[]>('cached_bookmarks', []);
+          (cached || []).forEach(cb => {
+            const match = allServices.find(s => s.type === (cb.type || '') && s.name === (cb.name || '') && s.city === (cb.city || ''));
+            if (match) resolved.add(match.id);
+          });
+
+          setBookmarkedIds(prev => new Set([...Array.from(prev), ...Array.from(resolved)]));
+        }
+      } catch (e) {
+        console.warn('Failed to load bookmarks', e);
+      }
+    };
+
+    // Load initial bookmarks
+    loadBookmarks();
+
+    // Listen for bookmark changes (both local and DB-driven)
+    const handleBookmarkChange = () => {
+      console.log('ServiceSearch: Received bookmarks change event, reloading bookmarks');
+      loadBookmarks();
+    };
+
+    window.addEventListener('bookmarks:changed', handleBookmarkChange);
+    window.addEventListener('wishlist:changed', handleBookmarkChange);
+    return () => {
+      window.removeEventListener('bookmarks:changed', handleBookmarkChange);
+      window.removeEventListener('wishlist:changed', handleBookmarkChange);
+    };
+  }, [user, allServices]);
+
+  // Reconcile cached bookmarks (full objects) with current service IDs
+  useEffect(() => {
+    try {
+      const cached = UserStorage.getItemAsJSON<Service[]>('cached_bookmarks', []);
+      if (cached && cached.length > 0 && allServices.length > 0) {
+        const resolved = new Set<string>();
+        cached.forEach(cb => {
+          const match = allServices.find(s => s.type === (cb.type || '') && s.name === (cb.name || '') && s.city === (cb.city || ''));
+          if (match) resolved.add(match.id);
+        });
+        if (resolved.size > 0) {
+          // Merge with any existing bookmarked ids (e.g., from local_bookmarks)
+          setBookmarkedIds(prev => new Set([...Array.from(prev), ...Array.from(resolved)]));
+        }
+      }
+    } catch (e) {
+      // Ignore reconciliation errors
+    }
+  }, [allServices]);
+
+  // If user is logged in, reconcile wishlist items from DB with current services
+  useEffect(() => {
+    const reconcileDbWishlist = async () => {
+      if (!user || allServices.length === 0) return;
+      try {
+        const itemsMap = await UserStorage.getWishlistItemsFromDB();
+        const resolved = new Set<string>();
+
+        // itemsMap: { service_id: service_data }
+        Object.keys(itemsMap).forEach(dbId => {
+          // Try direct ID match first
+          const direct = allServices.find(s => s.id === dbId);
+          if (direct) {
+            resolved.add(direct.id);
+            return;
+          }
+
+          // Fallback: try to match by service_data fields (type, name, city)
+          const sd = itemsMap[dbId] || {};
+          if (sd && (sd.name || sd.type)) {
+            const match = allServices.find(s => s.type === (sd.type || '') && s.name === (sd.name || '') && s.city === (sd.city || ''));
+            if (match) resolved.add(match.id);
+          }
+        });
+
+        if (resolved.size > 0) {
+          setBookmarkedIds(prev => new Set([...Array.from(prev), ...Array.from(resolved)]));
+        }
+      } catch (e) {
+        console.warn('Failed to reconcile DB wishlist with current services', e);
+      }
+    };
+
+    reconcileDbWishlist();
+  }, [user, allServices]);
+
   // Use robust filtering utility for filtered services
   const filteredServices = useMemo(() => {
     const filterCriteria: FilterCriteria = {
@@ -962,7 +1092,6 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   };
 
   const toggleBookmark = async (serviceId: string, service: Service) => {
-    // Check if user is authenticated
     if (!user) {
       if (onAuthRequired) {
         onAuthRequired();
@@ -970,24 +1099,60 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
       return;
     }
 
-    const newBookmarksSet = new Set(bookmarkedIds);
-    const isCurrentlyBookmarked = bookmarkedIds.has(serviceId);
+    const isBookmarked = bookmarkedIds.has(serviceId);
 
     try {
-      // Optimistically update the UI
-      if (isCurrentlyBookmarked) {
-        newBookmarksSet.delete(serviceId);
-      } else {
-        newBookmarksSet.add(serviceId);
-      }
-      setBookmarkedIds(newBookmarksSet);
+      const bookmarkKey = generateBookmarkKey(service);
 
-      // Attempt database operation
-      let success = false;
-      if (isCurrentlyBookmarked) {
-        success = await UserStorage.removeFromWishlistDB(serviceId);
+      if (isBookmarked) {
+        // Remove bookmark (optimistic, functional update to avoid races)
+        setBookmarkedIds(prev => {
+          const s = new Set(prev);
+          s.delete(serviceId);
+          return s;
+        });
+
+        // Remove from DB
+        const success = await UserStorage.removeFromWishlistDB(serviceId);
+        if (!success) {
+          // Revert optimistic update
+          setBookmarkedIds(prev => {
+            const s = new Set(prev);
+            s.add(serviceId);
+            return s;
+          });
+          throw new Error('Failed to remove bookmark');
+        }
+
+        // Update local cache
+        try {
+          const items = UserStorage.getBookmarkItems();
+          delete items[serviceId];
+          UserStorage.setBookmarkItems(items);
+
+          const cached = UserStorage.getItemAsJSON<Service[]>('cached_bookmarks', []);
+          const filteredCached = cached.filter(item => item.id !== serviceId);
+          UserStorage.setItem('cached_bookmarks', JSON.stringify(filteredCached));
+        } catch (e) {
+          // ignore local cache errors
+        }
+
+        // Dispatch event after successful DB operation
+        window.dispatchEvent(new CustomEvent('bookmarks:changed'));
       } else {
-        success = await UserStorage.addToWishlistDB(serviceId, {
+        // Add bookmark
+        // Dedupe locally: check cached bookmark items
+        const localItems = UserStorage.getBookmarkItems();
+        const alreadyLocal = Object.values(localItems || {}).some((it: any) => it && it.__bookmark_key === bookmarkKey);
+
+        // Optimistically add to bookmarks for UI (functional update)
+        setBookmarkedIds(prev => {
+          const s = new Set(prev);
+          s.add(serviceId);
+          return s;
+        });
+
+        const serviceData = {
           id: service.id,
           name: service.name,
           type: service.type,
@@ -996,24 +1161,35 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
           price: service.price,
           rating: service.rating,
           image: service.image,
-          features: service.features
-        });
-      }
+          features: service.features,
+          __bookmark_key: bookmarkKey
+        };
 
-      if (!success) {
-        // Revert the optimistic update if the operation failed
-        if (isCurrentlyBookmarked) {
-          newBookmarksSet.add(serviceId);
-        } else {
-          newBookmarksSet.delete(serviceId);
+        const success = await UserStorage.addToWishlistDB(serviceId, serviceData);
+        if (!success) {
+          // Revert optimistic add
+          setBookmarkedIds(prev => {
+            const s = new Set(prev);
+            s.delete(serviceId);
+            return s;
+          });
+          throw new Error('Failed to add to bookmarks');
         }
-        setBookmarkedIds(newBookmarksSet);
-        throw new Error(`Failed to ${isCurrentlyBookmarked ? 'remove from' : 'add to'} bookmarks`);
-      }
 
-      // Update local storage and notify components
-      localStorage.setItem('local_bookmarks', JSON.stringify([...newBookmarksSet]));
-      window.dispatchEvent(new CustomEvent('bookmarks:changed'));
+        try {
+          const items = UserStorage.getBookmarkItems();
+          items[serviceId] = serviceData;
+          UserStorage.setBookmarkItems(items);
+
+          const cached = UserStorage.getItemAsJSON<Service[]>('cached_bookmarks', []);
+          UserStorage.setItem('cached_bookmarks', JSON.stringify([...cached, serviceData]));
+        } catch (e) {
+          // ignore local cache errors
+        }
+
+        // Dispatch event after successful DB operation
+        window.dispatchEvent(new CustomEvent('bookmarks:changed'));
+      }
     } catch (error) {
       console.error('Failed to toggle bookmark:', error);
       window.dispatchEvent(new CustomEvent('toast:show', {
@@ -1487,8 +1663,16 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
                       key={combination.id}
                       combination={combination}
                       onViewDetails={setSelectedService}
-                      onToggleBookmark={toggleBookmark}
-                      isBookmarked={(serviceId: string) => bookmarkedIds.has(serviceId)}
+                      onToggleBookmark={() => {
+                        // Add any services in this combination that aren't bookmarked yet
+                        combination.services.forEach(svc => {
+                          if (!bookmarkedIds.has(svc.id)) {
+                            // toggleBookmark will handle auth checks and optimistic UI
+                            toggleBookmark(svc.id, svc);
+                          }
+                        });
+                      }}
+                      isBookmarked={combination.services.every(svc => bookmarkedIds.has(svc.id))}
                     />
                   ))}
               </div>
@@ -1592,5 +1776,5 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   );
 };
 
-export default React.memo(ServiceSearch);
+export default ServiceSearch;
 

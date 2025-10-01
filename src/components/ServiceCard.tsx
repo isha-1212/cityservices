@@ -30,11 +30,11 @@ interface ServiceCardProps {
   actionLabel?: string;
 }
 
-export const ServiceCard: React.FC<ServiceCardProps> = ({ 
-  service, 
-  isBookmarked, 
-  onToggleBookmark, 
-  onViewDetails, 
+export const ServiceCard: React.FC<ServiceCardProps> = ({
+  service,
+  isBookmarked,
+  onToggleBookmark,
+  onViewDetails,
   viewMode = 'grid',
   actionIcon: ActionIcon = Heart,
   actionLabel = 'Bookmark'
@@ -62,19 +62,20 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
           <p className="text-sm text-slate-600 truncate">{service.description}</p>
         </div>
         <div className="text-right flex-shrink-0">
-            <div className="text-lg font-bold text-slate-900">
-              ₹{(service.price ?? 0).toLocaleString()}
-            </div>
-            <div className="text-sm text-slate-600">{getPriceUnit(service.type)}</div>
+          <div className="text-lg font-bold text-slate-900">
+            ₹{(service.price ?? 0).toLocaleString()}
+          </div>
+          <div className="text-sm text-slate-600">{getPriceUnit(service.type)}</div>
           <div className="flex gap-2 mt-2">
             <button
               onClick={onToggleBookmark}
+              data-bookmark
               className={`p-2 rounded ${isBookmarked
                 ? 'text-red-500 hover:bg-red-50'
                 : 'text-slate-400 hover:bg-slate-50'
                 }`}
             >
-              <ActionIcon className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
+              <ActionIcon className={`w-4 h-4 stroke-current ${isBookmarked ? 'text-red-500' : 'text-slate-400'}`} />
             </button>
             <button
               onClick={onViewDetails}
@@ -128,7 +129,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             : 'bg-white/20 text-white hover:bg-white/30'
             }`}
         >
-          <ActionIcon className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
+          <ActionIcon className={`w-4 h-4 stroke-current ${isBookmarked ? 'text-red-500' : 'text-white'}`} />
         </button>
       </div>
 

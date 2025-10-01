@@ -1150,6 +1150,17 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
     setCriteria(prev => ({ ...prev, selectedTypes: prev.selectedTypes.filter(t => t !== type) }));
   };
 
+  const clearAllFilters = () => {
+    setSearchQuery('');
+    setSelectedCity('');
+    setSelectedTypes([]);
+    setPriceRange([0, 100000]);
+    setMinRating(0);
+    setAreaQuery('');
+    setFoodQuery('');
+    setTiffinQuery('');
+  };
+
   const toggleBookmark = async (serviceId: string, service: Service) => {
     if (!user) {
       if (onAuthRequired) {
@@ -1423,195 +1434,347 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
 
       {/* Sticky Floating Filter Bar - appears when main filter scrolls out */}
       {showStickyBar && (
-        <div className="sticky left-0 right-0 bg-white border-b border-slate-200 shadow-md" style={{ top: `${Math.max(0, stickyTop)}px`, zIndex: 40 }}>
-          <div className="max-w-7xl mx-auto px-3 py-2">
-            <div className="flex items-center gap-2">
-              {/* Search Bar */}
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Search services..."
-                  value={criteria.searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
-                />
+        <div className="sticky left-0 right-0 bg-white border-b border-slate-200 shadow-md overflow-x-auto" style={{ top: `${Math.max(0, stickyTop)}px`, zIndex: 40 }}>
+          <div className="max-w-7xl mx-auto px-3 py-2 min-w-[280px]">
+            <div className="flex flex-wrap md:flex-nowrap items-center justify-between w-full gap-2">
+              <div className="flex items-center gap-2 flex-1 min-w-0 w-full md:w-auto">
+                {/* Search Bar (compact) */}
+                <div className="relative flex-grow min-w-[150px] max-w-xs w-full sm:w-auto mr-2">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={criteria.searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500 bg-white"
+                  />
+                </div>
+
+                {/* Clear Filters - match main filter style with icon */}
+                <button
+                  onClick={() => clearAllFilters()}
+                  className="ml-0 h-10 min-w-[40px] sm:min-w-0 flex items-center justify-center px-0 sm:px-3 bg-red-50 text-red-600 rounded-2xl hover:bg-red-100 transition-colors text-sm font-medium whitespace-nowrap"
+                >
+                  <X className="w-5 h-5" />
+                  <span className="hidden sm:inline">Clear Filters</span>
+                </button>
               </div>
 
-              {/* Filter Button */}
-              <button
-                onClick={() => {
-                  // close sticky bar when opening filters from sticky area
-                  const opening = !showFilters;
-                  setShowStickyBar(false);
-                  setShowFilters(opening);
-                  setFiltersOpenedFrom(opening ? 'sticky' : null);
-                }}
-                className="flex items-center justify-center space-x-2 px-4 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap"
-              >
-                <SlidersHorizontal className="w-4 h-4 text-slate-600" />
-                <span className="text-sm font-medium text-slate-700">Filters</span>
-              </button>
-
-              {/* Sort Dropdown */}
-              <select
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value as 'priceLowToHigh' | 'priceHighToLow')}
-                className="px-3 py-2 text-sm rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700"
-                aria-label="Sort services by price"
-              >
-                <option value="priceLowToHigh">Price: Low to High</option>
-                <option value="priceHighToLow">Price: High to Low</option>
-              </select>
-
-              {/* Grid/List Toggle */}
-              <div className="flex items-center space-x-1 bg-slate-100 rounded-lg p-1 text-xs">
+              <div className="flex items-center gap-1 flex-shrink-0 mt-2 md:mt-0">
+                {/* Filter Button */}
                 <button
-                  onClick={() => setViewMode('grid')}
-                  className={`flex items-center px-2 py-1 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
-                    }`}
+                  onClick={() => {
+                    // close sticky bar when opening filters from sticky area
+                    const opening = !showFilters;
+                    setShowStickyBar(false);
+                    setShowFilters(opening);
+                    setFiltersOpenedFrom(opening ? 'sticky' : null);
+                  }}
+                  className="h-10 min-w-[40px] sm:min-w-0 flex items-center justify-center px-0 sm:px-3 bg-slate-100 rounded-2xl hover:bg-slate-200 transition-colors whitespace-nowrap text-sm"
                 >
-                  <Grid className="w-4 h-4" />
-                  <span className="ml-1 text-sm hidden sm:inline">Grid</span>
+                  <SlidersHorizontal className="w-5 h-5 text-slate-600" />
+                  <span className="font-medium text-slate-700 hidden sm:inline">Filters</span>
                 </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`flex items-center px-2 py-1 rounded-md transition-colors ${viewMode === 'list' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
-                    }`}
+
+                {/* Sort Dropdown */}
+                <select
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value as 'priceLowToHigh' | 'priceHighToLow')}
+                  className="px-2 py-1 text-xs rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700 max-w-[120px]"
+                  aria-label="Sort services by price"
                 >
-                  <List className="w-4 h-4" />
-                  <span className="ml-1 text-sm hidden sm:inline">List</span>
-                </button>
+                  <option value="priceLowToHigh">Price: Low to High</option>
+                  <option value="priceHighToLow">Price: High to Low</option>
+                </select>
+
+                {/* Grid/List Toggle */}
+                <div className="flex items-center space-x-1 bg-slate-100 rounded-lg p-1 text-xs">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`flex items-center px-1 py-1 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
+                      }`}
+                  >
+                    <Grid className="w-3 h-3" />
+                    <span className="ml-1 hidden sm:inline">Grid</span>
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`flex items-center px-1 py-1 rounded-md transition-colors ${viewMode === 'list' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
+                      }`}
+                  >
+                    <List className="w-3 h-3" />
+                    <span className="ml-1 hidden sm:inline">List</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      )}
+      )
+      }
 
       {/* Filters Panel - opens when showFilters is true; show condensed sticky panel only when opened from sticky */}
-      {showFilters && filtersOpenedFrom === 'sticky' && showStickyBar && (
-        <div
-          className="fixed left-0 right-0 bg-white border-b border-slate-200 shadow-lg"
-          style={{ top: filtersTop !== null ? `${filtersTop}px` : `${Math.max(0, stickyTop + STICKY_BAR_HEIGHT)}px`, zIndex: 45 }}
-        >
-          <div className="max-w-7xl mx-auto px-3 py-3">
-            <div className="space-y-3 p-3 bg-slate-50 rounded-lg">
-              {/* Copy of condensed filter controls for the sticky view */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* City Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">City</label>
-                  <select
-                    value={selectedCity}
-                    onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 text-slate-900"
-                  >
-                    <option value="">All Cities</option>
-                    {cities.map(city => (
-                      <option key={city} value={city}>{city}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Service Types */}
-                <div className="relative">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Service Type</label>
-                  <div className="relative">
-                    <button
-                      onClick={() => setServiceTypeDropdownOpen(!serviceTypeDropdownOpen)}
-                      className="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-lg text-left flex items-center justify-between hover:border-slate-300 focus:ring-2 focus:ring-slate-700"
+      {
+        showFilters && filtersOpenedFrom === 'sticky' && showStickyBar && (
+          <div
+            className="fixed left-0 right-0 bg-white border-b border-slate-200 shadow-lg"
+            style={{ top: filtersTop !== null ? `${filtersTop}px` : `${Math.max(0, stickyTop + STICKY_BAR_HEIGHT)}px`, zIndex: 45 }}
+          >
+            <div className="max-w-7xl mx-auto px-3 py-3">
+              <div className="space-y-3 p-3 bg-slate-50 rounded-lg">
+                {/* Copy of condensed filter controls for the sticky view */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* City Filter */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">City</label>
+                    <select
+                      value={selectedCity}
+                      onChange={(e) => setSelectedCity(e.target.value)}
+                      className="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 text-slate-900"
                     >
-                      <span className="text-slate-900">Select service types</span>
-                      <ChevronDown className="w-4 h-4 text-slate-400" />
-                    </button>
+                      <option value="">All Cities</option>
+                      {cities.map(city => (
+                        <option key={city} value={city}>{city}</option>
+                      ))}
+                    </select>
+                  </div>
 
-                    {serviceTypeDropdownOpen && (
-                      <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
-                        {serviceTypes.map(type => (
-                          <label key={type.value} className="flex items-center px-4 py-3 hover:bg-slate-50 cursor-pointer">
-                            <input
-                              type="checkbox"
-                              checked={selectedTypes.includes(type.value)}
-                              onChange={() => toggleServiceType(type.value)}
-                              className="w-4 h-4 text-slate-700 border-slate-300 rounded focus:ring-2 focus:ring-slate-700 focus:ring-offset-0"
-                            />
-                            <span className="ml-3 text-sm text-slate-700">{type.label}</span>
-                          </label>
-                        ))}
+                  {/* Service Types */}
+                  <div className="relative">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Service Type</label>
+                    <div className="relative">
+                      <button
+                        onClick={() => setServiceTypeDropdownOpen(!serviceTypeDropdownOpen)}
+                        className="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-lg text-left flex items-center justify-between hover:border-slate-300 focus:ring-2 focus:ring-slate-700"
+                      >
+                        <span className="text-slate-900">Select service types</span>
+                        <ChevronDown className="w-4 h-4 text-slate-400" />
+                      </button>
+
+                      {serviceTypeDropdownOpen && (
+                        <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                          {serviceTypes.map(type => (
+                            <label key={type.value} className="flex items-center px-4 py-3 hover:bg-slate-50 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={selectedTypes.includes(type.value)}
+                                onChange={() => toggleServiceType(type.value)}
+                                className="w-4 h-4 text-slate-700 border-slate-300 rounded focus:ring-2 focus:ring-slate-700 focus:ring-offset-0"
+                              />
+                              <span className="ml-3 text-sm text-slate-700">{type.label}</span>
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Price Range */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Budget: ₹{priceRange[0].toLocaleString()} - ₹{priceRange[1].toLocaleString()} per month
+                    </label>
+                    <div className="relative px-2">
+                      <div className="relative h-6">
+                        <div className="absolute top-1/2 transform -translate-y-1/2 w-full h-1 bg-slate-200 rounded"></div>
+
+                        <div
+                          className="absolute top-1/2 transform -translate-y-1/2 h-1 bg-slate-700 rounded"
+                          style={{
+                            left: `${(priceRange[0] / 100000) * 100}%`,
+                            width: `${((priceRange[1] - priceRange[0]) / 100000) * 100}%`
+                          }}
+                        ></div>
+
+                        <input
+                          type="range"
+                          min={0}
+                          max={100000}
+                          step={1000}
+                          value={priceRange[0]}
+                          onChange={(e) => {
+                            const value = Number(e.target.value);
+                            if (value <= priceRange[1]) {
+                              setPriceRange([value, priceRange[1]]);
+                            }
+                          }}
+                          className="absolute w-full h-6 bg-transparent cursor-pointer dual-range"
+                        />
+
+                        <input
+                          type="range"
+                          min={0}
+                          max={100000}
+                          step={1000}
+                          value={priceRange[1]}
+                          onChange={(e) => {
+                            const value = Number(e.target.value);
+                            if (value >= priceRange[0]) {
+                              setPriceRange([priceRange[0], value]);
+                            }
+                          }}
+                          className="absolute w-full h-6 bg-transparent cursor-pointer dual-range"
+                        />
                       </div>
-                    )}
+
+                      <div className="flex justify-between text-xs text-slate-500 mt-2 px-1">
+                        <span>₹0</span>
+                        <span>₹1,00,000</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Price Range */}
+                {/* Rating Filter (sticky condensed) */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Budget: ₹{priceRange[0].toLocaleString()} - ₹{priceRange[1].toLocaleString()} per month
-                  </label>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Min Rating: {minRating}★</label>
                   <div className="relative px-2">
                     <div className="relative h-6">
                       <div className="absolute top-1/2 transform -translate-y-1/2 w-full h-1 bg-slate-200 rounded"></div>
-
-                      <div
-                        className="absolute top-1/2 transform -translate-y-1/2 h-1 bg-slate-700 rounded"
-                        style={{
-                          left: `${(priceRange[0] / 100000) * 100}%`,
-                          width: `${((priceRange[1] - priceRange[0]) / 100000) * 100}%`
-                        }}
-                      ></div>
-
                       <input
                         type="range"
                         min={0}
-                        max={100000}
-                        step={1000}
-                        value={priceRange[0]}
-                        onChange={(e) => {
-                          const value = Number(e.target.value);
-                          if (value <= priceRange[1]) {
-                            setPriceRange([value, priceRange[1]]);
-                          }
-                        }}
-                        className="absolute w-full h-6 bg-transparent cursor-pointer dual-range"
-                      />
-
-                      <input
-                        type="range"
-                        min={0}
-                        max={100000}
-                        step={1000}
-                        value={priceRange[1]}
-                        onChange={(e) => {
-                          const value = Number(e.target.value);
-                          if (value >= priceRange[0]) {
-                            setPriceRange([priceRange[0], value]);
-                          }
-                        }}
-                        className="absolute w-full h-6 bg-transparent cursor-pointer dual-range"
+                        max={5}
+                        step={0.5}
+                        value={minRating}
+                        onChange={(e) => setMinRating(Number(e.target.value))}
+                        className="absolute w-full h-6 bg-transparent slider"
                       />
                     </div>
-
                     <div className="flex justify-between text-xs text-slate-500 mt-2 px-1">
-                      <span>₹0</span>
-                      <span>₹1,00,000</span>
+                      <span>0</span>
+                      <span>5</span>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Close button */}
-              <div className="flex justify-end">
-                <button
-                  onClick={() => setShowFilters(false)}
-                  className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors"
-                >
-                  Apply Filters
-                </button>
+                {/* Conditional Area/Food/Tiffin inputs for sticky view */}
+                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* Area Name - shown when accommodation selected */}
+                  {selectedTypes.includes('accommodation') && (
+                    <div className="relative">
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Area Name</label>
+                      <input
+                        type="text"
+                        placeholder="Type area name (e.g., Vaishno, Bodakdev)..."
+                        value={areaQuery}
+                        onChange={(e) => {
+                          setAreaQuery(e.target.value);
+                          setShowAreaSuggestions(e.target.value.length > 0);
+                        }}
+                        onFocus={() => setShowAreaSuggestions(areaQuery.length > 0)}
+                        onBlur={() => setTimeout(() => setShowAreaSuggestions(false), 300)}
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500 bg-white"
+                      />
+
+                      {showAreaSuggestions && filteredAreaSuggestions.length > 0 && (
+                        <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                          {filteredAreaSuggestions.slice(0, 8).map(area => (
+                            <button
+                              key={area}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setAreaQuery(area);
+                                setShowAreaSuggestions(false);
+                              }}
+                              className="w-full text-left px-3 sm:px-4 py-2 sm:py-3 hover:bg-slate-50 text-xs sm:text-sm text-slate-700"
+                            >
+                              {area}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Food Type - shown when food selected */}
+                  {selectedTypes.includes('food') && (
+                    <div className="relative">
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Food Type</label>
+                      <input
+                        type="text"
+                        placeholder="Type food type (e.g., Gujarati, South Indian)..."
+                        value={foodQuery}
+                        onChange={(e) => {
+                          setFoodQuery(e.target.value);
+                          setShowFoodSuggestions(e.target.value.length > 0);
+                        }}
+                        onFocus={() => setShowFoodSuggestions(foodQuery.length > 0)}
+                        onBlur={() => setTimeout(() => setShowFoodSuggestions(false), 300)}
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500 bg-white"
+                      />
+
+                      {showFoodSuggestions && filteredFoodSuggestions.length > 0 && (
+                        <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                          {filteredFoodSuggestions.slice(0, 8).map(food => (
+                            <button
+                              key={food}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setFoodQuery(food);
+                                setShowFoodSuggestions(false);
+                              }}
+                              className="w-full text-left px-4 py-3 hover:bg-slate-50 text-sm text-slate-700"
+                            >
+                              {food}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Tiffin Name - shown when tiffin selected */}
+                  {selectedTypes.includes('tiffin') && (
+                    <div className="relative">
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Tiffin Name</label>
+                      <input
+                        type="text"
+                        placeholder="Type tiffin name (e.g., Sharma Tiffin, Patel Tiffin)..."
+                        value={tiffinQuery}
+                        onChange={(e) => {
+                          setTiffinQuery(e.target.value);
+                          setShowTiffinSuggestions(e.target.value.length > 0);
+                        }}
+                        onFocus={() => setShowTiffinSuggestions(tiffinQuery.length > 0)}
+                        onBlur={() => setTimeout(() => setShowTiffinSuggestions(false), 300)}
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500 bg-white"
+                      />
+
+                      {showTiffinSuggestions && filteredTiffinSuggestions.length > 0 && (
+                        <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                          {filteredTiffinSuggestions.slice(0, 8).map(tiffin => (
+                            <button
+                              key={tiffin}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setTiffinQuery(tiffin);
+                                setShowTiffinSuggestions(false);
+                              }}
+                              className="w-full text-left px-4 py-3 hover:bg-slate-50 text-sm text-slate-700"
+                            >
+                              {tiffin}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+                {/* Close button */}
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowFilters(false)}
+                    className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors"
+                  >
+                    Apply Filters
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Main Search and Filters Section */}
       <div ref={mainFilterRef} className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200">
@@ -1768,15 +1931,24 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
                 <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-2">
                   Min Rating: {minRating}★
                 </label>
-                <input
-                  type="range"
-                  min={0}
-                  max={5}
-                  step={0.5}
-                  value={minRating}
-                  onChange={(e) => setMinRating(Number(e.target.value))}
-                  className="w-full slider"
-                />
+                <div className="relative px-2">
+                  <div className="relative h-6">
+                    <div className="absolute top-1/2 transform -translate-y-1/2 w-full h-1 bg-slate-200 rounded"></div>
+                    <input
+                      type="range"
+                      min={0}
+                      max={5}
+                      step={0.5}
+                      value={minRating}
+                      onChange={(e) => setMinRating(Number(e.target.value))}
+                      className="absolute w-full h-6 bg-transparent slider"
+                    />
+                  </div>
+                  <div className="flex justify-between text-xs text-slate-500 mt-2 px-1">
+                    <span>0</span>
+                    <span>5</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1956,172 +2128,180 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
       </div>
 
       {/* Loading State */}
-      {loading && (
-        <div className="text-center py-12">
-          <div className="inline-block w-8 h-8 border-4 border-slate-200 border-t-slate-700 rounded-full animate-spin"></div>
-          <p className="text-slate-600 mt-4">Loading services...</p>
-        </div>
-      )}
+      {
+        loading && (
+          <div className="text-center py-12">
+            <div className="inline-block w-8 h-8 border-4 border-slate-200 border-t-slate-700 rounded-full animate-spin"></div>
+            <p className="text-slate-600 mt-4">Loading services...</p>
+          </div>
+        )
+      }
 
       {/* Results */}
-      {!loading && (
-        <div className="space-y-6">
-          {/* Tab Navigation - show only when we have combinations */}
-          {selectedTypes.length > 1 && serviceCombinations.length > 0 && (
-            <div className="border-b border-slate-200">
-              <div className="flex space-x-8">
-                <button
-                  onClick={() => setActiveView('combined')}
-                  className={`py-3 px-1 border-b-2 font-medium text-sm ${activeView === 'combined'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
-                    }`}
-                >
-                  Combined Services
-                  <span className="ml-2 bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full">
-                    {serviceCombinations.length}
-                  </span>
-                </button>
-                <button
-                  onClick={() => setActiveView('individual')}
-                  className={`py-3 px-1 border-b-2 font-medium text-sm ${activeView === 'individual'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
-                    }`}
-                >
-                  Individual Services
-                  <span className="ml-2 bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-full">
-                    {filteredServices.length}
-                  </span>
-                </button>
+      {
+        !loading && (
+          <div className="space-y-6">
+            {/* Tab Navigation - show only when we have combinations */}
+            {selectedTypes.length > 1 && serviceCombinations.length > 0 && (
+              <div className="border-b border-slate-200">
+                <div className="flex space-x-8">
+                  <button
+                    onClick={() => setActiveView('combined')}
+                    className={`py-3 px-1 border-b-2 font-medium text-sm ${activeView === 'combined'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                      }`}
+                  >
+                    Combined Services
+                    <span className="ml-2 bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full">
+                      {serviceCombinations.length}
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => setActiveView('individual')}
+                    className={`py-3 px-1 border-b-2 font-medium text-sm ${activeView === 'individual'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                      }`}
+                  >
+                    Individual Services
+                    <span className="ml-2 bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-full">
+                      {filteredServices.length}
+                    </span>
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Combined Services Tab Content */}
-          {selectedTypes.length > 1 && serviceCombinations.length > 0 && activeView === 'combined' && (
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-slate-900">
-                  Combined Services Within Budget
-                </h2>
-                <span className="text-sm text-slate-600">
-                  {serviceCombinations.length} combinations found
-                </span>
+            {/* Combined Services Tab Content */}
+            {selectedTypes.length > 1 && serviceCombinations.length > 0 && activeView === 'combined' && (
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-slate-900">
+                    Combined Services Within Budget
+                  </h2>
+                  <span className="text-sm text-slate-600">
+                    {serviceCombinations.length} combinations found
+                  </span>
+                </div>
+
+                <div className="grid gap-4">
+                  {serviceCombinations
+                    .slice(0, combinationPage * COMBINATIONS_PER_PAGE)
+                    .map((combination) => (
+                      <ServiceCombinationCard
+                        key={combination.id}
+                        combination={combination}
+                        onViewDetails={setSelectedService}
+                        onToggleBookmark={() => {
+                          // Add any services in this combination that aren't bookmarked yet
+                          combination.services.forEach(svc => {
+                            if (!bookmarkedIds.has(svc.id)) {
+                              // toggleBookmark will handle auth checks and optimistic UI
+                              toggleBookmark(svc.id, svc);
+                            }
+                          });
+                        }}
+                        onToggleBookmarkService={(svc) => toggleBookmark(svc.id, svc)}
+                        isBookmarkedForService={(id) => bookmarkedIds.has(id)}
+                        isBookmarked={combination.services.every(svc => bookmarkedIds.has(svc.id))}
+                      />
+                    ))}
+                </div>
+                {serviceCombinations.length > combinationPage * COMBINATIONS_PER_PAGE && (
+                  <div className="flex justify-center mt-6">
+                    <button
+                      className="px-6 py-3 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition-colors"
+                      onClick={() => setCombinationPage(combinationPage + 1)}
+                    >
+                      Load More
+                    </button>
+                  </div>
+                )}
               </div>
+            )}
 
-              <div className="grid gap-4">
-                {serviceCombinations
-                  .slice(0, combinationPage * COMBINATIONS_PER_PAGE)
-                  .map((combination) => (
-                    <ServiceCombinationCard
-                      key={combination.id}
-                      combination={combination}
-                      onViewDetails={setSelectedService}
-                      onToggleBookmark={() => {
-                        // Add any services in this combination that aren't bookmarked yet
-                        combination.services.forEach(svc => {
-                          if (!bookmarkedIds.has(svc.id)) {
-                            // toggleBookmark will handle auth checks and optimistic UI
-                            toggleBookmark(svc.id, svc);
-                          }
-                        });
-                      }}
-                      onToggleBookmarkService={(svc) => toggleBookmark(svc.id, svc)}
-                      isBookmarkedForService={(id) => bookmarkedIds.has(id)}
-                      isBookmarked={combination.services.every(svc => bookmarkedIds.has(svc.id))}
+            {/* Individual Services Tab Content */}
+            {(activeView === 'individual' || serviceCombinations.length === 0) && (
+              <div>
+                {selectedTypes.length > 1 && serviceCombinations.length > 0 && (
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-bold text-slate-900">Individual Services</h2>
+                    <span className="text-sm text-slate-600">
+                      {filteredServices.length} services found
+                    </span>
+                  </div>
+                )}
+
+                {/* Individual services */}
+                <div ref={resultsRef} className={`grid gap-6 ${viewMode === 'grid'
+                  ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                  : 'grid-cols-1'
+                  }`}>
+                  {filteredServices.slice(0, individualPage * INDIVIDUALS_PER_PAGE).map((service) => (
+                    <ServiceCard
+                      key={service.id}
+                      service={service}
+                      isBookmarked={bookmarkedIds.has(service.id)}
+                      onToggleBookmark={() => toggleBookmark(service.id, service)}
+                      onViewDetails={() => setSelectedService(service)}
+                      viewMode={viewMode}
                     />
                   ))}
+                </div>
+                {filteredServices.length > individualPage * INDIVIDUALS_PER_PAGE && (
+                  <div className="flex justify-center mt-6">
+                    <button
+                      className="px-6 py-3 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition-colors"
+                      onClick={() => setIndividualPage(individualPage + 1)}
+                    >
+                      Load More
+                    </button>
+                  </div>
+                )}
               </div>
-              {serviceCombinations.length > combinationPage * COMBINATIONS_PER_PAGE && (
-                <div className="flex justify-center mt-6">
-                  <button
-                    className="px-6 py-3 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition-colors"
-                    onClick={() => setCombinationPage(combinationPage + 1)}
-                  >
-                    Load More
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Individual Services Tab Content */}
-          {(activeView === 'individual' || serviceCombinations.length === 0) && (
-            <div>
-              {selectedTypes.length > 1 && serviceCombinations.length > 0 && (
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-slate-900">Individual Services</h2>
-                  <span className="text-sm text-slate-600">
-                    {filteredServices.length} services found
-                  </span>
-                </div>
-              )}
-
-              {/* Individual services */}
-              <div ref={resultsRef} className={`grid gap-6 ${viewMode === 'grid'
-                ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-                : 'grid-cols-1'
-                }`}>
-                {filteredServices.slice(0, individualPage * INDIVIDUALS_PER_PAGE).map((service) => (
-                  <ServiceCard
-                    key={service.id}
-                    service={service}
-                    isBookmarked={bookmarkedIds.has(service.id)}
-                    onToggleBookmark={() => toggleBookmark(service.id, service)}
-                    onViewDetails={() => setSelectedService(service)}
-                    viewMode={viewMode}
-                  />
-                ))}
-              </div>
-              {filteredServices.length > individualPage * INDIVIDUALS_PER_PAGE && (
-                <div className="flex justify-center mt-6">
-                  <button
-                    className="px-6 py-3 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition-colors"
-                    onClick={() => setIndividualPage(individualPage + 1)}
-                  >
-                    Load More
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      )}
+            )}
+          </div>
+        )
+      }
 
       {/* Empty State */}
-      {!loading && filteredServices.length === 0 && serviceCombinations.length === 0 && (
-        <div className="text-center py-16">
-          <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Search className="w-8 h-8 text-slate-400" />
+      {
+        !loading && filteredServices.length === 0 && serviceCombinations.length === 0 && (
+          <div className="text-center py-16">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="w-8 h-8 text-slate-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-slate-900 mb-2">No services found</h3>
+            <p className="text-slate-600 mb-6">Try adjusting your filters or search terms</p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCity('');
+                setSelectedTypes([]);
+                setPriceRange([0, 100000]);
+                setMinRating(0);
+                setAreaQuery('');
+                setFoodQuery('');
+                setTiffinQuery('');
+              }}
+              className="px-6 py-3 bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors"
+            >
+              Clear All Filters
+            </button>
           </div>
-          <h3 className="text-xl font-semibold text-slate-900 mb-2">No services found</h3>
-          <p className="text-slate-600 mb-6">Try adjusting your filters or search terms</p>
-          <button
-            onClick={() => {
-              setSearchQuery('');
-              setSelectedCity('');
-              setSelectedTypes([]);
-              setPriceRange([0, 100000]);
-              setMinRating(0);
-              setAreaQuery('');
-              setFoodQuery('');
-              setTiffinQuery('');
-            }}
-            className="px-6 py-3 bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors"
-          >
-            Clear All Filters
-          </button>
-        </div>
-      )}
+        )
+      }
 
       {/* Service Details Modal */}
-      {selectedService && (
-        <ServiceDetails
-          service={selectedService}
-          onClose={() => setSelectedService(null)}
-        />
-      )}
+      {
+        selectedService && (
+          <ServiceDetails
+            service={selectedService}
+            onClose={() => setSelectedService(null)}
+          />
+        )
+      }
 
       {/* Transport Modal */}
       <TransportModal
@@ -2129,7 +2309,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
         onClose={() => setShowTransportModal(false)}
         onSelectTransport={handleTransportSelect}
       />
-    </div>
+    </div >
   );
 };
 

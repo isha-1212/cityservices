@@ -602,6 +602,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   // Local UI-only states
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortOrder, setSortOrder] = useState<'priceLowToHigh' | 'priceHighToLow'>('priceLowToHigh');
 
   // Load bookmarks and listen for changes
   useEffect(() => {
@@ -905,9 +906,14 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     };
 
     const result = applyAdvancedFilters(allServices, filterCriteria);
-    // Keep existing behavior: sort by monthly price ascending
-    return result.sort((a, b) => convertToMonthlyPrice(a) - convertToMonthlyPrice(b));
-  }, [allServices, criteria.searchQuery, criteria.selectedCity, JSON.stringify(criteria.selectedTypes), JSON.stringify(criteria.priceRange), criteria.minRating, areaQuery, foodQuery, tiffinQuery]);
+
+    // Apply sorting based on sortOrder state
+    if (sortOrder === 'priceLowToHigh') {
+      return result.sort((a, b) => convertToMonthlyPrice(a) - convertToMonthlyPrice(b));
+    } else {
+      return result.sort((a, b) => convertToMonthlyPrice(b) - convertToMonthlyPrice(a));
+    }
+  }, [allServices, criteria.searchQuery, criteria.selectedCity, JSON.stringify(criteria.selectedTypes), JSON.stringify(criteria.priceRange), criteria.minRating, areaQuery, foodQuery, tiffinQuery, sortOrder]);
 
   const cities = [...new Set(allServices.map(s => s.city))].sort();
   const serviceTypes = [
@@ -1126,6 +1132,18 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
 
           <div className="flex items-center space-x-3">
             <span className="text-sm text-slate-600">{filteredServices.length} results</span>
+
+            {/* Sort Box */}
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value as 'priceLowToHigh' | 'priceHighToLow')}
+              className="px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700"
+              aria-label="Sort services by price"
+            >
+              <option value="priceLowToHigh">Price: Low to High</option>
+              <option value="priceHighToLow">Price: High to Low</option>
+            </select>
+
             <div className="flex items-center space-x-1 bg-slate-100 rounded-lg p-1">
               <button
                 onClick={() => setViewMode('grid')}

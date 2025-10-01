@@ -15,6 +15,27 @@ import { TransportModal } from './TransportModal';
 interface ServiceSearchProps {
   user?: any;
   onAuthRequired?: () => void;
+
+  criteria: FilterCriteria;
+  setCriteria: React.Dispatch<React.SetStateAction<FilterCriteria>>;
+
+  areaQuery: string;
+  setAreaQuery: React.Dispatch<React.SetStateAction<string>>;
+
+  foodQuery: string;
+  setFoodQuery: React.Dispatch<React.SetStateAction<string>>;
+
+  tiffinQuery: string;
+  setTiffinQuery: React.Dispatch<React.SetStateAction<string>>;
+
+  viewMode: 'grid' | 'list';
+  setViewMode: React.Dispatch<React.SetStateAction<'grid' | 'list'>>;
+
+  activeView: 'combined' | 'individual';
+  setActiveView: React.Dispatch<React.SetStateAction<'combined' | 'individual'>>;
+
+  sortOrder: 'priceLowToHigh' | 'priceHighToLow';
+  setSortOrder: React.Dispatch<React.SetStateAction<'priceLowToHigh' | 'priceHighToLow'>>;
 }
 
 // Area image mappings
@@ -336,8 +357,10 @@ const ServiceCombinationCard: React.FC<{
   };
   onViewDetails: (service: Service) => void;
   onToggleBookmark: () => void; // combination-level handler
-  isBookmarked: boolean; // boolean now
-}> = ({ combination, onViewDetails, onToggleBookmark, isBookmarked }) => {
+  onToggleBookmarkService?: (service: Service) => void; // per-service handler
+  isBookmarked: boolean; // combo-level boolean
+  isBookmarkedForService?: (serviceId: string) => boolean; // per-service predicate
+}> = ({ combination, onViewDetails, onToggleBookmark, onToggleBookmarkService, isBookmarked, isBookmarkedForService }) => {
   return (
     <div className="bg-white rounded-lg sm:rounded-xl border border-slate-200 p-3 sm:p-4 hover:shadow-lg transition-shadow">
       <div className="flex flex-col sm:flex-row justify-between items-start gap-3 mb-3">
@@ -390,20 +413,27 @@ const ServiceCombinationCard: React.FC<{
                 ₹{service.price.toLocaleString()}{getPriceUnit(service.type) ? ` ${getPriceUnit(service.type)}` : ''}
               </span>
               <div className="flex gap-1">
-                <button
-                  onClick={() => {
-                    // For per-service quick add, call combination-level handler
-                    // Parent may choose to add all missing services in combination
-                    onToggleBookmark();
-                  }}
-                  className={`p-1 rounded ${isBookmarked ? 'text-red-500 hover:bg-red-50' : 'text-slate-400 hover:bg-slate-50'}`}
-                >
-                  {isBookmarked ? (
-                    <Heart className="w-3 h-3 sm:w-4 sm:h-4 fill-current text-red-500" />
-                  ) : (
-                    <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-slate-400" />
-                  )}
-                </button>
+                {(() => {
+                  const perBookmarked = isBookmarkedForService ? isBookmarkedForService(service.id) : isBookmarked;
+                  return (
+                    <button
+                      onClick={() => {
+                        if (onToggleBookmarkService) {
+                          onToggleBookmarkService(service);
+                        } else {
+                          onToggleBookmark();
+                        }
+                      }}
+                      className={`p-1 rounded ${perBookmarked ? 'text-red-500 hover:bg-red-50' : 'text-slate-400 hover:bg-slate-50'}`}
+                    >
+                      {perBookmarked ? (
+                        <Heart className="w-3 h-3 sm:w-4 sm:h-4 fill-current text-red-500" />
+                      ) : (
+                        <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-slate-400" />
+                      )}
+                    </button>
+                  );
+                })()}
                 <button
                   onClick={() => onViewDetails(service)}
                   className="px-2 py-1 text-xs bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors"
@@ -565,12 +595,26 @@ const ServiceCard: React.FC<{
   );
 };
 
-const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) => {
-
+const ServiceSearch: React.FC<ServiceSearchProps> = ({
+  user,
+  onAuthRequired,
+  criteria,
+  setCriteria,
+  areaQuery,
+  setAreaQuery,
+  foodQuery,
+  setFoodQuery,
+  tiffinQuery,
+  setTiffinQuery,
+  viewMode,
+  setViewMode,
+  activeView,
+  setActiveView,
+  sortOrder,
+  setSortOrder
+}) => {
 
   // Pagination state for individual services
-
-
   const [individualPage, setIndividualPage] = useState(1);
   const INDIVIDUALS_PER_PAGE = 20;
   // Pagination state for combined services
@@ -581,30 +625,14 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   const [csvServices, setCsvServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // New states for enhanced filtering
-  const [areaQuery, setAreaQuery] = useState('');
-  const [foodQuery, setFoodQuery] = useState('');
-  const [tiffinQuery, setTiffinQuery] = useState('');
+  // UI-only states
   const [showAreaSuggestions, setShowAreaSuggestions] = useState(false);
   const [showFoodSuggestions, setShowFoodSuggestions] = useState(false);
   const [showTiffinSuggestions, setShowTiffinSuggestions] = useState(false);
   const [serviceTypeDropdownOpen, setServiceTypeDropdownOpen] = useState(false);
-  const [activeView, setActiveView] = useState<'combined' | 'individual'>('combined');
   const [showTransportModal, setShowTransportModal] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
-  // Unified filter criteria state for robust filtering
-  const [criteria, setCriteria] = useState<FilterCriteria>({
-    searchQuery: '',
-    selectedCity: '',
-    selectedTypes: [],
-    priceRange: [0, 100000],
-    minRating: 0,
-    areaQuery: '',
-    foodQuery: '',
-    tiffinQuery: ''
-  });
-
-  // Derive common pieces for backward-compatible usage in the UI
   // Backward-compatible setters used throughout the component
   const setSearchQuery = (v: string) => setCriteria(prev => ({ ...prev, searchQuery: v }));
   const setSelectedCity = (v: string) => setCriteria(prev => ({ ...prev, selectedCity: v }));
@@ -633,10 +661,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     'Tiffin Service', 'Home Cooked', 'Vegan', 'Jain Food', 'Continental', 'Fast Food'
   ];
 
-  // Local UI-only states
-  const [showFilters, setShowFilters] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [sortOrder, setSortOrder] = useState<'priceLowToHigh' | 'priceHighToLow'>('priceLowToHigh');
+
 
   // Bookmarks handling consolidated below (runs after services are loaded)
 
@@ -666,7 +691,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
         Papa.parse(accommodationText, {
           header: true,
           complete: (results: any) => {
-            results.data.forEach((row: any, idx: number) => {
+            results.data.forEach((row: any, _idx: number) => {
               if (!row.City || !row['Rent Price']) return;
 
               // Create unique identifier for this service
@@ -728,7 +753,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
         Papa.parse(tiffinText, {
           header: true,
           complete: (results: any) => {
-            results.data.forEach((row: any, idx: number) => {
+            results.data.forEach((row: any, _idx: number) => {
               if (!row.Name) return;
 
               // Create unique identifier for this service
@@ -785,7 +810,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
               sampledData.push(...taken);
             });
 
-            sampledData.forEach((row: any, idx: number) => {
+            sampledData.forEach((row: any, _idx: number) => {
               if (!row['Dish Name']) return;
 
               const serviceKey = `food-${row['Dish Name']}-${row['Restaurant Name']}-${row['Location']}`;
@@ -819,7 +844,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
         Papa.parse(gujaratFoodText, {
           header: true,
           complete: (results: any) => {
-            results.data.forEach((row: any, idx: number) => {
+            results.data.forEach((row: any, _idx: number) => {
               if (!row['item_name'] || !row['restaurant_name']) return;
 
               const serviceKey = `gujaratfood-${row['item_name']}-${row['restaurant_name']}-${row['city']}`;
@@ -1162,7 +1187,6 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
         // Add bookmark
         // Dedupe locally: check cached bookmark items
         const localItems = UserStorage.getBookmarkItems();
-        const alreadyLocal = Object.values(localItems || {}).some((it: any) => it && it.__bookmark_key === bookmarkKey);
 
         // Optimistically add to bookmarks for UI (functional update)
         setBookmarkedIds(prev => {
@@ -1691,6 +1715,8 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
                           }
                         });
                       }}
+                      onToggleBookmarkService={(svc) => toggleBookmark(svc.id, svc)}
+                      isBookmarkedForService={(id) => bookmarkedIds.has(id)}
                       isBookmarked={combination.services.every(svc => bookmarkedIds.has(svc.id))}
                     />
                   ))}

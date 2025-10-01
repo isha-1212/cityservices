@@ -11,6 +11,7 @@ import CostCalculatorPage from './CostCalculatorPage';
 import TiffinRentalList from './components/TiffinRentalList';
 import { LoginPromptModal } from './components/LoginPromptModal';
 import { supabase } from './config/supabase';
+import { FilterCriteria } from './utils/serviceFilteringLogic';
 
 
 function App() {
@@ -19,6 +20,24 @@ function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showAuthPage, setShowAuthPage] = useState(false);
+
+  // Service search filter state - lifted to persist across page switches
+  const [criteria, setCriteria] = useState<FilterCriteria>({
+    searchQuery: '',
+    selectedCity: '',
+    selectedTypes: [],
+    priceRange: [0, 100000],
+    minRating: 0,
+    areaQuery: '',
+    foodQuery: '',
+    tiffinQuery: ''
+  });
+  const [areaQuery, setAreaQuery] = useState('');
+  const [foodQuery, setFoodQuery] = useState('');
+  const [tiffinQuery, setTiffinQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [activeView, setActiveView] = useState<'combined' | 'individual'>('combined');
+  const [sortOrder, setSortOrder] = useState<'priceLowToHigh' | 'priceHighToLow'>('priceLowToHigh');
 
   // Initialize authentication state
   useEffect(() => {
@@ -74,6 +93,42 @@ function App() {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // Load service search state from localStorage
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('service_search_state');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.criteria) {
+          setCriteria(parsed.criteria);
+          setAreaQuery(parsed.criteria.areaQuery || '');
+          setFoodQuery(parsed.criteria.foodQuery || '');
+          setTiffinQuery(parsed.criteria.tiffinQuery || '');
+        }
+        if (parsed.viewMode) setViewMode(parsed.viewMode);
+        if (parsed.activeView) setActiveView(parsed.activeView);
+        if (parsed.sortOrder) setSortOrder(parsed.sortOrder);
+      }
+    } catch (e) {
+      // ignore parse errors
+    }
+  }, []);
+
+  // Save service search state to localStorage
+  useEffect(() => {
+    try {
+      const toSave = {
+        criteria: { ...criteria, areaQuery, foodQuery, tiffinQuery },
+        viewMode,
+        activeView,
+        sortOrder
+      };
+      localStorage.setItem('service_search_state', JSON.stringify(toSave));
+    } catch (e) {
+      // ignore storage errors
+    }
+  }, [criteria, viewMode, activeView, sortOrder, areaQuery, foodQuery, tiffinQuery]);
 
   const clearUserSpecificData = () => {
     // Clear user-specific localStorage data
@@ -148,7 +203,26 @@ function App() {
       case 'dashboard':
         return <Dashboard />;
       case 'search':
-        return <ServiceSearch user={user} onAuthRequired={handleAuthRequired} />;
+        return (
+          <ServiceSearch
+            user={user}
+            onAuthRequired={handleAuthRequired}
+            criteria={criteria}
+            setCriteria={setCriteria}
+            areaQuery={areaQuery}
+            setAreaQuery={setAreaQuery}
+            foodQuery={foodQuery}
+            setFoodQuery={setFoodQuery}
+            tiffinQuery={tiffinQuery}
+            setTiffinQuery={setTiffinQuery}
+            viewMode={viewMode}
+            setViewMode={setViewMode}
+            activeView={activeView}
+            setActiveView={setActiveView}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+          />
+        );
       case 'tiffin':
         return <TiffinRentalList />;
       case 'calculator':

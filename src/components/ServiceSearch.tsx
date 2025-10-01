@@ -638,6 +638,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
 
   // Ref for the main filter section to detect when it's out of view
   const mainFilterRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
   // Use headerRef supplied via props (falls back to internal ref if not provided)
   const internalHeaderRef = useRef<HTMLDivElement>(null);
   const headerRef = externalHeaderRef || internalHeaderRef;
@@ -645,6 +646,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
   const [measuredHeaderHeight, setMeasuredHeaderHeight] = useState<number>(64);
   const STICKY_BAR_HEIGHT = 44; // px, used to position the filters panel directly below the sticky bar
   const [filtersTop, setFiltersTop] = useState<number | null>(null);
+  const [filtersOpenedFrom, setFiltersOpenedFrom] = useState<'main' | 'sticky' | null>(null);
 
   // Backward-compatible setters used throughout the component
   const setSearchQuery = (v: string) => setCriteria(prev => ({ ...prev, searchQuery: v }));
@@ -1331,20 +1333,44 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
   // Scroll detection for sticky filter bar
   useEffect(() => {
     const handleScroll = () => {
-      if (mainFilterRef.current) {
-        const rect = mainFilterRef.current.getBoundingClientRect();
-        // Show sticky bar when main filter section is out of view (top is above viewport)
-        const shouldShow = rect.bottom < 0;
-        setShowStickyBar(shouldShow);
-
-        // compute header bottom to position sticky bar below header
-        const headerRect = headerRef.current?.getBoundingClientRect();
-        const headerBottom = headerRect ? Math.floor(headerRect.bottom) : 64;
-        // Nudge sticky bar up by 1px to remove tiny visual gap between header and sticky bar.
-        // Header has higher z-index, so a 1px overlap won't hide it but will remove sub-pixel gap.
+      // compute header bottom to decide thresholds
+      const headerRect = headerRef.current?.getBoundingClientRect();
+      const headerBottom = headerRect ? Math.floor(headerRect.bottom) : 64;
+      // If filters overlay is open, do not show the sticky bar (mutual exclusivity)
+      if (showFilters) {
+        setShowStickyBar(false);
+        // still update stickyTop/measurements
         setStickyTop(Math.max(0, headerBottom - 1));
         if (headerRect) setMeasuredHeaderHeight(Math.floor(headerRect.height));
+        return;
       }
+
+      // If resultsRef exists, show sticky when the results top is near the header bottom
+      if (resultsRef.current) {
+        const r = resultsRef.current.getBoundingClientRect();
+        // try to detect the first result row's top
+        const firstChild = resultsRef.current.firstElementChild as HTMLElement | null;
+        if (firstChild) {
+          const firstRect = firstChild.getBoundingClientRect();
+          // Show sticky when the top of the first result reaches the header bottom (1px tolerance)
+          const shouldShow = firstRect.top <= headerBottom + 1;
+          setShowStickyBar(shouldShow);
+        } else {
+          // fallback to use the container top
+          const threshold = headerBottom + 48;
+          const shouldShow = r.top <= threshold;
+          setShowStickyBar(shouldShow);
+        }
+      } else if (mainFilterRef.current) {
+        const rect = mainFilterRef.current.getBoundingClientRect();
+        // fallback: when main filter bottom is scrolled under header
+        const shouldShow = rect.bottom <= headerBottom + 1;
+        setShowStickyBar(shouldShow);
+      }
+
+      // position sticky bar based on header
+      setStickyTop(Math.max(0, headerBottom - 1));
+      if (headerRect) setMeasuredHeaderHeight(Math.floor(headerRect.height));
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -1414,7 +1440,13 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
 
               {/* Filter Button */}
               <button
-                onClick={() => setShowFilters(!showFilters)}
+                onClick={() => {
+                  // close sticky bar when opening filters from sticky area
+                  const opening = !showFilters;
+                  setShowStickyBar(false);
+                  setShowFilters(opening);
+                  setFiltersOpenedFrom(opening ? 'sticky' : null);
+                }}
                 className="flex items-center justify-center space-x-2 px-4 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap"
               >
                 <SlidersHorizontal className="w-4 h-4 text-slate-600" />
@@ -1456,8 +1488,8 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
         </div>
       )}
 
-      {/* Filters Panel - opens when showFilters is true; positioned using computed filtersTop */}
-      {showFilters && (
+      {/* Filters Panel - opens when showFilters is true; show condensed sticky panel only when opened from sticky */}
+      {showFilters && filtersOpenedFrom === 'sticky' && showStickyBar && (
         <div
           className="fixed left-0 right-0 bg-white border-b border-slate-200 shadow-lg"
           style={{ top: filtersTop !== null ? `${filtersTop}px` : `${Math.max(0, stickyTop + STICKY_BAR_HEIGHT)}px`, zIndex: 45 }}
@@ -1599,7 +1631,13 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4">
           <div className="flex gap-2">
             <button
-              onClick={() => setShowFilters(!showFilters)}
+              onClick={() => {
+                // open filters from main area
+                const opening = !showFilters;
+                setShowStickyBar(false);
+                setShowFilters(opening);
+                setFiltersOpenedFrom(opening ? 'main' : null);
+              }}
               className="flex items-center justify-center space-x-2 px-4 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
             >
               <SlidersHorizontal className="w-4 h-4 text-slate-600" />
@@ -2021,7 +2059,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
               )}
 
               {/* Individual services */}
-              <div className={`grid gap-6 ${viewMode === 'grid'
+              <div ref={resultsRef} className={`grid gap-6 ${viewMode === 'grid'
                 ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
                 : 'grid-cols-1'
                 }`}>

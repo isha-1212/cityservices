@@ -550,8 +550,10 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   // New states for enhanced filtering
   const [areaQuery, setAreaQuery] = useState('');
   const [foodQuery, setFoodQuery] = useState('');
+  const [tiffinQuery, setTiffinQuery] = useState('');
   const [showAreaSuggestions, setShowAreaSuggestions] = useState(false);
   const [showFoodSuggestions, setShowFoodSuggestions] = useState(false);
+  const [showTiffinSuggestions, setShowTiffinSuggestions] = useState(false);
   const [serviceTypeDropdownOpen, setServiceTypeDropdownOpen] = useState(false);
   const [activeView, setActiveView] = useState<'combined' | 'individual'>('combined');
   const [showTransportModal, setShowTransportModal] = useState(false);
@@ -564,7 +566,8 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     priceRange: [0, 100000],
     minRating: 0,
     areaQuery: '',
-    foodQuery: ''
+    foodQuery: '',
+    tiffinQuery: ''
   });
 
   // Derive common pieces for backward-compatible usage in the UI
@@ -897,13 +900,14 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
       priceRange: criteria.priceRange,
       minRating: criteria.minRating,
       areaQuery: areaQuery || criteria.areaQuery,
-      foodQuery: foodQuery || criteria.foodQuery
+      foodQuery: foodQuery || criteria.foodQuery,
+      tiffinQuery: tiffinQuery || criteria.tiffinQuery
     };
 
     const result = applyAdvancedFilters(allServices, filterCriteria);
     // Keep existing behavior: sort by monthly price ascending
     return result.sort((a, b) => convertToMonthlyPrice(a) - convertToMonthlyPrice(b));
-  }, [allServices, criteria.searchQuery, criteria.selectedCity, JSON.stringify(criteria.selectedTypes), JSON.stringify(criteria.priceRange), criteria.minRating, areaQuery, foodQuery]);
+  }, [allServices, criteria.searchQuery, criteria.selectedCity, JSON.stringify(criteria.selectedTypes), JSON.stringify(criteria.priceRange), criteria.minRating, areaQuery, foodQuery, tiffinQuery]);
 
   const cities = [...new Set(allServices.map(s => s.city))].sort();
   const serviceTypes = [
@@ -925,9 +929,10 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
         ? prev.selectedTypes.filter(t => t !== type)
         : [...prev.selectedTypes, type];
 
-      // Reset area and food queries when service types change
+      // Reset area, food, and tiffin queries when service types change
       if (!newTypes.includes('accommodation')) setAreaQuery('');
-      if (!newTypes.includes('food') && !newTypes.includes('tiffin')) setFoodQuery('');
+      if (!newTypes.includes('food')) setFoodQuery('');
+      if (!newTypes.includes('tiffin')) setTiffinQuery('');
 
       return { ...prev, selectedTypes: newTypes };
     });
@@ -1025,7 +1030,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
   if (foodQuery.trim()) {
     // Gather all food dish names from filtered services
     const allFoodNames = allServices
-      .filter(s => s.type === 'food' || s.type === 'tiffin')
+      .filter(s => s.type === 'food')
       .map(s => s.name)
       .filter(Boolean);
     filteredFoodSuggestions = allFoodNames.filter(name =>
@@ -1035,6 +1040,28 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
     filteredFoodSuggestions = Array.from(new Set(filteredFoodSuggestions)).sort();
   } else {
     filteredFoodSuggestions = foodSuggestions;
+  }
+
+  // Filter tiffin suggestions based on query - SUBSTRING MATCH, show full tiffin names
+  let filteredTiffinSuggestions: string[] = [];
+  if (tiffinQuery.trim()) {
+    // Gather all tiffin names from filtered services
+    const allTiffinNames = allServices
+      .filter(s => s.type === 'tiffin')
+      .map(s => s.name)
+      .filter(Boolean);
+    filteredTiffinSuggestions = allTiffinNames.filter(name =>
+      name.toLowerCase().includes(tiffinQuery.toLowerCase())
+    );
+    // Remove duplicates and sort
+    filteredTiffinSuggestions = Array.from(new Set(filteredTiffinSuggestions)).sort();
+  } else {
+    // For tiffin, we'll use the actual tiffin service names as suggestions
+    filteredTiffinSuggestions = allServices
+      .filter(s => s.type === 'tiffin')
+      .map(s => s.name)
+      .filter(Boolean);
+    filteredTiffinSuggestions = Array.from(new Set(filteredTiffinSuggestions)).sort();
   }
 
   // Per-type filtering and matching logic removed - using centralized utilities instead
@@ -1048,11 +1075,12 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
       priceRange: criteria.priceRange,
       minRating: criteria.minRating,
       areaQuery: areaQuery || criteria.areaQuery,
-      foodQuery: foodQuery || criteria.foodQuery
+      foodQuery: foodQuery || criteria.foodQuery,
+      tiffinQuery: tiffinQuery || criteria.tiffinQuery
     };
 
     return getAllCombinationsSorted(allServices, filterCriteria, { maxCombinations: 1000, maxServicesPerType: 10 });
-  }, [allServices, criteria, areaQuery, foodQuery]);
+  }, [allServices, criteria, areaQuery, foodQuery, tiffinQuery]);
 
   const serviceCombinations = combinationResults.allCombinations.map(c => ({ id: c.id, services: c.services, totalPrice: c.totalMonthlyPrice, types: c.types }));
 
@@ -1300,7 +1328,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
             )}
 
             {/* Conditional Food Filter */}
-            {(selectedTypes.includes('food') || selectedTypes.includes('tiffin')) && (
+            {(selectedTypes.includes('food')) && (
               <div className="relative">
                 <label className="block text-sm font-medium text-slate-700 mb-2">Food Type</label>
                 <input
@@ -1329,6 +1357,43 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
                         className="w-full text-left px-4 py-3 hover:bg-slate-50 text-sm text-slate-700"
                       >
                         {food}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Conditional Tiffin Filter */}
+            {(selectedTypes.includes('tiffin')) && (
+              <div className="relative">
+                <label className="block text-sm font-medium text-slate-700 mb-2">Tiffin Name</label>
+                <input
+                  type="text"
+                  placeholder="Type tiffin name (e.g., Sharma Tiffin, Patel Tiffin)..."
+                  value={tiffinQuery}
+                  onChange={(e) => {
+                    setTiffinQuery(e.target.value);
+                    setShowTiffinSuggestions(e.target.value.length > 0);
+                  }}
+                  onFocus={() => setShowTiffinSuggestions(tiffinQuery.length > 0)}
+                  onBlur={() => setTimeout(() => setShowTiffinSuggestions(false), 300)}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
+                />
+
+                {showTiffinSuggestions && filteredTiffinSuggestions.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                    {filteredTiffinSuggestions.slice(0, 8).map(tiffin => (
+                      <button
+                        key={tiffin}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setTiffinQuery(tiffin);
+                          setShowTiffinSuggestions(false);
+                        }}
+                        className="w-full text-left px-4 py-3 hover:bg-slate-50 text-sm text-slate-700"
+                      >
+                        {tiffin}
                       </button>
                     ))}
                   </div>
@@ -1480,6 +1545,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({ user, onAuthRequired }) =
               setMinRating(0);
               setAreaQuery('');
               setFoodQuery('');
+              setTiffinQuery('');
             }}
             className="px-6 py-3 bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors"
           >

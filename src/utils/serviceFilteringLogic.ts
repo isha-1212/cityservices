@@ -8,6 +8,7 @@ export interface FilterCriteria {
     minRating?: number;
     areaQuery?: string;
     foodQuery?: string;
+    tiffinQuery?: string;
 }
 
 const DAYS_IN_MONTH = 30;
@@ -50,11 +51,17 @@ export function applyAdvancedFilters(services: Service[], criteria: FilterCriter
             const metaArea = (service.meta?.['Locality / Area'] || service.meta?.['Area'] || '').toString().toLowerCase();
             if (!(metaArea.includes(a) || service.name.toLowerCase().includes(a) || service.description.toLowerCase().includes(a))) return false;
         }
-        if (criteria.foodQuery && (service.type === 'food' || service.type === 'tiffin')) {
+        if (criteria.foodQuery && service.type === 'food') {
             const f = criteria.foodQuery.toLowerCase();
             const featuresMatch = (service.features || []).some(fe => fe.toLowerCase().includes(f));
             const metaMatch = (service.meta && Object.values(service.meta).some(v => v && v.toString().toLowerCase().includes(f))) || false;
             if (!(service.name.toLowerCase().includes(f) || service.description.toLowerCase().includes(f) || featuresMatch || metaMatch)) return false;
+        }
+        if (criteria.tiffinQuery && service.type === 'tiffin') {
+            const t = criteria.tiffinQuery.toLowerCase();
+            const featuresMatch = (service.features || []).some(fe => fe.toLowerCase().includes(t));
+            const metaMatch = (service.meta && Object.values(service.meta).some(v => v && v.toString().toLowerCase().includes(t))) || false;
+            if (!(service.name.toLowerCase().includes(t) || service.description.toLowerCase().includes(t) || featuresMatch || metaMatch)) return false;
         }
         return true;
     });

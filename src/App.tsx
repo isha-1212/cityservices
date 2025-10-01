@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout } from './components/Layout';
 import { Dashboard } from './components/Dashboard';
 import { default as ServiceSearch } from './components/ServiceSearch';
@@ -38,6 +38,7 @@ function App() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [activeView, setActiveView] = useState<'combined' | 'individual'>('combined');
   const [sortOrder, setSortOrder] = useState<'priceLowToHigh' | 'priceHighToLow'>('priceLowToHigh');
+  const headerRef = React.createRef<HTMLDivElement>();
 
   // Initialize authentication state
   useEffect(() => {
@@ -206,6 +207,7 @@ function App() {
         return (
           <ServiceSearch
             user={user}
+            headerRef={headerRef}
             onAuthRequired={handleAuthRequired}
             criteria={criteria}
             setCriteria={setCriteria}
@@ -239,7 +241,7 @@ function App() {
   };
 
   return (
-    <Layout currentPage={currentPage} onPageChange={setCurrentPage} onSignOut={user ? handleSignOut : undefined}>
+    <Layout currentPage={currentPage} onPageChange={setCurrentPage} onSignOut={user ? handleSignOut : undefined} headerRef={headerRef}>
       {renderCurrentPage()}
       <LoginPromptModal
         isOpen={showAuthModal}

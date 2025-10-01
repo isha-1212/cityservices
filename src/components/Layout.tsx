@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, User, BookOpen, BarChart3, Calculator, Search, LogOut } from 'lucide-react';
 
 interface LayoutProps {
@@ -6,9 +6,10 @@ interface LayoutProps {
   currentPage: string;
   onPageChange: (page: string) => void;
   onSignOut?: () => void;
+  headerRef?: React.RefObject<HTMLDivElement>;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut, headerRef }) => {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'search', label: 'Find Services', icon: Search },
@@ -17,10 +18,26 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
     { id: 'profile', label: 'Profile', icon: User },
   ];
 
+  const [headerHeight, setHeaderHeight] = useState<number>(0);
+
+  useEffect(() => {
+    const measure = () => {
+      const h = headerRef?.current?.getBoundingClientRect().height || 0;
+      setHeaderHeight(h);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [headerRef]);
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50 backdrop-blur-sm bg-white/95">
+      <header
+        ref={headerRef}
+        className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm pt-1"
+        style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
+      >
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -71,8 +88,11 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 lg:px-8 py-8 pb-24 md:pb-8">
+      {/* Main Content (reduced top gap so sticky bar sits slightly closer under header) */}
+      <main
+        className="container mx-auto px-4 lg:px-8 py-8 pb-24 md:pb-8"
+        style={{ paddingTop: headerHeight ? `${Math.max(headerHeight - 8, 0)}px` : undefined }}
+      >
         <div className="max-w-7xl mx-auto">
           {children}
         </div>

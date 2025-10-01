@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Search, MapPin, Star, Heart, Grid2x2 as Grid, List, SlidersHorizontal, ChevronDown, X } from 'lucide-react';
 import Papa from 'papaparse';
 import mockServices, { Service } from '../data/mockServices';
@@ -15,6 +15,7 @@ import { TransportModal } from './TransportModal';
 interface ServiceSearchProps {
   user?: any;
   onAuthRequired?: () => void;
+  headerRef?: React.RefObject<HTMLDivElement>;
 
   criteria: FilterCriteria;
   setCriteria: React.Dispatch<React.SetStateAction<FilterCriteria>>;
@@ -607,6 +608,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
   tiffinQuery,
   setTiffinQuery,
   viewMode,
+  headerRef: externalHeaderRef,
   setViewMode,
   activeView,
   setActiveView,
@@ -632,6 +634,17 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
   const [serviceTypeDropdownOpen, setServiceTypeDropdownOpen] = useState(false);
   const [showTransportModal, setShowTransportModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+
+  // Ref for the main filter section to detect when it's out of view
+  const mainFilterRef = useRef<HTMLDivElement>(null);
+  // Use headerRef supplied via props (falls back to internal ref if not provided)
+  const internalHeaderRef = useRef<HTMLDivElement>(null);
+  const headerRef = externalHeaderRef || internalHeaderRef;
+  const [stickyTop, setStickyTop] = useState<number>(64);
+  const [measuredHeaderHeight, setMeasuredHeaderHeight] = useState<number>(64);
+  const STICKY_BAR_HEIGHT = 44; // px, used to position the filters panel directly below the sticky bar
+  const [filtersTop, setFiltersTop] = useState<number | null>(null);
 
   // Backward-compatible setters used throughout the component
   const setSearchQuery = (v: string) => setCriteria(prev => ({ ...prev, searchQuery: v }));
@@ -1315,6 +1328,63 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
     return serviceTypes.find(t => t.value === type)?.label || type.charAt(0).toUpperCase() + type.slice(1);
   };
 
+  // Scroll detection for sticky filter bar
+  useEffect(() => {
+    const handleScroll = () => {
+      if (mainFilterRef.current) {
+        const rect = mainFilterRef.current.getBoundingClientRect();
+        // Show sticky bar when main filter section is out of view (top is above viewport)
+        const shouldShow = rect.bottom < 0;
+        setShowStickyBar(shouldShow);
+
+        // compute header bottom to position sticky bar below header
+        const headerRect = headerRef.current?.getBoundingClientRect();
+        const headerBottom = headerRect ? Math.floor(headerRect.bottom) : 64;
+        // Nudge sticky bar up by 1px to remove tiny visual gap between header and sticky bar.
+        // Header has higher z-index, so a 1px overlap won't hide it but will remove sub-pixel gap.
+        setStickyTop(Math.max(0, headerBottom - 1));
+        if (headerRect) setMeasuredHeaderHeight(Math.floor(headerRect.height));
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // run once to set initial state
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll as EventListener);
+    };
+  }, []);
+
+  // Compute filters panel top so it opens correctly whether sticky bar is visible or not
+  useEffect(() => {
+    const computeTop = () => {
+      if (showStickyBar) {
+        setFiltersTop(Math.max(0, stickyTop + STICKY_BAR_HEIGHT));
+        return;
+      }
+
+      if (mainFilterRef.current) {
+        const rect = mainFilterRef.current.getBoundingClientRect();
+        // position just below the main filter section relative to viewport
+        setFiltersTop(Math.max(0, Math.ceil(rect.bottom)));
+        return;
+      }
+
+      // fallback
+      setFiltersTop(Math.max(0, stickyTop + STICKY_BAR_HEIGHT));
+    };
+
+    // compute now and on scroll/resize
+    computeTop();
+    window.addEventListener('scroll', computeTop, { passive: true });
+    window.addEventListener('resize', computeTop);
+    return () => {
+      window.removeEventListener('scroll', computeTop as EventListener);
+      window.removeEventListener('resize', computeTop as EventListener);
+    };
+  }, [showFilters, showStickyBar, stickyTop, mainFilterRef.current]);
+
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Header */}
@@ -1325,8 +1395,194 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
         </p>
       </div>
 
-      {/* Search and Filters */}
-      <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200">
+      {/* Sticky Floating Filter Bar - appears when main filter scrolls out */}
+      {showStickyBar && (
+        <div className="sticky left-0 right-0 bg-white border-b border-slate-200 shadow-md" style={{ top: `${Math.max(0, stickyTop)}px`, zIndex: 40 }}>
+          <div className="max-w-7xl mx-auto px-3 py-2">
+            <div className="flex items-center gap-2">
+              {/* Search Bar */}
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search services..."
+                  value={criteria.searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
+                />
+              </div>
+
+              {/* Filter Button */}
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center justify-center space-x-2 px-4 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap"
+              >
+                <SlidersHorizontal className="w-4 h-4 text-slate-600" />
+                <span className="text-sm font-medium text-slate-700">Filters</span>
+              </button>
+
+              {/* Sort Dropdown */}
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value as 'priceLowToHigh' | 'priceHighToLow')}
+                className="px-3 py-2 text-sm rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700"
+                aria-label="Sort services by price"
+              >
+                <option value="priceLowToHigh">Price: Low to High</option>
+                <option value="priceHighToLow">Price: High to Low</option>
+              </select>
+
+              {/* Grid/List Toggle */}
+              <div className="flex items-center space-x-1 bg-slate-100 rounded-lg p-1 text-xs">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`flex items-center px-2 py-1 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
+                    }`}
+                >
+                  <Grid className="w-4 h-4" />
+                  <span className="ml-1 text-sm hidden sm:inline">Grid</span>
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`flex items-center px-2 py-1 rounded-md transition-colors ${viewMode === 'list' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
+                    }`}
+                >
+                  <List className="w-4 h-4" />
+                  <span className="ml-1 text-sm hidden sm:inline">List</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Filters Panel - opens when showFilters is true; positioned using computed filtersTop */}
+      {showFilters && (
+        <div
+          className="fixed left-0 right-0 bg-white border-b border-slate-200 shadow-lg"
+          style={{ top: filtersTop !== null ? `${filtersTop}px` : `${Math.max(0, stickyTop + STICKY_BAR_HEIGHT)}px`, zIndex: 45 }}
+        >
+          <div className="max-w-7xl mx-auto px-3 py-3">
+            <div className="space-y-3 p-3 bg-slate-50 rounded-lg">
+              {/* Copy of condensed filter controls for the sticky view */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* City Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">City</label>
+                  <select
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                    className="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 text-slate-900"
+                  >
+                    <option value="">All Cities</option>
+                    {cities.map(city => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Service Types */}
+                <div className="relative">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Service Type</label>
+                  <div className="relative">
+                    <button
+                      onClick={() => setServiceTypeDropdownOpen(!serviceTypeDropdownOpen)}
+                      className="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-lg text-left flex items-center justify-between hover:border-slate-300 focus:ring-2 focus:ring-slate-700"
+                    >
+                      <span className="text-slate-900">Select service types</span>
+                      <ChevronDown className="w-4 h-4 text-slate-400" />
+                    </button>
+
+                    {serviceTypeDropdownOpen && (
+                      <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                        {serviceTypes.map(type => (
+                          <label key={type.value} className="flex items-center px-4 py-3 hover:bg-slate-50 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={selectedTypes.includes(type.value)}
+                              onChange={() => toggleServiceType(type.value)}
+                              className="w-4 h-4 text-slate-700 border-slate-300 rounded focus:ring-2 focus:ring-slate-700 focus:ring-offset-0"
+                            />
+                            <span className="ml-3 text-sm text-slate-700">{type.label}</span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Price Range */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Budget: ₹{priceRange[0].toLocaleString()} - ₹{priceRange[1].toLocaleString()} per month
+                  </label>
+                  <div className="relative px-2">
+                    <div className="relative h-6">
+                      <div className="absolute top-1/2 transform -translate-y-1/2 w-full h-1 bg-slate-200 rounded"></div>
+
+                      <div
+                        className="absolute top-1/2 transform -translate-y-1/2 h-1 bg-slate-700 rounded"
+                        style={{
+                          left: `${(priceRange[0] / 100000) * 100}%`,
+                          width: `${((priceRange[1] - priceRange[0]) / 100000) * 100}%`
+                        }}
+                      ></div>
+
+                      <input
+                        type="range"
+                        min={0}
+                        max={100000}
+                        step={1000}
+                        value={priceRange[0]}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          if (value <= priceRange[1]) {
+                            setPriceRange([value, priceRange[1]]);
+                          }
+                        }}
+                        className="absolute w-full h-6 bg-transparent cursor-pointer dual-range"
+                      />
+
+                      <input
+                        type="range"
+                        min={0}
+                        max={100000}
+                        step={1000}
+                        value={priceRange[1]}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          if (value >= priceRange[0]) {
+                            setPriceRange([priceRange[0], value]);
+                          }
+                        }}
+                        className="absolute w-full h-6 bg-transparent cursor-pointer dual-range"
+                      />
+                    </div>
+
+                    <div className="flex justify-between text-xs text-slate-500 mt-2 px-1">
+                      <span>₹0</span>
+                      <span>₹1,00,000</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Close button */}
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Search and Filters Section */}
+      <div ref={mainFilterRef} className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200">
         {/* Search Bar */}
         <div className="relative mb-4 sm:mb-6">
           <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />

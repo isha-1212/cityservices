@@ -62,10 +62,10 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
           <p className="text-sm text-slate-600 truncate">{service.description}</p>
         </div>
         <div className="text-right flex-shrink-0">
-          <div className="text-lg font-bold text-slate-900">
-            ₹{service.price.toLocaleString()}
-          </div>
-          <div className="text-sm text-slate-600">{getPriceUnit(service.type)}</div>
+            <div className="text-lg font-bold text-slate-900">
+              ₹{(service.price ?? 0).toLocaleString()}
+            </div>
+            <div className="text-sm text-slate-600">{getPriceUnit(service.type)}</div>
           <div className="flex gap-2 mt-2">
             <button
               onClick={onToggleBookmark}
@@ -151,7 +151,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
         <div className="mt-auto flex items-center justify-between">
           <div>
             <div className="text-xl font-bold text-slate-900">
-              ₹{service.price.toLocaleString()}
+              ₹{(service.price ?? 0).toLocaleString()}
             </div>
             <div className="text-sm text-slate-600">{getPriceUnit(service.type)}</div>
           </div>

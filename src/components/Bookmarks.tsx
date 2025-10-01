@@ -57,7 +57,11 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
 
   useEffect(() => {
     const handler = () => {
-      loadBookmarks();
+      try {
+        loadBookmarks();
+      } catch (error) {
+        console.error('Error loading bookmarks on event:', error);
+      }
     };
     // Listen for both localStorage and database changes
     window.addEventListener('bookmarks:changed', handler);
@@ -131,18 +135,24 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {bookmarkedServices.map((service) => (
-            <ServiceCard
-              key={service.id}
-              service={service}
-              isBookmarked={true}
-              onToggleBookmark={() => removeLocal(service.id)}
-              onViewDetails={() => setSelected(service)}
-              viewMode="grid"
-              actionIcon={Trash2}
-              actionLabel="Remove from bookmarks"
-            />
-          ))}
+          {bookmarkedServices.map((service) => {
+            if (!service) {
+              console.error('Invalid service in bookmarks:', service);
+              return null;
+            }
+            return (
+              <ServiceCard
+                key={service.id}
+                service={service}
+                isBookmarked={true}
+                onToggleBookmark={() => removeLocal(service.id)}
+                onViewDetails={() => setSelected(service)}
+                viewMode="grid"
+                actionIcon={Trash2}
+                actionLabel="Remove from bookmarks"
+              />
+            );
+          })}
         </div>
       )}
       {selected && <ServiceDetails service={selected} onClose={() => setSelected(null)} />}

@@ -1436,10 +1436,10 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
       {showStickyBar && (
         <div className="sticky left-0 right-0 bg-white border-b border-slate-200 shadow-md overflow-x-auto" style={{ top: `${Math.max(0, stickyTop)}px`, zIndex: 40 }}>
           <div className="max-w-7xl mx-auto px-3 py-2 min-w-[280px]">
-            <div className="flex flex-wrap md:flex-nowrap items-center justify-between w-full gap-2">
-              <div className="flex items-center gap-2 flex-1 min-w-0 w-full md:w-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-2">
+              <div className="flex items-center gap-2 flex-1 min-w-0 w-full sm:w-auto">
                 {/* Search Bar (compact) */}
-                <div className="relative flex-grow min-w-[150px] max-w-xs w-full sm:w-auto mr-2">
+                <div className="relative flex-1 min-w-[120px] max-w-xs">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input
                     type="text"
@@ -1453,14 +1453,14 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
                 {/* Clear Filters - match main filter style with icon */}
                 <button
                   onClick={() => clearAllFilters()}
-                  className="ml-0 h-10 min-w-[40px] sm:min-w-0 flex items-center justify-center px-0 sm:px-3 bg-red-50 text-red-600 rounded-2xl hover:bg-red-100 transition-colors text-sm font-medium whitespace-nowrap"
+                  className="h-10 min-w-[40px] flex items-center justify-center px-2 sm:px-3 bg-red-50 text-red-600 rounded-2xl hover:bg-red-100 transition-colors text-sm font-medium whitespace-nowrap flex-shrink-0"
                 >
                   <X className="w-5 h-5" />
-                  <span className="hidden sm:inline">Clear Filters</span>
+                  <span className="hidden sm:inline ml-1">Clear Filters</span>
                 </button>
               </div>
 
-              <div className="flex items-center gap-1 flex-shrink-0 mt-2 md:mt-0">
+              <div className="flex items-center gap-2 flex-shrink-0 justify-between sm:justify-end">
                 {/* Filter Button */}
                 <button
                   onClick={() => {
@@ -1470,17 +1470,17 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
                     setShowFilters(opening);
                     setFiltersOpenedFrom(opening ? 'sticky' : null);
                   }}
-                  className="h-10 min-w-[40px] sm:min-w-0 flex items-center justify-center px-0 sm:px-3 bg-slate-100 rounded-2xl hover:bg-slate-200 transition-colors whitespace-nowrap text-sm"
+                  className="h-10 min-w-[40px] flex items-center justify-center px-2 sm:px-3 bg-slate-100 rounded-2xl hover:bg-slate-200 transition-colors whitespace-nowrap text-sm flex-shrink-0"
                 >
                   <SlidersHorizontal className="w-5 h-5 text-slate-600" />
-                  <span className="font-medium text-slate-700 hidden sm:inline">Filters</span>
+                  <span className="font-medium text-slate-700 hidden sm:inline ml-1">Filters</span>
                 </button>
 
                 {/* Sort Dropdown */}
                 <select
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value as 'priceLowToHigh' | 'priceHighToLow')}
-                  className="px-2 py-1 text-xs rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700 max-w-[120px]"
+                  className="px-2 py-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700 min-w-[100px] max-w-[140px] flex-shrink-0"
                   aria-label="Sort services by price"
                 >
                   <option value="priceLowToHigh">Price: Low to High</option>
@@ -1488,10 +1488,10 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
                 </select>
 
                 {/* Grid/List Toggle */}
-                <div className="flex items-center space-x-1 bg-slate-100 rounded-lg p-1 text-xs">
+                <div className="flex items-center space-x-1 bg-slate-100 rounded-lg p-1 text-xs flex-shrink-0">
                   <button
                     onClick={() => setViewMode('grid')}
-                    className={`flex items-center px-1 py-1 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
+                    className={`flex items-center px-2 py-1 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
                       }`}
                   >
                     <Grid className="w-3 h-3" />
@@ -1499,7 +1499,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
-                    className={`flex items-center px-1 py-1 rounded-md transition-colors ${viewMode === 'list' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
+                    className={`flex items-center px-2 py-1 rounded-md transition-colors ${viewMode === 'list' ? 'bg-white shadow-sm text-slate-700' : 'text-slate-500'
                       }`}
                   >
                     <List className="w-3 h-3" />

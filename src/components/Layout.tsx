@@ -35,7 +35,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
       {/* Header */}
       <header
         ref={headerRef}
-        className="bg-white border-b border-slate-200 sticky top-0 z-[100] shadow-sm pt-1"
+        className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm pt-1"
         style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
       >
         <div className="container mx-auto px-4 lg:px-8">
@@ -99,7 +99,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
       </main>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 backdrop-blur-sm bg-white/95 z-[100]">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 backdrop-blur-sm bg-white/95">
         <div className="flex items-center justify-around py-2">
           {navItems.map((item) => {
             const Icon = item.icon;

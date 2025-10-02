@@ -81,7 +81,7 @@ export const TransportModal: React.FC<TransportModalProps> = ({
     setSourceCity(value);
     setSourceArea(''); // Reset area when city changes
     if (value.length > 0) {
-      const filtered = availableCities.filter(city => 
+      const filtered = availableCities.filter(city =>
         city.toLowerCase().includes(value.toLowerCase()) && city !== destinationCity
       );
       setSourceSuggestions(filtered);
@@ -95,7 +95,7 @@ export const TransportModal: React.FC<TransportModalProps> = ({
     setSourceArea(value);
     if (value.length > 0 && sourceCity) {
       const areas = cityAreas[sourceCity] || [];
-      const filtered = areas.filter(area => 
+      const filtered = areas.filter(area =>
         area.toLowerCase().includes(value.toLowerCase())
       );
       setSourceAreaSuggestions(filtered);
@@ -109,7 +109,7 @@ export const TransportModal: React.FC<TransportModalProps> = ({
     setDestinationCity(value);
     setDestinationArea(''); // Reset area when city changes
     if (value.length > 0) {
-      const filtered = availableCities.filter(city => 
+      const filtered = availableCities.filter(city =>
         city.toLowerCase().includes(value.toLowerCase()) && city !== sourceCity
       );
       setDestSuggestions(filtered);
@@ -123,7 +123,7 @@ export const TransportModal: React.FC<TransportModalProps> = ({
     setDestinationArea(value);
     if (value.length > 0 && destinationCity) {
       const areas = cityAreas[destinationCity] || [];
-      const filtered = areas.filter(area => 
+      const filtered = areas.filter(area =>
         area.toLowerCase().includes(value.toLowerCase())
       );
       setDestAreaSuggestions(filtered);
@@ -173,7 +173,7 @@ export const TransportModal: React.FC<TransportModalProps> = ({
   const handleTransportSelect = (transport: any) => {
     const sourceLocation = sourceArea ? `${sourceCity} - ${sourceArea}` : sourceCity;
     const destLocation = destinationArea ? `${destinationCity} - ${destinationArea}` : destinationCity;
-    
+
     const transportService = {
       id: `transport-${sourceCity}-${sourceArea || 'city'}-${destinationCity}-${destinationArea || 'city'}-${transport.id}`,
       name: `${transport.name} - ${sourceLocation} to ${destLocation}`,
@@ -191,7 +191,7 @@ export const TransportModal: React.FC<TransportModalProps> = ({
       sourceLocation: sourceLocation,
       destinationLocation: destLocation
     };
-    
+
     onSelectTransport(transportService);
     onClose();
   };
@@ -216,8 +216,8 @@ export const TransportModal: React.FC<TransportModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
-      <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1001] p-2 sm:p-4">
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-200">
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900">Find Transport Options</h2>
@@ -259,7 +259,7 @@ export const TransportModal: React.FC<TransportModalProps> = ({
                     className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
                   />
                   <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
-                  
+
                   {showSourceSuggestions && sourceSuggestions.length > 0 && (
                     <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg sm:rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
                       {sourceSuggestions.map((city, index) => (
@@ -291,7 +291,7 @@ export const TransportModal: React.FC<TransportModalProps> = ({
                       className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
                     />
                     <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
-                    
+
                     {showSourceAreaSuggestions && sourceAreaSuggestions.length > 0 && (
                       <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
                         {sourceAreaSuggestions.map((area, index) => (
@@ -323,7 +323,7 @@ export const TransportModal: React.FC<TransportModalProps> = ({
                     className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
                   />
                   <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                  
+
                   {showDestSuggestions && destSuggestions.length > 0 && (
                     <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
                       {destSuggestions.map((city, index) => (
@@ -355,7 +355,7 @@ export const TransportModal: React.FC<TransportModalProps> = ({
                       className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
                     />
                     <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                    
+
                     {showDestAreaSuggestions && destAreaSuggestions.length > 0 && (
                       <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
                         {destAreaSuggestions.map((area, index) => (

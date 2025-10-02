@@ -563,7 +563,7 @@ const ServiceCard: React.FC<{
           <h3 className="font-semibold text-slate-900 text-sm sm:text-base lg:text-lg line-clamp-2">{service.name}</h3>
           <div className="flex items-center gap-1 flex-shrink-0">
             <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
-            <span className="text-xs sm:text-sm text-slate-600">{service.rating}</span>
+            <span className="text-xs sm:text-sm text-slate-600">{service.rating.toFixed(1)}</span>
           </div>
         </div>
 
@@ -753,7 +753,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
                 type: 'accommodation',
                 city: row['City'],
                 price: Number(row['Rent Price']) || 0,
-                rating: 4.2 + Math.random() * 0.6,
+                rating: Math.round((4.2 + Math.random() * 0.6) * 2) / 2, // Round to nearest 0.5
                 description: `${row['Bedrooms']} ${row['Property Type']} in ${row['Locality / Area']}, ${row['Furnishing Status']}`,
                 image: row.image || areaImageMap[locality] || 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400',
                 features: (row['Amenities'] || '').split(',').map((f: string) => f.trim()).filter(Boolean),
@@ -787,7 +787,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
                 type: 'tiffin',
                 city: row.City || 'Ahmedabad',
                 price: avgPrice * 30, // Monthly cost
-                rating: Number(row.Rating) || 4.5,
+                rating: Math.round((Number(row.Rating) || 4.5) * 2) / 2, // Round to nearest 0.5
                 description: row.Address || 'Tiffin service provider',
                 image: row.Menu || 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400',
                 features: [row.Type || 'Tiffin Service', row.Hours || 'Daily Service'].filter(Boolean),
@@ -844,7 +844,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
                 type: 'food',
                 city: row['City'] || 'Ahmedabad',
                 price: price * 15, // Convert to monthly cost (assuming 15 orders per month)
-                rating: rating > 0 ? rating : 4.2 + Math.random() * 0.6,
+                rating: Math.round((rating > 0 ? rating : 4.2 + Math.random() * 0.6) * 2) / 2, // Round to nearest 0.5
                 description: `${row['Category']} dish from ${row['Restaurant Name']} in ${row['Location']}. ${ratingCount > 0 ? `Based on ${ratingCount} ratings.` : ''} (₹${price}/item, ~15 orders/month)`,
                 image: getFoodImage(dishName),
                 features: [row['Restaurant Name'], row['Location'], row['Category']].filter(Boolean),

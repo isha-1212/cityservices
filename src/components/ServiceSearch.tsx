@@ -533,9 +533,9 @@ const ServiceCard: React.FC<{
       aria-label={`View details for ${service.name}`}
       style={{ minHeight: '320px' }}
     >
-      <div className="relative">
+      <div className="relative z-0">
         {/* Source tag badge */}
-        <span className="absolute top-3 left-3 z-10 bg-slate-200 text-slate-900 text-xs font-semibold px-2 py-1 rounded shadow-md">
+        <span className="absolute top-3 left-3 z-0 bg-slate-200 text-slate-900 text-xs font-semibold px-2 py-1 rounded shadow-md">
           {sourceTag}
         </span>
         <img
@@ -1517,11 +1517,11 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
       {
         showFilters && filtersOpenedFrom === 'sticky' && showStickyBar && (
           <div
-            className="fixed left-0 right-0 bg-white border-b border-slate-200 shadow-lg"
-            style={{ top: filtersTop !== null ? `${filtersTop}px` : `${Math.max(0, stickyTop + STICKY_BAR_HEIGHT)}px`, zIndex: 45 }}
+            className="fixed left-0 right-0 bg-white border-b border-slate-200 shadow-lg max-h-[calc(100vh-80px)] overflow-y-auto"
+            style={{ top: "80px", zIndex: 45 }}
           >
             <div className="max-w-7xl mx-auto px-3 py-3">
-              <div className="space-y-3 p-3 bg-slate-50 rounded-lg">
+              <div className="space-y-3 p-3 bg-slate-50 rounded-lg max-h-[80vh] overflow-y-auto">
                 {/* Copy of condensed filter controls for the sticky view */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {/* City Filter */}

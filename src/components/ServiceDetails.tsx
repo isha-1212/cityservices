@@ -33,7 +33,7 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-[1000] flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm"
             onClick={onClose}
         >
             <div

@@ -56,7 +56,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             </div>
             <div className="flex items-center gap-1">
               <Star className="w-4 h-4 text-yellow-400 fill-current" />
-              <span>{service.rating}</span>
+              <span>{service.rating % 1 === 0 ? `${service.rating}.0` : service.rating}</span>
             </div>
           </div>
           <p className="text-sm text-slate-600 truncate">{service.description}</p>
@@ -138,7 +138,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
           <h3 className="font-semibold text-slate-900 text-lg">{service.name}</h3>
           <div className="flex items-center gap-1">
             <Star className="w-4 h-4 text-yellow-400 fill-current" />
-            <span className="text-sm text-slate-600">{service.rating}</span>
+            <span className="text-sm text-slate-600">{service.rating % 1 === 0 ? `${service.rating}.0` : service.rating}</span>
           </div>
         </div>
 

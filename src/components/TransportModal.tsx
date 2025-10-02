@@ -217,9 +217,9 @@ export const TransportModal: React.FC<TransportModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1001] p-2 sm:p-4">
-      <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-200">
+      <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+        {/* Fixed Header */}
+        <div className="sticky top-0 left-0 right-0 flex items-center justify-between p-4 sm:p-6 border-b border-slate-200 bg-white rounded-t-xl sm:rounded-t-2xl z-20">
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900">Find Transport Options</h2>
           <button
             onClick={handleClose}
@@ -229,180 +229,182 @@ export const TransportModal: React.FC<TransportModalProps> = ({
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-4 sm:p-6">
-          {!showTransportOptions ? (
-            <div className="space-y-4 sm:space-y-6">
-              <div className="text-center">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                  <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-slate-600" />
+        {/* Scrollable Content */}
+        <div className="overflow-y-auto">
+          <div className="p-4 sm:p-6">
+            {!showTransportOptions ? (
+              <div className="space-y-4 sm:space-y-6">
+                <div className="text-center">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                    <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-slate-600" />
+                  </div>
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2">
+                    Select Your Route
+                  </h3>
+                  <p className="text-sm sm:text-base text-slate-600 px-2">
+                    Choose your source and destination cities to find transport options
+                  </p>
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2">
-                  Select Your Route
-                </h3>
-                <p className="text-sm sm:text-base text-slate-600 px-2">
-                  Choose your source and destination cities to find transport options
-                </p>
-              </div>
 
-              {/* Source City Input */}
-              <div className="space-y-2">
-                <label className="block text-xs sm:text-sm font-medium text-slate-700">
-                  From (Source City)
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={sourceCity}
-                    onChange={(e) => handleSourceCityChange(e.target.value)}
-                    placeholder="Enter source city..."
-                    className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
-                  />
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
-
-                  {showSourceSuggestions && sourceSuggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg sm:rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
-                      {sourceSuggestions.map((city, index) => (
-                        <button
-                          key={index}
-                          onClick={() => selectSourceCity(city)}
-                          className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base text-left hover:bg-slate-50 first:rounded-t-lg sm:first:rounded-t-xl last:rounded-b-lg sm:last:rounded-b-xl"
-                        >
-                          {city}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Source Area Input */}
-              {sourceCity && (
+                {/* Source City Input */}
                 <div className="space-y-2">
                   <label className="block text-xs sm:text-sm font-medium text-slate-700">
-                    From Area (Optional)
+                    From (Source City)
                   </label>
                   <div className="relative">
                     <input
                       type="text"
-                      value={sourceArea}
-                      onChange={(e) => handleSourceAreaChange(e.target.value)}
-                      placeholder="Enter source area..."
+                      value={sourceCity}
+                      onChange={(e) => handleSourceCityChange(e.target.value)}
+                      placeholder="Enter source city..."
                       className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
                     />
                     <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
 
-                    {showSourceAreaSuggestions && sourceAreaSuggestions.length > 0 && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
-                        {sourceAreaSuggestions.map((area, index) => (
+                    {showSourceSuggestions && sourceSuggestions.length > 0 && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg sm:rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
+                        {sourceSuggestions.map((city, index) => (
                           <button
                             key={index}
-                            onClick={() => selectSourceArea(area)}
-                            className="w-full px-4 py-2 text-left hover:bg-slate-50 first:rounded-t-xl last:rounded-b-xl"
+                            onClick={() => selectSourceCity(city)}
+                            className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base text-left hover:bg-slate-50 first:rounded-t-lg sm:first:rounded-t-xl last:rounded-b-lg sm:last:rounded-b-xl"
                           >
-                            {area}
+                            {city}
                           </button>
                         ))}
                       </div>
                     )}
                   </div>
                 </div>
-              )}
 
-              {/* Destination City Input */}
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">
-                  To (Destination City)
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={destinationCity}
-                    onChange={(e) => handleDestinationCityChange(e.target.value)}
-                    placeholder="Enter destination city..."
-                    className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
-                  />
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                {/* Source Area Input */}
+                {sourceCity && (
+                  <div className="space-y-2">
+                    <label className="block text-xs sm:text-sm font-medium text-slate-700">
+                      From Area (Optional)
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={sourceArea}
+                        onChange={(e) => handleSourceAreaChange(e.target.value)}
+                        placeholder="Enter source area..."
+                        className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
+                      />
+                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
 
-                  {showDestSuggestions && destSuggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
-                      {destSuggestions.map((city, index) => (
-                        <button
-                          key={index}
-                          onClick={() => selectDestinationCity(city)}
-                          className="w-full px-4 py-2 text-left hover:bg-slate-50 first:rounded-t-xl last:rounded-b-xl"
-                        >
-                          {city}
-                        </button>
-                      ))}
+                      {showSourceAreaSuggestions && sourceAreaSuggestions.length > 0 && (
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
+                          {sourceAreaSuggestions.map((area, index) => (
+                            <button
+                              key={index}
+                              onClick={() => selectSourceArea(area)}
+                              className="w-full px-4 py-2 text-left hover:bg-slate-50 first:rounded-t-xl last:rounded-b-xl"
+                            >
+                              {area}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
+                  </div>
+                )}
 
-              {/* Destination Area Input */}
-              {destinationCity && (
+                {/* Destination City Input */}
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-slate-700">
-                    To Area (Optional)
+                    To (Destination City)
                   </label>
                   <div className="relative">
                     <input
                       type="text"
-                      value={destinationArea}
-                      onChange={(e) => handleDestinationAreaChange(e.target.value)}
-                      placeholder="Enter destination area..."
+                      value={destinationCity}
+                      onChange={(e) => handleDestinationCityChange(e.target.value)}
+                      placeholder="Enter destination city..."
                       className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
                     />
                     <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
 
-                    {showDestAreaSuggestions && destAreaSuggestions.length > 0 && (
+                    {showDestSuggestions && destSuggestions.length > 0 && (
                       <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
-                        {destAreaSuggestions.map((area, index) => (
+                        {destSuggestions.map((city, index) => (
                           <button
                             key={index}
-                            onClick={() => selectDestinationArea(area)}
+                            onClick={() => selectDestinationCity(city)}
                             className="w-full px-4 py-2 text-left hover:bg-slate-50 first:rounded-t-xl last:rounded-b-xl"
                           >
-                            {area}
+                            {city}
                           </button>
                         ))}
                       </div>
                     )}
                   </div>
                 </div>
-              )}
 
-              {/* Search Button */}
-              <div className="pt-2 sm:pt-4">
-                <button
-                  onClick={handleSearch}
-                  disabled={
-                    !sourceCity || !destinationCity ||
-                    (sourceCity === destinationCity && (!sourceArea || !destinationArea || sourceArea === destinationArea))
-                  }
-                  className="w-full bg-slate-700 text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
-                >
-                  <Search className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span>Find Transport Options</span>
-                </button>
+                {/* Destination Area Input */}
+                {destinationCity && (
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">
+                      To Area (Optional)
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={destinationArea}
+                        onChange={(e) => handleDestinationAreaChange(e.target.value)}
+                        placeholder="Enter destination area..."
+                        className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900"
+                      />
+                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
 
-                {sourceCity && destinationCity && sourceCity === destinationCity && (!sourceArea || !destinationArea || sourceArea === destinationArea) && (
-                  <p className="text-red-500 text-xs sm:text-sm mt-2 text-center">
-                    For same city travel, please select different areas
-                  </p>
+                      {showDestAreaSuggestions && destAreaSuggestions.length > 0 && (
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
+                          {destAreaSuggestions.map((area, index) => (
+                            <button
+                              key={index}
+                              onClick={() => selectDestinationArea(area)}
+                              className="w-full px-4 py-2 text-left hover:bg-slate-50 first:rounded-t-xl last:rounded-b-xl"
+                            >
+                              {area}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 )}
+
+                {/* Search Button */}
+                <div className="pt-2 sm:pt-4">
+                  <button
+                    onClick={handleSearch}
+                    disabled={
+                      !sourceCity || !destinationCity ||
+                      (sourceCity === destinationCity && (!sourceArea || !destinationArea || sourceArea === destinationArea))
+                    }
+                    className="w-full bg-slate-700 text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+                  >
+                    <Search className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span>Find Transport Options</span>
+                  </button>
+
+                  {sourceCity && destinationCity && sourceCity === destinationCity && (!sourceArea || !destinationArea || sourceArea === destinationArea) && (
+                    <p className="text-red-500 text-xs sm:text-sm mt-2 text-center">
+                      For same city travel, please select different areas
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-          ) : (
-            <TransportOptions
-              sourceCity={sourceCity}
-              sourceArea={sourceArea}
-              destinationCity={destinationCity}
-              destinationArea={destinationArea}
-              onSelectOption={handleTransportSelect}
-            />
-          )}
+            ) : (
+              <TransportOptions
+                sourceCity={sourceCity}
+                sourceArea={sourceArea}
+                destinationCity={destinationCity}
+                destinationArea={destinationArea}
+                onSelectOption={handleTransportSelect}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

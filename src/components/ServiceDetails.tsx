@@ -166,17 +166,9 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
                 {/* Footer */}
                 <div className="flex-shrink-0 p-4 sm:p-6 border-t border-slate-200 bg-slate-50">
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                        <div className="flex-1">
-                            <a
-                                href="#"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center sm:justify-start space-x-2 text-slate-600 hover:text-slate-900 transition-colors"
-                            >
-                                <ExternalLink className="w-4 h-4" />
-                                <span className="text-xs sm:text-sm">View original listing</span>
-                            </a>
-                        </div>
+                    <div className="flex-1">
+                        {/* Removed "View original listing" link as per user request */}
+                    </div>
                         <div className="flex items-center space-x-3">
                             <button
                                 onClick={handleContactProvider}

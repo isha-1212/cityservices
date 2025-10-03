@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { MapPin, Star, X, ExternalLink } from 'lucide-react';
 import { Service } from '../data/mockServices';
+import { areasMap } from '../data/areasMap';
 
 interface Props {
     service: Service | null;
@@ -17,6 +18,21 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
         window.addEventListener('keydown', onKey);
         return () => window.removeEventListener('keydown', onKey);
     }, [onClose]);
+
+    const handleContactProvider = () => {
+        if (service.type === 'accommodation' && service.meta && service.meta['Locality / Area']) {
+            const area = service.meta['Locality / Area'];
+            const normalizedArea = area.toLowerCase().replace(/\s+/g, '_');
+            const url = areasMap[normalizedArea];
+            if (url) {
+                window.open(url, '_blank');
+            } else {
+                alert('Area listing not found');
+            }
+        } else {
+            alert('Contact provider not available for this service type');
+        }
+    };
 
     // Source tag logic
     let sourceTag = 'General';
@@ -163,6 +179,7 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
                         </div>
                         <div className="flex items-center space-x-3">
                             <button
+                                onClick={handleContactProvider}
                                 className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-slate-700 text-white text-sm rounded-lg hover:bg-slate-800 transition-colors"
                             >
                                 Contact Provider

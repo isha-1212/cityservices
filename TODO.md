@@ -1,19 +1,22 @@
-# TODO: Implement Dynamic Food Suggestions
+# TODO: Fix Contact Provider Button for Accommodation Area Links
 
 ## Tasks
-- [ ] Modify foodSuggestions to be dynamic from allServices data
-- [ ] Extract unique words from dish names, descriptions, and features
-- [ ] Filter suggestions with prefix match to each word
-- [ ] Test the suggestions functionality
+- [x] Create src/data/areasMap.ts with imports of all area listing URLs and export a map object.
+- [x] Modify src/components/ServiceDetails.tsx to import areasMap.
+- [x] Add onClick handler to "Contact Provider" button in ServiceDetails.tsx.
+- [x] Implement handler to normalize area name from service.meta['Locality / Area'], lookup URL in areasMap, and open in new tab.
+- [x] Add fallback alert if area listing not found or service type is not accommodation.
+- [ ] Test the button on accommodation services to verify correct area listing opens.
 
 ## Information Gathered
-- Current foodSuggestions is static array
-- User wants suggestions from actual dish names in data
-- Match prefix to each word in the sentence
+- Accommodation services have area info in service.meta['Locality / Area'].
+- Area listing URLs are in src/data/areas/*.ts files.
+- Button currently has no onClick handler.
 
 ## Plan
-- Use useMemo to create foodSuggestions from allServices
-- Split names, descriptions, features into words
-- Filter words longer than 2 chars, capitalize first letter
-- Sort the unique words
-- Use prefix match for filtering suggestions
+- Create areasMap.ts with all area listing imports and map.
+- Update ServiceDetails.tsx to add handler and button onClick.
+- Test functionality.
+
+## Next Steps
+- Await user confirmation to test or further improvements.

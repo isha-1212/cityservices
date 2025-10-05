@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapPin, Trash2 } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import mockServices, { Service } from '../data/mockServices';
 import { ServiceDetails } from './ServiceDetails';
 import { ServiceCard } from './ServiceCard';
@@ -104,7 +104,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
   };
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-4 sm:space-y-6 pt-16 sm:pt-6 pb-16 sm:pb-6">
       <div className="text-center mb-6 sm:mb-8 px-4">
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">Your Bookmarks</h2>
         <p className="text-sm sm:text-base text-slate-600">Saved services you added to your bookmarks</p>
@@ -150,7 +150,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {bookmarkedServices.map((service) => {
             if (!service) {
               console.error('Invalid service in bookmarks:', service);
@@ -164,8 +164,6 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
                 onToggleBookmark={() => removeLocal(service.id)}
                 onViewDetails={() => setSelected(service)}
                 viewMode="grid"
-                actionIcon={Trash2}
-                actionLabel="Remove from bookmarks"
               />
             );
           })}

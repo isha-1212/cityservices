@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { MapPin, Star, X, ExternalLink } from 'lucide-react';
 import { Service } from '../data/mockServices';
-import { areasMap } from '../data/areasMap';
 
 interface Props {
     service: Service | null;
@@ -18,21 +17,6 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
         window.addEventListener('keydown', onKey);
         return () => window.removeEventListener('keydown', onKey);
     }, [onClose]);
-
-    const handleContactProvider = () => {
-        if (service.type === 'accommodation' && service.meta && service.meta['Locality / Area']) {
-            const area = service.meta['Locality / Area'];
-            const normalizedArea = area.toLowerCase().replace(/\s+/g, '_');
-            const url = areasMap[normalizedArea];
-            if (url) {
-                window.open(url, '_blank');
-            } else {
-                alert('Area listing not found');
-            }
-        } else {
-            alert('Contact provider not available for this service type');
-        }
-    };
 
     // Source tag logic
     let sourceTag = 'General';
@@ -166,12 +150,19 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
                 {/* Footer */}
                 <div className="flex-shrink-0 p-4 sm:p-6 border-t border-slate-200 bg-slate-50">
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                    <div className="flex-1">
-                        {/* Removed "View original listing" link as per user request */}
-                    </div>
+                        <div className="flex-1">
+                            <a
+                                href="#"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center sm:justify-start space-x-2 text-slate-600 hover:text-slate-900 transition-colors"
+                            >
+                                <ExternalLink className="w-4 h-4" />
+                                <span className="text-xs sm:text-sm">View original listing</span>
+                            </a>
+                        </div>
                         <div className="flex items-center space-x-3">
                             <button
-                                onClick={handleContactProvider}
                                 className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-slate-700 text-white text-sm rounded-lg hover:bg-slate-800 transition-colors"
                             >
                                 Contact Provider

@@ -110,7 +110,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
     >
       <div className="relative">
         {/* Source tag badge */}
-        <span className="absolute top-3 left-3 z-10 bg-slate-200 text-slate-900 text-xs font-semibold px-2 py-1 rounded shadow-md">
+        <span className="absolute top-3 left-3 z-0 bg-slate-200 text-slate-900 text-xs font-semibold px-2 py-1 rounded shadow-md">
           {sourceTag}
         </span>
         <img

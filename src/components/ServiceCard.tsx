@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Star, Heart } from 'lucide-react';
+import { MapPin, Star, Heart, Trash2 } from 'lucide-react';
 
 // Define the Service interface (this should match your existing Service type)
 export interface Service {
@@ -26,6 +26,7 @@ interface ServiceCardProps {
   onToggleBookmark: () => void;
   onViewDetails: () => void;
   viewMode?: 'grid' | 'list';
+  isBookmarkPage?: boolean;
   actionIcon?: React.ComponentType<{ className?: string }>;
   actionLabel?: string;
 }
@@ -36,6 +37,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   onToggleBookmark,
   onViewDetails,
   viewMode = 'grid',
+  isBookmarkPage = false,
   actionIcon: ActionIcon = Heart,
   actionLabel = 'Bookmark'
 }) => {
@@ -70,12 +72,18 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             <button
               onClick={onToggleBookmark}
               data-bookmark
-              className={`p-2 rounded ${isBookmarked
+              className={`p-2 rounded ${isBookmarkPage
+                ? 'text-red-500 hover:bg-red-50'
+                : isBookmarked
                 ? 'text-red-500 hover:bg-red-50'
                 : 'text-slate-400 hover:bg-slate-50'
                 }`}
             >
-              <ActionIcon className={`w-4 h-4 stroke-current ${isBookmarked ? 'text-red-500' : 'text-slate-400'}`} />
+              {isBookmarkPage ? (
+                <Trash2 className="w-4 h-4 stroke-current text-red-500" />
+              ) : (
+                <ActionIcon className={`w-4 h-4 stroke-current ${isBookmarked ? 'text-red-500' : 'text-slate-400'}`} />
+              )}
             </button>
             <button
               onClick={onViewDetails}

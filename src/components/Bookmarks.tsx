@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapPin } from 'lucide-react';
+import { MapPin, Trash2 } from 'lucide-react';
 import mockServices, { Service } from '../data/mockServices';
 import { ServiceDetails } from './ServiceDetails';
 import { ServiceCard } from './ServiceCard';
@@ -164,6 +164,9 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
                 onToggleBookmark={() => removeLocal(service.id)}
                 onViewDetails={() => setSelected(service)}
                 viewMode="grid"
+                isBookmarkPage={true}
+                actionIcon={Trash2}
+                actionLabel="Remove"
               />
             );
           })}

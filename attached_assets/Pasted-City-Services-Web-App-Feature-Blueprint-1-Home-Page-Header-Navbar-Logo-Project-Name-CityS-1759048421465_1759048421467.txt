@@ -5,7 +5,7 @@ Header/Navbar
 
 Logo + Project Name (CityServices)
 
-Navigation: Dashboard | Find Services | Cost Calculator | Bookmarks | Profile | Sign Out
+Navigation: Dashboard | Find Services | Cost Calculator | Wishlist | Profile | Sign Out
 
 Hero Section
 

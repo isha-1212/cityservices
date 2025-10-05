@@ -258,7 +258,7 @@ export class UserStorage {
             // Dispatch events to notify components
             window.dispatchEvent(new CustomEvent('wishlist:changed'));
             window.dispatchEvent(new CustomEvent('toast:show', {
-                detail: { message: 'Added to bookmarks', type: 'success' }
+                detail: { message: 'Added to Wishlist', type: 'success' }
             }));
             return true;
         } catch (error) {
@@ -289,7 +289,7 @@ export class UserStorage {
             // Dispatch events to notify components
             window.dispatchEvent(new CustomEvent('wishlist:changed'));
             window.dispatchEvent(new CustomEvent('toast:show', {
-                detail: { message: 'Removed from bookmarks', type: 'success' }
+                detail: { message: 'Removed from Wishlist', type: 'success' }
             }));
             return true;
         } catch (error) {

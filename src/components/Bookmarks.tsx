@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { MapPin, Trash2 } from 'lucide-react';
+import { MapPin, Trash2, Calculator } from 'lucide-react';
 import mockServices, { Service } from '../data/mockServices';
 import { ServiceDetails } from './ServiceDetails';
 import { ServiceCard } from './ServiceCard';
 import { UserStorage } from '../utils/userStorage';
+import { BudgetBuddy } from './BudgetBuddy';
+import { loadAllServices as loadAllServicesFromCSV } from '../utils/serviceLoader';
 
 interface BookmarksProps {
   user?: any;
@@ -14,6 +16,8 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
   const [bookmarkedServices, setBookmarkedServices] = useState<Service[]>([]);
   const [selected, setSelected] = useState<Service | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showBudgetBuddy, setShowBudgetBuddy] = useState(false);
+  const [allServices, setAllServices] = useState<Service[]>([]);
 
   const loadBookmarks = async () => {
     try {
@@ -63,7 +67,18 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
 
   useEffect(() => {
     loadBookmarks();
+    loadAllServices();
   }, [user]);
+
+  const loadAllServices = async () => {
+    try {
+      const services = await loadAllServicesFromCSV();
+      setAllServices(services);
+    } catch (error) {
+      console.error('Error loading all services:', error);
+      setAllServices(mockServices);
+    }
+  };
 
   useEffect(() => {
     const handler = () => {
@@ -106,8 +121,21 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="text-center mb-6 sm:mb-8 px-4">
-        <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">Your Bookmarks</h2>
-        <p className="text-sm sm:text-base text-slate-600">Saved services you added to your bookmarks</p>
+        <div className="flex items-center justify-center gap-4 mb-4">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">Your Bookmarks</h2>
+            <p className="text-sm sm:text-base text-slate-600">Saved services you added to your bookmarks</p>
+          </div>
+        </div>
+        {user && bookmarkedServices.length > 0 && (
+          <button
+            onClick={() => setShowBudgetBuddy(true)}
+            className="inline-flex items-center gap-2 bg-slate-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-800 transition-colors shadow-md hover:shadow-lg"
+          >
+            <Calculator className="w-5 h-5" />
+            Budget Buddy
+          </button>
+        )}
       </div>
 
       {isLoading ? (
@@ -173,6 +201,13 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
         </div>
       )}
       {selected && <ServiceDetails service={selected} onClose={() => setSelected(null)} />}
+      {showBudgetBuddy && (
+        <BudgetBuddy
+          bookmarkedServices={bookmarkedServices}
+          allServices={allServices}
+          onClose={() => setShowBudgetBuddy(false)}
+        />
+      )}
     </div>
   );
 };

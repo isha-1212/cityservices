@@ -165,7 +165,7 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
                         <div className="flex items-center space-x-3">
                             <a
                                 href={service.type === 'accommodation' ?
-                                    areasMap[service.meta?.area?.toLowerCase() || ''] || '#' :
+                                    areasMap[service.meta?.['Locality / Area']?.toLowerCase()?.trim() || ''] || '#' :
                                     '#'}
                                 target="_blank"
                                 rel="noopener noreferrer"

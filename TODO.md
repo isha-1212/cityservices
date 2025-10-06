@@ -1,22 +1,21 @@
-# TODO: Fix Contact Provider Button for Accommodation Area Links
+# TODO: Budget Buddy Feature Implementation
 
 ## Tasks
-- [x] Create src/data/areasMap.ts with imports of all area listing URLs and export a map object.
-- [x] Modify src/components/ServiceDetails.tsx to import areasMap.
-- [x] Add onClick handler to "Contact Provider" button in ServiceDetails.tsx.
-- [x] Implement handler to normalize area name from service.meta['Locality / Area'], lookup URL in areasMap, and open in new tab.
-- [x] Add fallback alert if area listing not found or service type is not accommodation.
-- [ ] Test the button on accommodation services to verify correct area listing opens.
+- [x] Update backend schema to add services and budget_plans tables.
+- [x] Add backend endpoints: POST /api/services/seed, GET /api/bookmarks/services, POST /api/budget/estimate, POST /api/budget/plans.
+- [x] Implement estimation logic in backend with category breakdown, budget comparison, and smart suggestions.
+- [x] Update Bookmarks.tsx to add Budget Buddy UI flow with modal, selection, budget input, results display, and save option.
+- [x] Add Calculator icon import from lucide-react.
+- [ ] Test the Budget Buddy feature end-to-end.
 
 ## Information Gathered
-- Accommodation services have area info in service.meta['Locality / Area'].
-- Area listing URLs are in src/data/areas/*.ts files.
-- Button currently has no onClick handler.
+- Services use 'type' as category (accommodation, food, tiffin, etc.).
+- Price is assumed monthly cost.
+- Suggestions: Find cheaper alternatives in same category not selected, that reduce overage.
 
 ## Plan
-- Create areasMap.ts with all area listing imports and map.
-- Update ServiceDetails.tsx to add handler and button onClick.
-- Test functionality.
+- Backend: Add tables and endpoints for seeding, fetching, estimating, saving.
+- Frontend: Add modal in Bookmarks with selection checkboxes, budget input, estimate button, display results with breakdown and suggestions, save plan option.
 
 ## Next Steps
-- Await user confirmation to test or further improvements.
+- Test the feature by seeding services, bookmarking some, opening Budget Buddy, selecting items, entering budget, getting estimate, and saving plan.

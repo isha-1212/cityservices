@@ -14,7 +14,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'search', label: 'Find Services', icon: Search },
     { id: 'calculator', label: 'Calculator', icon: Calculator },
-    { id: 'bookmarks', label: 'Wishlist', icon: BookOpen },
+    { id: 'bookmarks', label: 'Bookmarks', icon: BookOpen },
     { id: 'profile', label: 'Profile', icon: User },
   ];
 

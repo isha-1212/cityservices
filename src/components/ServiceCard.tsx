@@ -39,7 +39,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   viewMode = 'grid',
   isBookmarkPage = false,
   actionIcon: ActionIcon = Heart,
-  actionLabel = 'Add to Wishlist'
+  actionLabel = 'Bookmark'
 }) => {
   if (viewMode === 'list') {
     return (
@@ -75,8 +75,8 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
               className={`p-2 rounded ${isBookmarkPage
                 ? 'text-red-500 hover:bg-red-50'
                 : isBookmarked
-                  ? 'text-red-500 hover:bg-red-50'
-                  : 'text-slate-400 hover:bg-slate-50'
+                ? 'text-red-500 hover:bg-red-50'
+                : 'text-slate-400 hover:bg-slate-50'
                 }`}
             >
               {isBookmarkPage ? (

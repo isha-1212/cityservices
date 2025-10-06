@@ -44,7 +44,33 @@ $$ language 'plpgsql';
 
 -- Drop existing trigger if it exists and recreate
 DROP TRIGGER IF EXISTS update_users_updated_at ON users;
-CREATE TRIGGER update_users_updated_at 
-    BEFORE UPDATE ON users 
-    FOR EACH ROW 
+CREATE TRIGGER update_users_updated_at
+    BEFORE UPDATE ON users
+    FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
+
+-- Services table for storing service data
+CREATE TABLE IF NOT EXISTS services (
+    id VARCHAR(100) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    city VARCHAR(100),
+    price DECIMAL(10,2),
+    rating DECIMAL(3,1),
+    description TEXT,
+    image TEXT,
+    features JSONB,
+    meta JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Budget plans table
+CREATE TABLE IF NOT EXISTS budget_plans (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    bookmark_ids JSONB NOT NULL,
+    budget DECIMAL(10,2) NOT NULL,
+    total_cost DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

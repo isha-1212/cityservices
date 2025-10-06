@@ -234,3 +234,216 @@ const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Backend running on port ${PORT}`);
 });
+
+// Endpoint to seed services data from mockServices
+import { mockServices } from '../src/data/mockServices';
+
+app.post('/api/services/seed', authenticateToken, async (req, res) => {
+    try {
+        // Validate prices and data
+        for (const service of mockServices) {
+            if (service.price <= 0) {
+                return res.status(400).json({ error: `Invalid price for service ${service.id}` });
+            }
+        }
+        // Upsert services
+        for (const service of mockServices) {
+            await pool.query(
+                `INSERT INTO services (id, name, type, city, price, rating, description, image, features, meta)
+                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+                 ON CONFLICT (id) DO UPDATE SET
+                   name = EXCLUDED.name,
+                   type = EXCLUDED.type,
+                   city = EXCLUDED.city,
+                   price = EXCLUDED.price,
+                   rating = EXCLUDED.rating,
+                   description = EXCLUDED.description,
+                   image = EXCLUDED.image,
+                   features = EXCLUDED.features,
+                   meta = EXCLUDED.meta`,
+                [
+                    service.id,
+                    service.name,
+                    service.type,
+                    service.city,
+                    service.price,
+                    service.rating,
+                    service.description,
+                    service.image,
+                    JSON.stringify(service.features),
+                    JSON.stringify(service.meta || {})
+                ]
+            );
+        }
+        res.json({ message: 'Services seeded successfully' });
+    } catch (err) {
+        console.error('Seed services error:', err);
+        res.status(500).json({ error: 'Failed to seed services' });
+    }
+});
+
+// Endpoint to get bookmarked services with details
+app.get('/api/bookmarks/services', authenticateToken, async (req, res) => {
+    try {
+        const bookmarksResult = await pool.query(
+            'SELECT service_id FROM bookmarks WHERE user_id = $1',
+            [req.user.id]
+        );
+        const serviceIds = bookmarksResult.rows.map(row => row.service_id);
+        if (serviceIds.length === 0) {
+            return res.json({ services: [] });
+        }
+        const servicesResult = await pool.query(
+            `SELECT * FROM services WHERE id = ANY($1::varchar[])`,
+            [serviceIds]
+        );
+        res.json({ services: servicesResult.rows });
+    } catch (err) {
+        console.error('Get bookmarked services error:', err);
+        res.status(500).json({ error: 'Failed to fetch bookmarked services' });
+    }
+});
+
+// Endpoint to compute budget estimate
+app.post('/api/budget/estimate', authenticateToken, async (req, res) => {
+    try {
+        const { bookmarkIds, budget } = req.body;
+        if (!Array.isArray(bookmarkIds) || bookmarkIds.length === 0) {
+            return res.status(400).json({ error: 'Please select at least one item.' });
+        }
+        if (typeof budget !== 'number' || budget <= 0) {
+            return res.status(400).json({ error: 'Invalid budget value.' });
+        }
+
+        // Validate bookmarkIds exist in services
+        const servicesResult = await pool.query(
+            `SELECT * FROM services WHERE id = ANY($1::varchar[])`,
+            [bookmarkIds]
+        );
+        const services = servicesResult.rows;
+        const foundIds = new Set(services.map(s => s.id));
+        const invalidIds = bookmarkIds.filter(id => !foundIds.has(id));
+        if (invalidIds.length > 0) {
+            return res.status(400).json({ error: `Invalid service IDs: ${invalidIds.join(', ')}` });
+        }
+
+        // Calculate total monthly cost
+        const totalMonthly = services.reduce((sum, s) => sum + parseFloat(s.price), 0);
+
+        // Group by category
+        const breakdownMap = new Map();
+        for (const s of services) {
+            if (!breakdownMap.has(s.type)) {
+                breakdownMap.set(s.type, { total: 0, items: [] });
+            }
+            const entry = breakdownMap.get(s.type);
+            entry.total += parseFloat(s.price);
+            entry.items.push({ id: s.id, name: s.name, category: s.type, price: parseFloat(s.price) });
+        }
+
+        // Calculate percentages
+        const breakdown = [];
+        for (const [category, data] of breakdownMap.entries()) {
+            breakdown.push({
+                category,
+                total: data.total,
+                percent: (data.total / totalMonthly) * 100,
+                items: data.items
+            });
+        }
+
+        const withinBudget = budget >= totalMonthly;
+        const diff = budget - totalMonthly;
+
+        // Suggestions for over budget categories
+        let suggestions = {};
+        if (!withinBudget) {
+            // For each category, find cheaper alternatives not selected
+            for (const [category, data] of breakdownMap.entries()) {
+                const currentItems = data.items;
+                // Get all services in category not selected
+                const altResult = await pool.query(
+                    `SELECT * FROM services WHERE type = $1 AND id != ALL($2::varchar[]) AND price < ALL(SELECT price FROM services WHERE id = ANY($2::varchar[])) ORDER BY price ASC LIMIT 3`,
+                    [category, bookmarkIds]
+                );
+                const alternatives = altResult.rows;
+
+                // Filter helpful suggestions
+                const helpfulSuggestions = [];
+                for (const alt of alternatives) {
+                    for (const current of currentItems) {
+                        if (alt.price < current.price) {
+                            const savings = current.price - alt.price;
+                            if (savings > 0) {
+                                helpfulSuggestions.push({
+                                    replaceId: current.id,
+                                    suggestionId: alt.id,
+                                    name: alt.name,
+                                    price: alt.price,
+                                    savings
+                                });
+                            }
+                        }
+                    }
+                }
+                if (helpfulSuggestions.length > 0) {
+                    suggestions[category] = helpfulSuggestions.slice(0, 3);
+                }
+            }
+        }
+
+        // Format currency values with thousand separators for display
+        function formatCurrency(value) {
+            return value.toLocaleString('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 });
+        }
+
+        res.json({
+            totalMonthly: formatCurrency(totalMonthly),
+            breakdown: breakdown.map(b => ({
+                category: b.category,
+                total: formatCurrency(b.total),
+                percent: b.percent.toFixed(2),
+                items: b.items.map(i => ({
+                    id: i.id,
+                    name: i.name,
+                    category: i.category,
+                    price: formatCurrency(i.price)
+                }))
+            })),
+            withinBudget,
+            diff: formatCurrency(diff),
+            suggestions
+        });
+    } catch (err) {
+        console.error('Budget estimate error:', err);
+        res.status(500).json({ error: 'Failed to compute budget estimate' });
+    }
+});
+
+// Endpoint to save budget plan
+app.post('/api/budget/plans', authenticateToken, async (req, res) => {
+    try {
+        const { name, bookmarkIds, budget, totalCost } = req.body;
+        if (!name || typeof name !== 'string') {
+            return res.status(400).json({ error: 'Plan name is required' });
+        }
+        if (!Array.isArray(bookmarkIds) || bookmarkIds.length === 0) {
+            return res.status(400).json({ error: 'Please select at least one item.' });
+        }
+        if (typeof budget !== 'number' || budget <= 0) {
+            return res.status(400).json({ error: 'Invalid budget value.' });
+        }
+        if (typeof totalCost !== 'number' || totalCost < 0) {
+            return res.status(400).json({ error: 'Invalid total cost value.' });
+        }
+
+        const result = await pool.query(
+            `INSERT INTO budget_plans (user_id, name, bookmark_ids, budget, total_cost) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+            [req.user.id, name, JSON.stringify(bookmarkIds), budget, totalCost]
+        );
+        res.status(201).json({ planId: result.rows[0].id });
+    } catch (err) {
+        console.error('Save budget plan error:', err);
+        res.status(500).json({ error: 'Failed to save budget plan' });
+    }
+});

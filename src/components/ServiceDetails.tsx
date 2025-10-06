@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { MapPin, Star, X, ExternalLink } from 'lucide-react';
 import { Service } from '../data/mockServices';
+import { areasMap } from '../data/areasMap';
 
 interface Props {
     service: Service | null;
@@ -162,11 +163,16 @@ export const ServiceDetails: React.FC<Props> = ({ service, onClose }) => {
                             </a>
                         </div>
                         <div className="flex items-center space-x-3">
-                            <button
-                                className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-slate-700 text-white text-sm rounded-lg hover:bg-slate-800 transition-colors"
+                            <a
+                                href={service.type === 'accommodation' ?
+                                    areasMap[service.meta?.area?.toLowerCase() || ''] || '#' :
+                                    '#'}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-slate-700 text-white text-sm rounded-lg hover:bg-slate-800 transition-colors text-center"
                             >
                                 Contact Provider
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>

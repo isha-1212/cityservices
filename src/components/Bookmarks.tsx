@@ -164,6 +164,9 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
                 onToggleBookmark={() => removeLocal(service.id)}
                 onViewDetails={() => setSelected(service)}
                 viewMode="grid"
+                actionIcon={Trash2}
+                actionLabel="Remove"
+                isBookmarkPage={true}
               />
             );
           })}

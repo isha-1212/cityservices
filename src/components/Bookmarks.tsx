@@ -123,8 +123,8 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
       <div className="text-center mb-6 sm:mb-8 px-4">
         <div className="flex items-center justify-center gap-4 mb-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">Your Bookmarks</h2>
-            <p className="text-sm sm:text-base text-slate-600">Saved services you added to your bookmarks</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">Your Wishlist</h2>
+            <p className="text-sm sm:text-base text-slate-600">Saved services you added to your Wishlist</p>
           </div>
         </div>
         {user && bookmarkedServices.length > 0 && (
@@ -141,7 +141,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
       {isLoading ? (
         <div className="text-center py-8 sm:py-12">
           <div className="w-12 h-12 sm:w-16 sm:h-16 border-4 border-slate-700 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-sm sm:text-base text-gray-600">Loading your bookmarks...</p>
+          <p className="mt-4 text-sm sm:text-base text-gray-600">Loading your Wishlist...</p>
         </div>
       ) : !user ? (
         <div className="text-center py-8 sm:py-12 px-4">
@@ -150,7 +150,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
               <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Login to View Your Bookmarks</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Login to View Your Wishlist</h3>
               <p className="text-sm sm:text-base text-gray-600 mb-6">
                 Sign in to save your favorite services and access them from anywhere
               </p>
@@ -170,7 +170,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
               <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Your bookmarks list is empty</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Your Wishlist list is empty</h3>
               <p className="text-sm sm:text-base text-gray-600">
                 Start exploring services and add your favorites to see them here
               </p>

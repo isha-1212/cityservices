@@ -1324,21 +1324,7 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
 
 
 
-  // Area suggestions for Ahmedabad
-
-  const areaSuggestions = [
-
-    'Vaishno Devi Circle', 'Shantigram', 'Jagatpur', 'Bodakdev', 'Motera', 'Bopal',
-
-    'Chandkheda', 'Shela', 'Chharodi', 'Sanand', 'Shilaj', 'Tragad', 'Vastrapur',
-
-    'Ambli', 'Paldi', 'Satellite', 'Ghuma', 'Ellisbridge', 'Gota', 'Navrangpura',
-
-    'Sola', 'Jodhpur', 'Makarba', 'Vastral', 'New Maninagar', 'Mahadev Nagar',
-
-    'Odhav', 'Ramol', 'Vejalpur', 'Vijay Nagar', 'Vavol'
-
-  ];
+  
 
 
 
@@ -1894,71 +1880,46 @@ const toTitleCase = (str: string) => {
 
   // Combine and filter services - Remove duplicates by ID and standardize city names
 
-  const allServices = useMemo(() => {
+  const allServices = useMemo(() => {
+    const combined = [...mockServices, ...csvServices];
+    const seen = new Set<string>();
+    const uniqueServices = combined.filter(service => {
+      if (seen.has(service.id)) {
+        return false;
+      }
+      seen.add(service.id);
 
-    const combined = [...mockServices, ...csvServices];
+      let city = service.city.toLowerCase().trim();
+      if (city === 'anand') {
+        return false;
+      }
+      if (city === 'vadodara') {
+        service.city = 'Baroda';
+      } else {
+        service.city = toTitleCase(service.city);
+      }
+      return true;
+    });
+    console.log('Processed allServices:', uniqueServices.length);
+    return uniqueServices;
+  }, [mockServices, csvServices]);
 
-    const seen = new Set<string>();
+  const areaSuggestions = useMemo(() => {
+    if (!selectedTypes.includes('accommodation')) return [];
 
-    const uniqueServices = combined.filter(service => {
+    const relevantServices = selectedCity
+      ? allServices.filter(s => s.type === 'accommodation' && s.city === selectedCity)
+      : allServices.filter(s => s.type === 'accommodation');
 
-      if (seen.has(service.id)) {
-
-        return false;
-
-      }
-
-      seen.add(service.id);
-
-
-
-      // Standardize city names and filter out unwanted cities
-
-      // NOTE: This city standardization logic is already mostly handled in the useEffect loading block now.
-
-      // We still include the old cleanup steps for robustness.
-
-      let city = service.city.toLowerCase().trim();
-
-
-
-      // Remove Anand from the list
-
-      if (city === 'anand') {
-
-        return false;
-
-      }
-
-
-
-      // Standardize Vadodara to Baroda
-
-      if (city === 'vadodara') {
-
-        service.city = 'Baroda';
-
-      } else {
-
-          // 🔴 FIX: Apply general title-casing/trimming to all cities from mockServices or
-
-          // other sources in case they were not cleaned in the CSV load step.
-
-          service.city = toTitleCase(service.city);
-
-      }
-
-
-
-      return true;
-
-    });
-
-    console.log('Processed allServices:', uniqueServices.length);
-
-    return uniqueServices;
-
-  }, [mockServices, csvServices]);
+    const areas = new Set<string>();
+    relevantServices.forEach(s => {
+      const areaName = s.meta?.['Locality / Area'] || s.meta?.['Area'];
+      if (areaName && typeof areaName === 'string') {
+        areas.add(toTitleCase(areaName));
+      }
+    });
+    return Array.from(areas).sort();
+  }, [allServices, selectedCity, selectedTypes]);
 
 
 
@@ -3438,7 +3399,7 @@ const toTitleCase = (str: string) => {
 
                           }}
 
-                          onFocus={() => setShowAreaSuggestions(areaQuery.length > 0)}
+                          onFocus={() => setShowAreaSuggestions(true)}
 
                           onBlur={() => setTimeout(() => setShowAreaSuggestions(false), 300)}
 
@@ -3452,7 +3413,7 @@ const toTitleCase = (str: string) => {
 
                           <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
 
-                            {filteredAreaSuggestions.slice(0, 8).map(area => (
+                            {filteredAreaSuggestions.map(area => (
 
                               <button
 
@@ -3512,7 +3473,7 @@ const toTitleCase = (str: string) => {
 
                           }}
 
-                          onFocus={() => setShowFoodSuggestions(foodQuery.length > 0)}
+                          onFocus={() => setShowFoodSuggestions(true)}
 
                           onBlur={() => setTimeout(() => setShowFoodSuggestions(false), 300)}
 
@@ -3526,7 +3487,7 @@ const toTitleCase = (str: string) => {
 
                           <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
 
-                            {filteredFoodSuggestions.slice(0, 8).map(food => (
+                            {filteredFoodSuggestions.map(food => (
 
                               <button
 
@@ -3586,7 +3547,7 @@ const toTitleCase = (str: string) => {
 
                           }}
 
-                          onFocus={() => setShowTiffinSuggestions(tiffinQuery.length > 0)}
+                          onFocus={() => setShowTiffinSuggestions(true)}
 
                           onBlur={() => setTimeout(() => setShowTiffinSuggestions(false), 300)}
 
@@ -3600,7 +3561,7 @@ const toTitleCase = (str: string) => {
 
                           <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
 
-                            {filteredTiffinSuggestions.slice(0, 8).map(tiffin => (
+                            {filteredTiffinSuggestions.map(tiffin => (
 
                               <button
 
@@ -4172,7 +4133,7 @@ const toTitleCase = (str: string) => {
 
                   }}
 
-                  onFocus={() => setShowAreaSuggestions(areaQuery.length > 0)}
+                  onFocus={() => setShowAreaSuggestions(true)}
 
                   onBlur={() => setTimeout(() => setShowAreaSuggestions(false), 300)}
 
@@ -4186,7 +4147,7 @@ const toTitleCase = (str: string) => {
 
                   <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
 
-                    {filteredAreaSuggestions.slice(0, 8).map(area => (
+                    {filteredAreaSuggestions.map(area => (
 
                       <button
 
@@ -4246,7 +4207,7 @@ const toTitleCase = (str: string) => {
 
                   }}
 
-                  onFocus={() => setShowFoodSuggestions(foodQuery.length > 0)}
+                  onFocus={() => setShowFoodSuggestions(true)}
 
                   onBlur={() => setTimeout(() => setShowFoodSuggestions(false), 300)}
 
@@ -4260,7 +4221,7 @@ const toTitleCase = (str: string) => {
 
                   <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
 
-                    {filteredFoodSuggestions.slice(0, 8).map(food => (
+                    {filteredFoodSuggestions.map(food => (
 
                       <button
 
@@ -4320,7 +4281,7 @@ const toTitleCase = (str: string) => {
 
                   }}
 
-                  onFocus={() => setShowTiffinSuggestions(tiffinQuery.length > 0)}
+                  onFocus={() => setShowTiffinSuggestions(true)}
 
                   onBlur={() => setTimeout(() => setShowTiffinSuggestions(false), 300)}
 
@@ -4334,7 +4295,7 @@ const toTitleCase = (str: string) => {
 
                   <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
 
-                    {filteredTiffinSuggestions.slice(0, 8).map(tiffin => (
+                    {filteredTiffinSuggestions.map(tiffin => (
 
                       <button
 

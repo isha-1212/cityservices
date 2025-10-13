@@ -1,0 +1,80 @@
+[
+  {
+    "id": "food-201",
+    "city": "Ahmedabad",
+    "meta": {
+      "City": "Ahmedabad",
+      "State": "Gujarat",
+      "Rating": "4.5",
+      "Category": "Super Saver Deals",
+      "Location": "Vastrapur",
+      "Dish Name": "2 Medium Veg Pizza",
+      "Price (INR)": "799.0",
+      "Rating Count": "4",
+      "Restaurant Name": "Oven Story Pizza"
+    },
+    "name": "2 Medium Veg Pizza - Oven Story Pizza",
+    "type": "food",
+    "image": "https://content.jdmagicbox.com/comp/def_content/pizza_outlets/default-pizza-outlets-3.jpg",
+    "price": 799,
+    "rating": 4.5,
+    "features": [
+      "Oven Story Pizza",
+      "Vastrapur",
+      "Super Saver Deals"
+    ],
+    "description": "Super Saver Deals dish from Oven Story Pizza in Vastrapur. Based on 4 ratings."
+  },
+  {
+    "id": "food-209",
+    "city": "Ahmedabad",
+    "meta": {
+      "City": "Ahmedabad",
+      "State": "Gujarat",
+      "Rating": "4.8",
+      "Category": "Pocket Friendly Rolls",
+      "Location": "Extension Road",
+      "Dish Name": "2 Classic Veg Rolls at 160 each.",
+      "Price (INR)": "319.0",
+      "Rating Count": "10",
+      "Restaurant Name": "Faasos - Wraps, Rolls & Shawarma"
+    },
+    "name": "2 Classic Veg Rolls at 160 each. - Faasos - Wraps, Rolls & Shawarma",
+    "type": "food",
+    "image": "https://lh4.googleusercontent.com/proxy/EG-kWc7b5gqVrXOriIpVK4ao-jNHc5WfpDzv2g0PV_yIhzAl4tAXAy_9q69f00QG-3odYcWYf2jb7keCIUv5DCp2xp16tSMiXnpn",
+    "price": 319,
+    "rating": 4.8,
+    "features": [
+      "Faasos - Wraps, Rolls & Shawarma",
+      "Extension Road",
+      "Pocket Friendly Rolls"
+    ],
+    "description": "Pocket Friendly Rolls dish from Faasos - Wraps, Rolls & Shawarma in Extension Road. Based on 10 ratings."
+  },
+  {
+    "id": "food-248",
+    "city": "Ahmedabad",
+    "meta": {
+      "City": "Ahmedabad",
+      "State": "Gujarat",
+      "Rating": "0.0",
+      "Category": "Beverages With Benefits",
+      "Location": "Sola",
+      "Dish Name": "Apple Of The Eye",
+      "Price (INR)": "255.0",
+      "Rating Count": "0",
+      "Restaurant Name": "Nini's Kitchen"
+    },
+    "name": "Apple Of The Eye - Nini's Kitchen",
+    "type": "food",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAD_kasqlYXaDOWO1rCq96ZJ77o2_3xYy1Tw&s",
+    "price": 255,
+    "rating": 4.3,
+    "features": [
+      "Nini's Kitchen",
+      "Sola",
+      "Beverages With Benefits"
+    ],
+    "description": "Beverages With Benefits dish from Nini's Kitchen in Sola. "
+  }
+]

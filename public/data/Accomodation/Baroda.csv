@@ -1,197 +1,212 @@
-City,Locality / Area,Property Type,Bedrooms,Rent Price,Furnishing Status,Size,Amenities,Project/Owner Name,Contact / Listing Link,Additional Notes
-Vadodara,Satellite,Independent House,3 BHK,100000,Fully furnished,2475 sq.ft,"24x7 Security, Children Play Area, Community Hall, Gated Community",Darshanshah1982,N/A,N/A
-Vadodara,Bopal,Flat,3 BHK,28000,Semi furnished,1750 sq.ft,"Pool, Gym, Lift, Parking",Mahadev Estate,N/A,N/A
-Vadodara,Shela,Flat,4 BHK,60000,Semi furnished,3121 sq.ft,"Pool, Gym, Lift, Parking",Universal Estate,N/A,N/A
-Vadodara,Shilaj,Independent House,5 BHK,190000,Fully furnished,3795 sq.ft,"24x7 Security, Children Play Area, Community Hall, Gated Community",Darshanshah1982,N/A,N/A
-Vadodara,Shantigram,Flat,3 BHK,46990,Semi furnished,2280 sq.ft,24x7 Security,HOME ADDRESS REALTY,N/A,N/A
-Vadodara,Shantigram,Penthouse,4.5 BHK,88990,Semi furnished,3800 sq.ft,"24x7 Security, Gymnasium, Children Play Area, Landscaped Garden",HOME ADDRESS REALTY,N/A,N/A
-Vadodara,Shela,Flat,4 BHK,60000,Fully furnished,2700 sq.ft,"24x7 Security, Children Play Area, Gated Community, Lift",Darshanshah1982,N/A,N/A
-Vadodara,Jodhpur,Flat,2 BHK,29000,Fully furnished,990 sq.ft,"Lift, Parking, Intercom, Garden",Darshanshah1982,N/A,N/A
-Vadodara,Shyamal,Flat,3 BHK,50000,Semi furnished,1850 sq.ft,"24x7 Security, Gated Community, Lift, Children Play Area",Darshanshah1982,N/A,N/A
-Vadodara,Thaltej,Independent House,4 BHK,150000,Fully furnished,2970 sq.ft,"24x7 Security, Children Play Area, Community Hall, Gated Community",Darshanshah1982,N/A,N/A
-Vadodara,Shantigram,Flat,2 BHK,23000,Semi furnished,1250 sq.ft,"24x7 Security, Business Center, Children Play Area, Close to Bus Stop",Anoop,N/A,N/A
-Vadodara,Vastrapur,Flat,3 BHK,100000,Fully furnished,2020 sq.ft,"24x7 Security, Children Play Area, Gated Community, Lift",Darshanshah1982,N/A,N/A
-Vadodara,Ramdev Nagar,Independent House,3 BHK,100000,Fully furnished,2322 sq.ft,"Parking, Intercom, Garden, Kids Area",Darshanshah1982,N/A,N/A
-Vadodara,Ramdev Nagar,Independent House,4 BHK,135000,Fully furnished,3600 sq.ft,"24x7 Security, Children Play Area, Gated Community, Community Hall",Darshanshah1982,N/A,N/A
-Vadodara,Ambli,Independent House,4 BHK,200000,Fully furnished,5000 sq.ft,"24x7 Security, Children Play Area, Gated Community, Community Hall",Darshanshah1982,N/A,N/A
-Vadodara,Bodakdev,Flat,4 BHK,70000,Fully furnished,2790 sq.ft,"Lift, Parking, Intercom, Garden",Darshanshah1982,N/A,N/A
-Vadodara,Shela,Flat,3 BHK,22000,Semi furnished,1410 sq.ft,"Pool, Gym, Lift, Parking",Mahadev Estate,N/A,N/A
-Vadodara,Vaishno Devi Circle,Flat,2 BHK,24000,Semi furnished,1050 sq.ft,"24x7 Security, Business Center, Children Play Area, Close to Bus Stop",Anoop,N/A,N/A
-Vadodara,Jagatpur,Flat,2 BHK,30000,Fully furnished,1280 sq.ft,"Pool, Gym, Lift, Parking",Preetam Yadav,N/A,N/A
-Vadodara,Shantigram,Flat,3 BHK,27000,Semi furnished,1480 sq.ft,"Swimming Pool, Children Play Area, Community Hall, Landscaped Garden",Property Navigators LLP,N/A,N/A
-Vadodara,Sola,Flat,3 BHK,30000,Semi furnished,2350 sq.ft,"Gym, Lift, Parking, Power Backup",R G Property,N/A,N/A
-Vadodara,Chharodi,Flat,3 BHK,40000,Fully furnished,2055 sq.ft,"24x7 Security, Close to Hospital, School Proximity, Close to Mall",Preetam Yadav,N/A,N/A
-Vadodara,Ambawadi,Flat,3 BHK,60000,Fully furnished,2295 sq.ft,"Children Play Area, Gymnasium, Indoor Game Room, Swimming Pool",ASK ME NOW ADVISORS,N/A,N/A
-Vadodara,Shilaj,Flat,2 BHK,30000,Fully furnished,1185 sq.ft,"Children Play Area, Gymnasium, Indoor Game Room, Swimming Pool",ASK ME NOW ADVISORS,N/A,N/A
-Vadodara,Shilaj,Flat,2 BHK,25000,Fully furnished,1062 sq.ft,"24x7 Security, Children Play Area, Indoor Game Room, Gymnasium",ASK ME NOW ADVISORS,N/A,N/A
-Vadodara,University Area,Flat,3.5 BHK,50000,Fully furnished,2025 sq.ft,"Children Play Area, Indoor Game Room, Gymnasium, Swimming Pool",ASK ME NOW ADVISORS,N/A,N/A
-Vadodara,Jagatpur,Flat,1 BHK,21000,Fully furnished,450 sq.ft,"Pool, Gym, Lift, Parking
-R",Realest,N/A,N/A
-Vadodara,South Bopal,Flat,3 BHK,32000,Fully furnished,1435 sq.ft,"Children Play Area, Gymnasium, Indoor Game Room, Swimming Pool",ASK ME NOW ADVISORS,N/A,N/A
-Vadodara,Shantigram,Flat,2.5 BHK,27500,Semi furnished,1350 sq.ft,"24x7 Security, Gymnasium, Swimming Pool, Children Play Area",HOME ADDRESS REALTY,N/A,N/A
-Vadodara,Vaishno Devi Circle,Flat,2 BHK,22000,Un-furnished,560 sq.ft,Parking,Galaxy Space Realtors,N/A,N/A
-Vadodara,BSNL Colony,Flat,2 BHK,16500,Semi furnished,1000 sq.ft,"24x7 Security, Children Play Area, Close to Airport, Gated Community",Prime Properties,N/A,N/A
-Vadodara,Harni,Flat,3 BHK,22000,Fully furnished,1450 sq.ft,"24x7 Security, Children Play Area, Close to Airport, Close to Mall",Radhe Real Estate,N/A,N/A
-Vadodara,Akota,Flat,3 BHK,40000,Fully furnished,2100 sq.ft,"24x7 Security, Swimming Pool, Gymnasium, Gated Community",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,26000,Fully furnished,1650 sq.ft,"24x7 Security, Swimming Pool, Gymnasium, Gated Community",Shivalaya Associate,N/A,N/A
-Vadodara,Padra,Flat,2 BHK,16000,Fully furnished,1100 sq.ft,"Lift, Parking, Power Backup, Garden",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Akota,Independent House,2 BHK,17500,Semi furnished,900 sq.ft,"Close to Hospital, Close to Mall, Close to Movie Theatres, Close to Pubs & Restaurants",BARODA PROPERTIES,N/A,N/A
-Vadodara,Gotri,Independent House,3 BHK,20000,Semi furnished,1500 sq.ft,Parking,PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Chhani,Flat,2 BHK,13000,Semi furnished,860 sq.ft,"24x7 Security, Business Center, Close to Pubs & Restaurants, Closer to Pharmacy",Mars Property Dealer,N/A,N/A
-Vadodara,Tarsali,Independent House,1 BHK,7000,Un-furnished,1000 sq.ft,"Parking, Water Supply",HARISH Gore,N/A,N/A
-Vadodara,Gotri,Flat,3 BHK,25000,Semi furnished,1050 sq.ft,"Lift, Parking, Garden, Water Supply",Chirag Priyadarshi,N/A,N/A
-Vadodara,Manjalpur,Flat,2 BHK,21000,Fully furnished,1000 sq.ft,"Lift, Parking, Garden, Gas Pipeline",AARAMBH PROPERTIES,N/A,N/A
-Vadodara,Saiyed Vasna,Flat,3 BHK,16500,Un-furnished,1800 sq.ft,"Lift, Parking, Power Backup, Gated Community",Vadodara Realty OPC Pvt Ltd,N/A,N/A
-Vadodara,Gotri,Flat,3 BHK,20000,Fully furnished,1200 sq.ft,"Lift, Parking, Gated Community, Water Supply",CITYSCOPE,N/A,N/A
-Vadodara,Race Course,Flat,3 BHK,60000,Fully furnished,1595 sq.ft,"Parking, Power Backup, Pet Allowed, Water Supply",Capital Crafters India,N/A,N/A
-Vadodara,Bhayli,Flat,1 BHK,15000,Fully furnished,600 sq.ft,Parking,Bhoomi Realty,N/A,N/A
-Vadodara,New Alkapuri,Flat,3 BHK,21000,Semi furnished,1350 sq.ft,"Gym, Lift, Parking, Garden",Sevak Properties,N/A,N/A
-Vadodara,Diwalipura,Flat,3 BHK,52000,Fully furnished,1300 sq.ft,Parking,DREAM HOME PROPERTY 🏠,N/A,N/A
-Vadodara,Fatehgunj,Flat,3 BHK,28000,Fully furnished,1800 sq.ft,"Lift, Parking, Gas Pipeline",Tridev Real Estate,N/A,N/A
-Vadodara,Akota,Flat,2 BHK,13000,Semi furnished,1100 sq.ft,"Lift, Parking, Water Supply",Shree Pramukh Estate,N/A,N/A
-Vadodara,Kalali,Flat,3 BHK,32000,Fully furnished,1400 sq.ft,"Pool, Gym, Lift, Parking",Shriji Estate,N/A,N/A
-Vadodara,Bhayli,Flat,2 BHK,17000,Fully furnished,1250 sq.ft,Parking,Priyansh Realty,N/A,N/A
-Vadodara,Harni,Flat,3 BHK,18000,Semi furnished,1560 sq.ft,"24x7 Security, ATM, Close to Airport, Close to Bus Stop",Krishna Property Estate Agency,N/A,N/A
-Vadodara,Old Padra Road,Flat,2 BHK,18000,Fully furnished,742 sq.ft,"Lift, Parking, Power Backup, Gated Community",A Realty,N/A,N/A
-Vadodara,Sama Savli,Flat,3 BHK,20000,Semi furnished,1500 sq.ft,Parking,Shree Parth Property Consultancy,N/A,N/A
-Vadodara,Gotri,Flat,3 BHK,23000,Fully furnished,1285 sq.ft,Parking,Vadodara Vista Realty,N/A,N/A
-Vadodara,Gotri,Flat,3 BHK,18000,Semi furnished,1800 sq.ft,"Lift, Parking, Garden, Sports Facility",Akshar Real Estate,N/A,N/A
-Vadodara,Gotri,Flat,2 BHK,17500,Semi furnished,1800 sq.ft,"24x7 Security, Children Play Area, Close to Grocery Stores, Close to Mall",Arun Gupta,N/A,N/A
-Vadodara,Sama Savli,Flat,3 BHK,16000,Semi furnished,1600 sq.ft,Parking,SHIVAM REALITY,N/A,N/A
-Vadodara,Haripura,Penthouse,2 BHK,16000,Semi furnished,1135 sq.ft,"Lift, Parking, Water Supply",Prisha Real Estate Solutions,N/A,N/A
-Vadodara,Harni,Flat,3 BHK,20000,Semi furnished,1050 sq.ft,"Gym, Lift, Parking, Power Backup",Meera Real Estate,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,35000,Fully furnished,1300 sq.ft,"24x7 Security, Close to Hospital, Close to Mall, Children Play Area",Sindha Property Consultant,N/A,N/A
-Vadodara,Akota,Flat,2 BHK,10000,Semi furnished,800 sq.ft,"Internet/Wi-Fi, Business Center",PRAMUKH ESTATE AGENCY,N/A,N/A
-Vadodara,Diwalipura,Flat,2 BHK,35000,Fully furnished,1599 sq.ft,"Lift, Parking, Power Backup, Garden",Rashee Realty,N/A,N/A
-Vadodara,Harni,Flat,3 BHK,15000,Semi furnished,1200 sq.ft,"Lift, Parking, Garden, Kids Area",Vishisht Real Estate,N/A,N/A
-Vadodara,Saiyed Vasna,Flat,2 BHK,16500,Semi furnished,900 sq.ft,"Lift, Parking, Gas Pipeline",Property Raja,N/A,N/A
-Vadodara,Gotri,Flat,3 BHK,15000,Semi furnished,1000 sq.ft,"Lift, Parking, Kids Area",Hanuram Real Estate,N/A,N/A
-Vadodara,Undera,Flat,2.5 BHK,20000,Semi furnished,1400 sq.ft,"Pool, Gym, Lift, Parking",URMI PROPERTY,N/A,N/A
-Vadodara,Sama Savli,Independent House,2 BHK,15000,Fully furnished,1300 sq.ft,"Parking, Pet Allowed, Water Supply, Gas Pipeline",Diptesh Mehta,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,18000,Semi furnished,1200 sq.ft,"24x7 Security, Gated Community, Close to Hospital, Close to Mall",Shivaay Realty World,N/A,N/A
-Vadodara,New Gotri,Flat,3 BHK,20000,Fully furnished,1200 sq.ft,"Gym, Lift, Parking, Power Backup",Pawan,N/A,N/A
-Vadodara,Bhayli,Flat,2 BHK,14000,Semi furnished,1400 sq.ft,"Gym, Lift, Parking, Power Backup",Kanu Parmar,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,50000,Fully furnished,2200 sq.ft,"24x7 Security, Fire Fighting Systems",Apex Real Estate,N/A,N/A
-Vadodara,Vemali,Penthouse,3 BHK,30000,Semi furnished,2000 sq.ft,"Lift, Parking, Power Backup, Garden",Sridha,N/A,N/A
-Vadodara,Harni,Villa,4 BHK,40000,Fully furnished,2500 sq.ft,"Business Center, Ceramic Tiles, Close to Bus Stop, Close to Grocery Stores",Jadav Properties,N/A,N/A
-Vadodara,Chhani Jakat Naka,Flat,2 BHK,21000,Semi furnished,1321 sq.ft,"Pool, Gym, Lift, Parking",Jatinbhai,N/A,N/A
-Vadodara,Gotri,Independent House,3 BHK,21000,Semi furnished,1500 sq.ft,"24x7 Security, Children Play Area, Close to Mall, Close to Hospital",BARODA PROPERTIES,N/A,N/A
-Vadodara,Gotri,Independent House,2.5 BHK,35000,Fully furnished,1750 sq.ft,"Close to Jain Temple, Close to Hospital, Close to Grocery Stores, Close to Bus Stop",BARODA PROPERTIES,N/A,N/A
-Vadodara,Manjalpur,Flat,1 BHK,17000,Fully furnished,1000 sq.ft,"Lift, Parking, Gas Pipeline",AARAMBH PROPERTIES,N/A,N/A
-Vadodara,Bhayli,Penthouse,4 BHK,28000,Semi furnished,3000 sq.ft,"Barbecue Area, Children Play Area, Community Hall, Swimming Pool",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Gotri,Flat,2 BHK,13250,Semi furnished,1050 sq.ft,"Lift, Gated Community, Landscaped Garden, 24x7 Security",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Vasna,Flat,3 BHK,18000,Semi furnished,1500 sq.ft,"Gym, Lift, Parking, Power Backup",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Akota,Duplex,2 BHK,16000,Semi furnished,1100 sq.ft,"Parking, Gated Community",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Gorwa,Flat,2 BHK,24000,Fully furnished,1000 sq.ft,"Lift, Parking, Power Backup, Gated Community",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Gotri,Flat,3 BHK,45000,Fully furnished,1853 sq.ft,"24x7 Security, Swimming Pool, Gymnasium, Yoga Room",BARODA PROPERTIES,N/A,N/A
-Vadodara,Atladara,Duplex,3 BHK,15000,Semi furnished,1650 sq.ft,"Parking, Water Supply",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Sama Savli,Flat,4 BHK,30000,Semi furnished,1850 sq.ft,"Pool, Gym, Lift, Parking",Prime Properties,N/A,N/A
-Vadodara,Atladara,Flat,3 BHK,15000,Semi furnished,1650 sq.ft,"Parking, Power Backup, Garden, Kids Area",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,New Alkapuri,Flat,3 BHK,30000,Fully furnished,1200 sq.ft,"Gym, Lift, Parking, Garden",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Flat,2 BHK,15000,Fully furnished,900 sq.ft,"Lift, Parking, Gated Community",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Vasna,Flat,3 BHK,18000,Semi furnished,1000 sq.ft,"Lift, Gated Community, Landscaped Garden, 24x7 Security",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,New Karelibaug,Flat,2 BHK,13500,Semi furnished,1200 sq.ft,"Gym, Lift, Parking, Power Backup",Prime Properties,N/A,N/A
-Vadodara,Gotri,Independent House,3 BHK,28500,Fully furnished,2000 sq.ft,"Close to Hospital, Close to Mall, Close to Pubs & Restaurants, Close to Movie Theatres",BARODA PROPERTIES,N/A,N/A
-Vadodara,New Alkapuri,Flat,3 BHK,25000,Fully furnished,1150 sq.ft,"Gym, Lift, Parking, Garden",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Duplex,3 BHK,25000,Semi furnished,2200 sq.ft,"24x7 Security, Badminton Court, Children Play Area, Community Hall",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Atladara,Flat,3 BHK,12500,Un-furnished,1150 sq.ft,"Lift, Parking, Power Backup, Garden",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Vasna,Flat,3 BHK,15000,Semi furnished,1100 sq.ft,"Lift, Parking, Power Backup, Garden",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Gotri,Flat,3 BHK,21000,Semi furnished,1100 sq.ft,"Lift, Gated Community, Landscaped Garden, 24x7 Security",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Sevasi,Flat,3 BHK,30000,Fully furnished,1150 sq.ft,"Gym, Lift, Parking, Garden",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Gotri,Flat,4 BHK,22000,Semi furnished,2500 sq.ft,"Close to Mall, Close to Movie Theatres, Close to Hospital, Close to Bus Stop",BARODA PROPERTIES,N/A,N/A
-Vadodara,Bhayli,Flat,2 BHK,15500,Fully furnished,890 sq.ft,"Lift, Parking, Garden, Kids Area",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Gotri,Penthouse,2 BHK,13000,Semi furnished,1000 sq.ft,"Lift, Parking, Garden, Gated Community",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Flat,4 BHK,80000,Fully furnished,3000 sq.ft,"24x7 Security, 24 Hours Concierge, Children Play Area, Gated Community",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,21000,Fully furnished,1250 sq.ft,"Gated Community, Lift, Landscaped Garden, 24x7 Security",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Subhanpura,Flat,1 BHK,12200,Fully furnished,600 sq.ft,"Close to ATM, Close to Grocery Stores, Close to Jain Temple, Close to Hospital",BARODA PROPERTIES,N/A,N/A
-Vadodara,Sama Savli,Flat,2 BHK,22000,Fully furnished,1100 sq.ft,"24x7 Security, Close to Airport, Children Play Area, Close to Mall",Mars Property Dealer,N/A,N/A
-Vadodara,Alkapuri,Flat,2 BHK,20000,Fully furnished,1250 sq.ft,"Close to Railway Station, Close to Hospital, Close to Mall, Internal Roads",BARODA PROPERTIES,N/A,N/A
-Vadodara,Bhayli,Flat,2 BHK,14000,Semi furnished,1200 sq.ft,"24x7 Security, Close to Mall, Close to Pubs & Restaurants, Close to Hospital",Mars Property Dealer,N/A,N/A
-Vadodara,Harni,Villa,4 BHK,40000,Fully furnished,3500 sq.ft,"24x7 Security, Close to Airport, Gymnasium, Landscaped Garden",Prime Properties,N/A,N/A
-Vadodara,Gotri,Independent House,3 BHK,15000,Semi furnished,1450 sq.ft,"Close to Hospital, Close to Grocery Stores, Close to Jain Temple, Close to Mall",BARODA PROPERTIES,N/A,N/A
-Vadodara,New Gotri,Flat,3 BHK,20000,Fully furnished,1150 sq.ft,"Lift, Gated Community, Children Play Area, 24x7 Security",CITYSCOPE,N/A,N/A
-Vadodara,Gorwa,Independent House,3 BHK,19000,Semi furnished,1750 sq.ft,"24x7 Security, Closer to Pharmacy, Community Hall, Copper Wiring",BARODA PROPERTIES,N/A,N/A
-Vadodara,Akota,Flat,2 BHK,25000,Fully furnished,1050 sq.ft,"24x7 Security, Close to Hospital, Close to Pubs & Restaurants, Close to Railway Station",Mars Property Dealer,N/A,N/A
-Vadodara,Gotri,Flat,2 BHK,18000,Fully furnished,1000 sq.ft,"Lift, Parking, Garden, Gated Community",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Sama Savli,Flat,2 BHK,15000,Semi furnished,900 sq.ft,"24x7 Security, Children Play Area, Close to Mall, Close to Railway Station",Mars Property Dealer,N/A,N/A
-Vadodara,Alkapuri,Flat,2 BHK,20000,Fully furnished,1450 sq.ft,"Close to Pubs & Restaurants, Close to Railway Station, Utility Shops, Closer to Pharmacy",BARODA PROPERTIES,N/A,N/A
-Vadodara,Gorwa,Flat,2 BHK,23000,Fully furnished,950 sq.ft,"Lift, Parking, Garden, Gated Community",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Villa,4 BHK,40000,Fully furnished,2400 sq.ft,"24x7 Security, Children Play Area, 24 Hours Concierge, Community Hall",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,17200,Semi furnished,1750 sq.ft,"24x7 Security, Close to Grocery Stores, Close to Hospital, Close to Mall",BARODA PROPERTIES,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,35000,Fully furnished,1650 sq.ft,"24x7 Security, Swimming Pool, Children Play Area, Gymnasium",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Kalali,Flat,6 BHK,55000,Fully furnished,3250 sq.ft,"Pool, Gym, Lift, Parking",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,New Alkapuri,Flat,3 BHK,20000,Semi furnished,1100 sq.ft,"Lift, Gated Community, Close to Hospital, Close to Grocery Stores",CITYSCOPE,N/A,N/A
-Vadodara,Race Course,Flat,3 BHK,40000,Fully furnished,1530 sq.ft,"24x7 Security, Close to Bus Stop, Close to Pubs & Restaurants, Close to Railway Station",Mars Property Dealer,N/A,N/A
-Vadodara,Race Course,Flat,2 BHK,25000,Fully furnished,1060 sq.ft,"24x7 Security, Close to Bus Stop, Close to Pubs & Restaurants, Close to Railway Station",Mars Property Dealer,N/A,N/A
-Vadodara,Vasna,Flat,2 BHK,16500,Fully furnished,1000 sq.ft,"Lift, Parking, Garden, Gated Community",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Flat,4 BHK,85000,Fully furnished,3080 sq.ft,"24x7 Security, Swimming Pool, Gymnasium, Gated Community",BARODA PROPERTIES,N/A,N/A
-Vadodara,Gotri,Flat,2 BHK,21500,Fully furnished,1000 sq.ft,"Lift, Parking, Garden, Gated Community",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Subhanpura,Duplex,3 BHK,20000,Semi furnished,1300 sq.ft,"Close to Bus Stop, Close to Hospital, Close to Jain Temple, Close to Mall",Mars Property Dealer,N/A,N/A
-Vadodara,Sama Savli,Flat,2 BHK,20000,Fully furnished,1000 sq.ft,"Lift, Parking, Kids Area, Gated Community",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,19000,Semi furnished,1400 sq.ft,"Lift, Parking, Garden, Kids Area",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Villa,5 BHK,100000,Fully furnished,3300 sq.ft,"24 Hours Concierge, 24x7 Security, Gated Community, School Proximity",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,35000,Fully furnished,1800 sq.ft,"24x7 Security, Gymnasium, Swimming Pool, Children Play Area",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Sevasi,Villa,4 BHK,45000,Semi furnished,2125 sq.ft,"Garden, Gated Community, Water Supply",CITYSCOPE,N/A,N/A
-Vadodara,Vasna,Penthouse,4 BHK,45000,Fully furnished,2150 sq.ft,"Gymnasium, 24x7 Security, Children Play Area, Lift",Shivalaya Associate,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,32000,Semi furnished,1560 sq.ft,"Children Play Area, Close to Hospital, Community Hall, Gated Community",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Race Course,Flat,3 BHK,60000,Fully furnished,2800 sq.ft,"Business Center, Close to Railway Station, Close to Pubs & Restaurants, Close to Mall",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Gotri,Independent House,3 BHK,21000,Semi furnished,1500 sq.ft,"24x7 Security, Children Play Area, Close to Mall, Close to Hospital",BARODA PROPERTIES,N/A,N/A
-Vadodara,Gotri,Independent House,2.5 BHK,35000,Fully furnished,1750 sq.ft,"Close to Jain Temple, Close to Hospital, Close to Grocery Stores, Close to Bus Stop",BARODA PROPERTIES,N/A,N/A
-Vadodara,Manjalpur,Flat,1 BHK,17000,Fully furnished,1000 sq.ft,"Lift, Parking, Gas Pipeline",AARAMBH PROPERTIES,N/A,N/A
-Vadodara,Bhayli,Penthouse,4 BHK,28000,Semi furnished,3000 sq.ft,"Barbecue Area, Children Play Area, Community Hall, Swimming Pool",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Gotri,Flat,2 BHK,13250,Semi furnished,1050 sq.ft,"Lift, Gated Community, Landscaped Garden, 24x7 Security",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Vasna,Flat,3 BHK,18000,Semi furnished,1500 sq.ft,"Gym, Lift, Parking, Power Backup",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Akota,Duplex,2 BHK,16000,Semi furnished,1100 sq.ft,"Parking, Gated Community",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Gorwa,Flat,2 BHK,24000,Fully furnished,1000 sq.ft,"Lift, Parking, Power Backup, Gated Community",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Gotri,Flat,3 BHK,45000,Fully furnished,1853 sq.ft,"24x7 Security, Swimming Pool, Gymnasium, Yoga Room",BARODA PROPERTIES,N/A,N/A
-Vadodara,Atladara,Duplex,3 BHK,15000,Semi furnished,1650 sq.ft,"Parking, Water Supply",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Sama Savli,Flat,4 BHK,30000,Semi furnished,1850 sq.ft,"Pool, Gym, Lift, Parking",Prime Properties,N/A,N/A
-Vadodara,Atladara,Flat,3 BHK,15000,Semi furnished,1650 sq.ft,"Parking, Power Backup, Garden, Kids Area",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,New Alkapuri,Flat,3 BHK,30000,Fully furnished,1200 sq.ft,"Gym, Lift, Parking, Garden",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,35000,Fully furnished,1650 sq.ft,"24x7 Security, Swimming Pool, Children Play Area, Gymnasium",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Kalali,Flat,6 BHK,55000,Fully furnished,3250 sq.ft,"Pool, Gym, Lift, Parking",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,New Alkapuri,Flat,3 BHK,20000,Semi furnished,1100 sq.ft,"Lift, Gated Community, Close to Hospital, Close to Grocery Stores",CITYSCOPE,N/A,N/A
-Vadodara,Race Course,Flat,3 BHK,40000,Fully furnished,1530 sq.ft,"24x7 Security, Close to Bus Stop, Close to Pubs & Restaurants, Close to Railway Station",Mars Property Dealer,N/A,N/A
-Vadodara,Race Course,Flat,2 BHK,25000,Fully furnished,1060 sq.ft,"24x7 Security, Close to Bus Stop, Close to Pubs & Restaurants, Close to Railway Station",Mars Property Dealer,N/A,N/A
-Vadodara,Vasna,Flat,2 BHK,16500,Fully furnished,1000 sq.ft,"Lift, Parking, Garden, Gated Community",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Flat,4 BHK,85000,Fully furnished,3080 sq.ft,"24x7 Security, Swimming Pool, Gymnasium, Gated Community",BARODA PROPERTIES,N/A,N/A
-Vadodara,Gotri,Flat,2 BHK,21500,Fully furnished,1000 sq.ft,"Lift, Parking, Garden, Gated Community",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Subhanpura,Duplex,3 BHK,20000,Semi furnished,1300 sq.ft,"Close to Bus Stop, Close to Hospital, Close to Jain Temple, Close to Mall",Mars Property Dealer,N/A,N/A
-Vadodara,Sama Savli,Flat,2 BHK,20000,Fully furnished,1000 sq.ft,"Lift, Parking, Kids Area, Gated Community",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,19000,Semi furnished,1400 sq.ft,"Lift, Parking, Garden, Kids Area",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Villa,5 BHK,100000,Fully furnished,3300 sq.ft,"24 Hours Concierge, 24x7 Security, Gated Community, School Proximity",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,35000,Fully furnished,1800 sq.ft,"24x7 Security, Gymnasium, Swimming Pool, Children Play Area",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Sevasi,Villa,4 BHK,45000,Semi furnished,2125 sq.ft,"Garden, Gated Community, Water Supply",CITYSCOPE,N/A,N/A
-Vadodara,Vasna,Penthouse,4 BHK,45000,Fully furnished,2150 sq.ft,"Gymnasium, 24x7 Security, Children Play Area, Lift",Shivalaya Associate,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,32000,Semi furnished,1560 sq.ft,"Children Play Area, Close to Hospital, Community Hall, Gated Community",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Race Course,Flat,3 BHK,60000,Fully furnished,2800 sq.ft,"Business Center, Close to Railway Station, Close to Pubs & Restaurants, Close to Mall",SHREE KASHTBHANJAN DEV Real Estate Consultant,N/A,N/A
-Vadodara,Bhayli,Penthouse,4 BHK,25000,Semi furnished,3000 sq.ft,"Gym, Lift, Parking, Kids Area",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Vadsar,Independent House,4 BHK,15000,Un-furnished,1300 sq.ft,"24x7 Security, Security Guards, Children Play Area, Cricket Pitch",Pratham Properties,N/A,N/A
-Vadodara,New Alkapuri,Villa,4 BHK,65000,Fully furnished,2000 sq.ft,"24x7 Security, Children Play Area, Close to Mall, Gated Community",Prime Properties,N/A,N/A
-Vadodara,Bhayli,Penthouse,4 BHK,40000,Fully furnished,3100 sq.ft,"Gym, Lift, Parking, Power Backup",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Gotri,Flat,2 BHK,13000,Semi furnished,900 sq.ft,"Lift, Parking, Garden, Kids Area",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,New Alkapuri,Villa,4 BHK,27000,Semi furnished,1850 sq.ft,"24x7 Security, Close to Grocery Stores, Close to Hospital, Close to Mall",Shivalaya Associate,N/A,N/A
-Vadodara,Atladara,Flat,2 BHK,14000,Fully furnished,850 sq.ft,"Lift, Parking, Garden, Gated Community",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Chhani Jakat Naka,Flat,2 BHK,24000,Semi furnished,1050 sq.ft,"24x7 Security, Gated Community, Swimming Pool, Gymnasium",Shivalaya Associate,N/A,N/A
-Vadodara,Sama Savli,Flat,3 BHK,35000,Fully furnished,1150 sq.ft,"Lift, Parking, Garden, Kids Area",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Gotri,Flat,2 BHK,16000,Semi furnished,1550 sq.ft,"24x7 Security, Gated Community, Children Play Area, Close to Mall",Shivalaya Associate,N/A,N/A
-Vadodara,Bapu nagar,Flat,2 BHK,12500,Semi furnished,1150 sq.ft,"Gated Community, Security Guards, Marble, Close to Jain Temple",Prime Properties,N/A,N/A
-Vadodara,Gotri,Flat,3 BHK,25000,Fully furnished,1750 sq.ft,"24x7 Security, Community Hall, Landscaped Garden, Lift",Shivalaya Associate,N/A,N/A
-Vadodara,Sama Savli,Flat,3 BHK,24000,Semi furnished,1700 sq.ft,"24x7 Security, Children Play Area, Close to Mall, Gated Community",Prime Properties,N/A,N/A
-Vadodara,Vasna,Flat,3 BHK,25000,Fully furnished,1050 sq.ft,"Lift, Parking, Garden, Kids Area",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Undera,Flat,1 BHK,12500,Fully furnished,900 sq.ft,"24x7 Security, Children Play Area, Close to Hospital, Close to Mall",BARODA PROPERTIES,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,20000,Fully furnished,1100 sq.ft,"Lift, Gated Community, Children Play Area, 24x7 Security",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,New Alkapuri,Independent House,5 BHK,40000,Semi furnished,2400 sq.ft,"Pool, Gym, Parking, Power Backup",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Tandalja,Flat,3 BHK,15000,Semi furnished,1000 sq.ft,Parking,PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,New Gotri,Flat,3 BHK,40000,Fully furnished,1850 sq.ft,"24x7 Security, Gymnasium, Gated Community, Landscaped Garden",Shivalaya Associate,N/A,N/A
-Vadodara,New Gotri,Villa,3 BHK,24000,Semi furnished,1600 sq.ft,"Swimming Pool, Landscaped Garden, Children Play Area, Gymnasium",CITYSCOPE,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,28000,Fully furnished,1500 sq.ft,"Pool, Gym, Lift, Parking",ARIHANT ESTATE HUB,N/A,N/A
-Vadodara,Bhayli,Flat,2 BHK,13500,Semi furnished,900 sq.ft,"Lift, Parking",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Flat,2 BHK,18000,Fully furnished,1250 sq.ft,"24x7 Security, Gated Community, Close to Mall, Close to Hospital",Vadodara Realty OPC Pvt Ltd,N/A,N/A
-Vadodara,Bhayli,Flat,3 BHK,55000,Semi furnished,1600 sq.ft,"Swimming Pool, Children Play Area, Landscaped Garden, Gymnasium",CITYSCOPE,N/A,N/A
-Vadodara,Atladara,Flat,3 BHK,18000,Semi furnished,1200 sq.ft,"Gym, Lift, Parking, Power Backup",PRAMUKH GLOBAL REALTORS,N/A,N/A
-Vadodara,Bhayli,Flat,2 BHK,21000,Fully furnished,1150 sq.ft,"24x7 Security, Children Play Area, Landscaped Garden, Lift",Shivalaya Associate,N/A,N/A
-Vadodara,Harni,Flat,2 BHK,14000,Semi furnished,1130 sq.ft,"24x7 Security, Close to Airport, Close to Hospital, Children Play Area",Mars Property Dealer,N/A,N/A
-Vadodara,Sama Savli,Flat,3 BHK,18000,Semi furnished,1850 sq.ft,"24x7 Security, Children Play Area, Lift, Close to Airport",Mars Property Dealer,N/A,N/A
-Vadodara,Bhayli,Independent House,3 BHK,19500,Semi furnished,1850 sq.ft,"24x7 Security, Close to Grocery Stores, Close to Hospital, Close to Jain Temple",Shivalaya Associate,N/A,N/A
-Vadodara,Vasna,Independent House,2 BHK,15000,Fully furnished,1000 sq.ft,Parking,PRAMUKH GLOBAL REALTORS,N/A,N/A
+City,Locality / Area,Property Type,Bedrooms,Rent Price,Furnishing Status,Size (sq.ft),Amenities,Project/Owner Name,Additional Notes
+Vadodara,Bhayli,Apartment,3 BHK,35000,Semi Furnished,1860,"Pool, Gym, Lift, Parking",Nilamber Bellissimo,Sponsored
+Vadodara,Harni,Flat,3 BHK,20000,Semi furnished,1590,"Gym, Lift, Parking, Power Backup",Prime Properties,Verified, 1d ago
+Vadodara,Sevasi,Flat,3 BHK,18000,Semi furnished,1350,"Swimming Pool, Gymnasium, Gated Community, Children Play Area",Samanvay Splendid,Verified, 1w ago
+Vadodara,New Alkapuri,Flat,2 BHK,29500,Fully furnished,1225,"Pool, Gym, Lift, Parking",ARIHANT ESTATE HUB,4d ago
+Vadodara,New Alkapuri,Flat,3 BHK,30000,Semi furnished,2050,"Gym, Lift, Parking, Intercom",SHREE KASHTBHANJAN DEV Real Estate Consultant,1w ago
+Vadodara,New Alkapuri,Villa,4 BHK,20000,Semi furnished,1400,"Club House, Community Hall, Natural Light, Gated Community",CITYSCOPE,New, 1d ago
+Vadodara,Gotri,Independent House,1 BHK,8500,Semi furnished,950,"Parking",Vadodara Vista Realty,3d ago
+Vadodara,Saiyed Vasna,Duplex,4 BHK,17500,Semi furnished,1500,"24 Hours Concierge, Close to Hospital, Close to Mall, Close to Movie Theatres",BARODA PROPERTIES,1d ago
+Vadodara,Vasna,Flat,3 BHK,16000,Fully furnished,1100,"Lift, Parking, Gated Community, Gas Pipeline",PRAMUKH GLOBAL REALTORS,1w ago
+Vadodara,New Karelibaug,Independent House,2 BHK,25000,Un-furnished,800,"Nearby: Podar International School, VIROC Super specialty Orthopedic Hospital, Jagdish Food Zone",Vijaykumar Parmar,Owner, 2w ago
+Vadodara,Pratapgunj,Flat,3 BHK,25000,Fully furnished,1000,"Gym, Lift, Power Backup, Intercom",Haresh Vaswani,Owner, 1w ago
+Vadodara,Sama Savli,Flat,3 BHK,25000,Semi furnished,1550,"Pool, Gym, Lift, Parking",Mars Property Dealer,3d ago
+Vadodara,Diwalipura,Flat,3 BHK,30000,Fully furnished,2100,"Lift, Parking, Power Backup, Gated Community",Megha Agrawal,3w ago
+Vadodara,Harni,Flat,3 BHK,19499,Semi furnished,1200,"24x7 Security, Children Play Area, Close to ATM, Close to Airport",Ratnam Aura,Radhe Real Estate,Verified
+Vadodara,Gotri,Flat,2 BHK,25000,Fully Furnished,730,"Parking, Power Backup, Gated Community, Water Supply",ARIHANT ESTATE HUB,Newly added, Updated 5 days ago
+Vadodara,Sevasi,Flat,3 BHK,17000,Semi Furnished,1050,N/A,CITYSCOPE,Newly added, Updated 5 days ago
+Vadodara,Subhanpura,Flat,2 BHK,15000,Semi Furnished,900,"Parking, Gas Pipeline",Prisha Real Estate Solutions,Newly added, Updated 5 days ago
+Vadodara,Atladara,Flat,3 BHK,28000,Semi Furnished,1475,"Parking, Power Backup, Kids Area, Water Supply",ARIHANT ESTATE HUB,Newly added, Updated 5 days ago
+Vadodara,Gotri,Independent House,3 BHK,16500,Semi furnished,2000,"Parking, Garden, Kids Area, Gated Community",Vadodara Realty OPC Pvt Ltd,3w ago
+Vadodara,Harni,Flat,3 BHK,25000,Fully furnished,1550,"Gym, Lift, Parking, Power Backup",Kalash Properties,New, 1d ago
+Vadodara,New Gotri,Flat,3 BHK,22000,Semi furnished,2100,"Gym, Lift, Parking, Power Backup",Akshar Real Estate,Verified, 1d ago
+Vadodara,Gotri,Flat,2 BHK,20000,Fully furnished,800,"Parking, Gas Pipeline",Bhoomi Realty,Verified, 5d ago
+Vadodara,Sevasi,Flat,3 BHK,16500,Semi furnished,1550,"Gym, Lift, Parking, Power Backup",Shree Radhe Shyam,Sevak Properties,2w ago
+Vadodara,Akota,Duplex,4 BHK,25000,Semi furnished,1600,"Parking, Garden, Gated Community, Water Supply",Shriji Estate,1w ago
+Vadodara,Old Padra Road,Duplex,4 BHK,35000,Fully furnished,1800,"Gated Community, 24*7 Security, Pet Friendly, POP Finishing",Square,Shiv Properties,New, 1d ago
+Vadodara,Bhayli,Flat,3 BHK,35000,Semi furnished,1860,"Pool, Gym, Lift, Parking",Nilamber Bellissimo,Tridev Real Estate,5d ago
+Vadodara,Diwalipura,Flat,3 BHK,52000,Fully furnished,1300,"Parking",DREAM HOME PROPERTY 🏠,1w ago
+Vadodara,Atladara,Flat,2 BHK,9000,Semi furnished,1100,"Lift, Parking, Water Supply",Shree Pramukh Estate,2d ago
+Vadodara,Sama Savli,Flat,3 BHK,20000,Semi furnished,1700,"Parking",Shree Parth Property Consultancy,1w ago
+Vadodara,Bhayli,Flat,4 BHK,100000,Semi furnished,3600,"Parking",KP Luxuria,PropGuru
+Vadodara,Sama Savli,Flat,3 BHK,18000,Semi furnished,1150,"Gym, Lift, Parking, Power Backup",Manan Joshi,1w ago
+Vadodara,Akota,Duplex,3 BHK,20000,Fully furnished,1400,"Parking, Garden, Sports Facility, Kids Area",PRAMUKH ESTATE AGENCY,3d ago
+Vadodara,Saiyed Vasna,Flat,2 BHK,13000,Semi furnished,1150,"Close to RANESHWAR MULTISPECIALITY HOSPITAL, Lift, Children Play Area, Natural Light",A Realty,New, 1d ago
+Vadodara,Sama Savli,Flat,3 BHK,26000,Fully furnished,1800,"Parking",SHIVAM REALITY,Verified, 6d ago
+Vadodara,Sama Savli,Flat,2 BHK,14000,Semi furnished,810,"Parking",Krishna Property Estate Agency,Verified, 2w ago
+Vadodara,Sevasi,Flat,3 BHK,20000,Semi furnished,2000,"Pool, Gym, Lift, Parking",DREAM HOME REALTY,Verified, 3d ago
+Vadodara,Tandalja,Flat,3 BHK,26000,Fully furnished,1650,"Lift, Parking, Water Supply, Gas Pipeline",Rashee Realty,Verified, 3w ago
+Vadodara,Sama Savli,Flat,3 BHK,26000,Fully furnished,1400,"Gym, Lift, Parking, Power Backup",Diptesh Mehta,Verified
+Vadodara,Gorwa,Flat,3 BHK,22000,Semi furnished,1500,"Parking",URMI PROPERTY,Verified
+Vadodara,Bhayli,Flat,2 BHK,20000,Fully furnished,880,"Gym, Lift, Parking, Power Backup",Samanvay Status,Shree Ram Real Estate,1w ago
+Vadodara,Chhani Jakat Naka,Flat,3 BHK,37000,Fully furnished,1750,"Pool, Gym, Lift, Parking",Alembic Veda II,Jatinbhai,5d ago
+Vadodara,New Alkapuri,Flat,2 BHK,30000,Fully furnished,1000,"Lift, Parking, Gas Pipeline",Shivaay Realty World,1w ago
+Vadodara,Akota,Flat,3 BHK,20000,Semi furnished,1000,"24x7 Security, Children Play Area, Lift, Close to Mall",Prisha Real Estate Solutions
+Vadodara,Chhani,Flat,2 BHK,18000,Semi furnished,950,"Parking",BIG BLOCK REALITY,2w ago
+Vadodara,New Alkapuri,Flat,2 BHK,18000,Semi furnished,850,"Lift, Parking, Kids Area, Gated Community",Hanuram Real Estate,New, 1d ago
+Vadodara,Makarpura,Independent House,3 BHK,15000,Semi furnished,2000,"Parking",Aakruti Duplex,AARAMBH PROPERTIES,5d ago
+Vadodara,Sama Savli,Independent House,2 BHK,13000,Semi furnished,1200,"Parking",Sridha,4d ago
+Vadodara,Manjalpur,Flat,2 BHK,15000,Un-furnished,1100,"Parking",Yash Patel,1w ago
+Vadodara,Vasna,Independent House,2 BHK,18000,Semi furnished,1200,"Parking, Garden, Kids Area, Gated Community",Kanu Parmar,2d ago
+Vadodara,Vemali,Flat,2 BHK,25000,Fully furnished,1200,"Lift, Parking, Garden, Kids Area",Shivay Real Estate,2w ago
+Vadodara,Bhayli,Flat,4 BHK,110000,Fully furnished,2800,"Pool, Gym, Lift, Parking",Apex Real Estate,5d ago
+Vadodara,Bhayli,Flat,3 BHK,28000,Fully furnished,1300,"Lift, Parking, Garden, Gated Community",Mahakali Estate Agency,6d ago
+Vadodara,Harni,Flat,2 BHK,15000,Semi furnished,900,"Lift, Parking, Water Supply, Gas Pipeline",Meera Real Estate,1w ago
+Vadodara,Atladara,Flat,2 BHK,16000,Semi furnished,1065,"Gym, Lift, Parking, Power Backup",Ace Octave,Vadodara Property Partners,1w ago
+Vadodara,Sama Savli,Flat,3 BHK,25000,Fully furnished,1750,"Parking",Patel Real Estate,2w ago
+Vadodara,Bill,Flat,3 BHK,18000,Fully furnished,900,"Pool, Gym, Lift, Parking",The Planet The Planet 1,Shree Lalji Consultants
+Vadodara,Saiyed Vasna,Independent House,4 BHK,25000,Fully furnished,1200,"Parking, Gas Pipeline",Jay Mataji Real Estate,1w ago
+Vadodara,Harni,Independent House,4 BHK,30000,Fully furnished,1350,"Power Backup, Lift, 24*7 Security, Gated Community",Samir.ghanchi201*,2d ago
+Vadodara,Bhayli,Flat,3 BHK,25000,Semi furnished,1450,"Lift, Parking, Intercom, Garden",Aarna 48,For You Property,3d ago
+Vadodara,Bhayli,Flat,3 BHK,23000,Fully furnished,1450,"Lift, Parking, Power Backup, Intercom",Akshar Pavilion,HARDIK PATEL,5d ago
+Vadodara,Bhayli,Villa,3 BHK,40000,Fully furnished,2200,"Gym, Parking, Garden, Gated Community",Narayan West,Property Raja,1w ago
+Vadodara,Gotri,Flat,2 BHK,17000,Fully furnished,1250,"Parking",Mahant Realty
+Vadodara,Tarsali,Independent Builder Floor,2 BHK,18000,Fully furnished,1000,"Children Play Area, Close to Bus Stop, Close to Hospital, Close to Mall",Bipin Kumar,Owner
+Vadodara,Tarsali,Flat,2 BHK,15000,Semi furnished,620,"Gym, Lift, Parking, Power Backup",Pushpak Skyline,Rahul Dusane,Owner, No Brokerage, 1w ago
+Vadodara,Sama Savli,Independent Builder Floor,2 BHK,15000,Un-furnished,1000,"Parking, Kids Area, Water Supply",Akshil Chauhan,Owner, Verified, 1w ago
+Vadodara,New Waghodia Road,Flat,2 BHK,15000,Semi furnished,900,"Lift, Parking, Power Backup, Water Supply",Devesh Iconic,Mehul Goswami,Agent, Verified, 4w ago
+Vadodara,Sama Savli,Duplex,3 BHK,35000,Fully furnished,1800,"Parking, Garden, Water Supply",Parthiv Vania,Owner, No Brokerage, Verified, 4w ago
+Vadodara,Tarsali,Independent House,1 BHK,12000,Semi furnished,700,"Nearby: Don Bosco High School, BAPS Shastriji Maharaj Hospital, Jay Mahakali Sev Usal, Eva The Mall",Aruna,Owner, Verified, 3w ago
+Vadodara,Harni,Flat,3 BHK,18000,Semi furnished,727,"Gym, Lift, Gated Community",Prerna Shree Siddheshwar Highdeck 1,Parshuram Singh,Owner, Verified
+Vadodara,Akota,Flat,2 BHK,20000,Semi furnished,700,"Parking, Power Backup, Gated Community",ARIHANT ESTATE HUB,4d ago
+Vadodara,Bhayli,Flat,3 BHK,30000,Semi furnished,1750,"Pool, Gym, Lift, Parking",SHREE KASHTBHANJAN DEV Real Estate Consultant,1w ago
+Vadodara,Sevasi,Flat,3 BHK,21000,Semi furnished,1400,"Pool, Gym, Lift, Parking",Darshanam Seltosa,Shivalaya Associate,4d ago
+Vadodara,Sama Savli,Flat,4 BHK,21000,Semi furnished,1800,"Pool, Gym, Lift, Parking",Prime Properties,5d ago
+Vadodara,Sunpharma Road,Flat,3 BHK,30000,Semi furnished,1700,"Parking",Vadodara Vista Realty,1w ago
+Vadodara,Saiyed Vasna,Villa,4 BHK,42000,Fully furnished,3500,"Close to Hospital, Close to Jain Temple, Close to Mall, Close to Movie Theatres",BARODA PROPERTIES,6d ago
+Vadodara,Akota,Flat,2 BHK,18000,Fully furnished,900,"Lift, Parking",PRAMUKH GLOBAL REALTORS,1w ago
+Vadodara,New Gotri,Flat,2 BHK,20000,Fully furnished,851,"Lift, Parking, Garden, Kids Area",Mars Property Dealer,1w ago
+Vadodara,Harni,Flat,2 BHK,14000,Semi furnished,1100,"24x7 Security, Close to Airport, Close to Mall, Children Play Area",Radhe Real Estate,3w ago
+Vadodara,Vemali,Flat,2 BHK,14500,Fully furnished,1250,"Lift, Parking, Intercom, Garden",Kalash Properties,4w ago
+Vadodara,Alkapuri,Flat,3 BHK,23000,Fully furnished,1900,"Lift, Parking, Gated Community, Water Supply",Shiv Properties,4d ago
+Vadodara,Akota,Duplex,3 BHK,32000,Fully furnished,2000,"Close to Grocery Store, Close to Bankers Heart Institute, Utility Shops, Natural Light",Shriji Estate,2d ago
+Vadodara,Bhayli,Flat,3 BHK,35000,Semi furnished,1300,"Pool, Gym, Lift, Parking",Darshanam Splendora II,Tridev Real Estate,2w ago
+Vadodara,New Alkapuri,Flat,2 BHK,14000,Semi furnished,1244,"Gym, Lift, Parking, Power Backup",Shree Ram Builders Shapath,Sevak Properties,6d ago
+Vadodara,Bhayli,Flat,3 BHK,60000,Fully furnished,1300,"Parking",DREAM HOME PROPERTY 🏠,1w ago
+Vadodara,Saiyed Vasna,Flat,3 BHK,30000,Fully furnished,1800,"Pool, Gym, Lift, Parking",Shree Pramukh Estate,2w ago
+Vadodara,Karelibagh,Flat,3 BHK,23000,Fully furnished,1600,"Parking, Gas Pipeline",Shree Parth Property Consultancy,1w ago
+Vadodara,Bhayli,Flat,4 BHK,100000,Fully furnished,6500,"Gym, Lift, Parking, Power Backup",Prapti Springs Exotica II,A Realty,1w ago
+Vadodara,Akota,Independent Builder Floor,2 BHK,16400,Fully furnished,1200,"Parking, Kids Area, Gated Community, Water Supply",PRAMUKH ESTATE AGENCY,1w ago
+Vadodara,Vemali,Flat,2 BHK,14000,Semi furnished,850,"Lift, Parking, Water Supply",Krishna Property Estate Agency,Verified, 2w ago
+Vadodara,New Alkapuri,Flat,3 BHK,25000,Fully furnished,1350,"Children Play Area, Close to Mall, Gated Community, Landscaped Garden",Shree Ram Builders Shapath,DREAM HOME REALTY,Verified
+Vadodara,Chhani Jakat Naka,Flat,2 BHK,21000,Semi furnished,1321,"Pool, Gym, Lift, Parking",Alembic Samsara Apartment,Jatinbhai,5d ago
+Vadodara,Sama Savli,Flat,2.5 BHK,18000,Semi furnished,1800,"Parking",SHIVAM REALITY,2w ago
+Vadodara,Gotri,Flat,2 BHK,25000,Fully furnished,800,"Parking, Gas Pipeline",Shivaay Realty World,4w ago
+Vadodara,Subhanpura,Flat,2 BHK,15000,Semi furnished,900,"Parking, Gas Pipeline",Prisha Real Estate Solutions,4d ago
+Vadodara,Vasna,Flat,2 BHK,15000,Fully furnished,750,"Gym, Lift, Parking, Garden",Hanuram Real Estate,New, 1d ago
+Vadodara,Sevasi,Flat,3 BHK,23000,Fully furnished,1500,"Lift, Parking, Power Backup",URMI PROPERTY,New, 1d ago
+Vadodara,Manjalpur,Flat,2 BHK,16000,Semi furnished,1000,"Parking",AARAMBH PROPERTIES,6d ago
+Vadodara,Vemali,Penthouse,3 BHK,30000,Semi furnished,2000,"Lift, Parking, Power Backup, Garden",Vrunda Saakar Opulent,Sridha,1w ago
+Vadodara,Sama Savli,Flat,3 BHK,28000,Semi furnished,1400,"Pool, Gym, Lift, Parking",Orchid Highlife,Diptesh Mehta,5d ago
+Vadodara,Atladara,Flat,2 BHK,15500,Semi furnished,1400,"Gym, Lift, Parking, Power Backup",Kanu Parmar,1w ago
+Vadodara,Vemali,Flat,2 BHK,9000,Un-furnished,900,"Parking",Shivay Real Estate,4w ago
+Vadodara,Bhayli,Flat,3 BHK,37000,Semi furnished,1650,"Pool, Gym, Lift, Parking",Darshanam Splendora II,Apex Real Estate,1w ago
+Vadodara,Bhayli,Independent House,4 BHK,35000,Fully furnished,2500,"Pool, Gym, Parking, Kids Area",Rashee Realty,3w ago
+Vadodara,Chhani,Flat,2 BHK,18000,Semi furnished,1050,"Parking",BIG BLOCK REALITY,2w ago
+Vadodara,Alkapuri,Flat,4 BHK,85000,Fully furnished,3700,"Gym, Lift, Parking, Power Backup",Vadodara Property Partners,2w ago
+Vadodara,Gotri,Independent House,4 BHK,35000,Semi furnished,1250,"Parking",Shree Ram Real Estate,2w ago
+Vadodara,Saiyed Vasna,Flat,2 BHK,14000,Semi furnished,800,"Lift, Parking, Water Supply",Niwas Developers Niwas,Mahakali Estate Agency,3w ago
+Vadodara,Chhani Jakat Naka,Flat,2 BHK,26000,Fully furnished,1100,"Pool, Gym, Lift, Parking",Alembic Alchemy Veda,Patel Real Estate,3w ago
+Vadodara,Harni,Flat,2 BHK,14500,Semi furnished,1200,"Gym, Lift, Parking, Garden",Meera Real Estate,4w ago
+Vadodara,Vemali,Flat,2 BHK,16000,Semi furnished,850,"Lift, Parking, Power Backup, Intercom",Pancham Aristo,For You Property,1w ago
+Vadodara,Gorwa,Independent House,2 BHK,12000,Semi furnished,950,"Parking, Gated Community, Water Supply, Gas Pipeline",Samir.ghanchi201*,1w ago
+Vadodara,New Gotri,Flat,3 BHK,50000,Fully furnished,1195,"Lift, Parking, Power Backup, Intercom",Tia Courtyard Towers,HARDIK PATEL,1w ago
+Vadodara,Bhayli,Flat,3 BHK,25000,Fully furnished,1760,"Pool, Gym, Lift, Parking",Skyseven Skyline Synnove,Property Raja,4w ago
+Vadodara,Saiyed Vasna,Flat,2 BHK,12500,Fully furnished,1151,"Lift, Parking, Gas Pipeline",Jay Mataji Real Estate,4w ago
+Vadodara,Sevasi,Flat,3 BHK,22000,Fully furnished,820,"Gym, Lift, Parking, Power Backup",Shree Shyamal Lake View,Megha Agrawal,1w ago
+Vadodara,Kalali,Flat,3 BHK,20000,Semi furnished,1240,"Parking, Power Backup, Intercom, Garden",ARIHANT ESTATE HUB,4d ago
+Vadodara,Harni,Flat,3 BHK,22000,Semi furnished,1500,"Gym, Lift, Parking, Power Backup",Prime Properties,4d ago
+Vadodara,Diwalipura,Independent House,2 BHK,14500,Semi furnished,1000,"Parking",Vadodara Vista Realty,1w ago
+Vadodara,Bhayli,Flat,3 BHK,23000,Semi furnished,1350,"Natural Light, Swimming Pool, Gymnasium, Children Play Area",Shivalaya Associate,1d ago
+Vadodara,Waghodia Road,Flat,3 BHK,18000,Semi furnished,1500,"Close to Hospital, Close to Mall, Close to Movie Theatres, Close to Pubs & Restaurants",BARODA PROPERTIES,6d ago
+Vadodara,Vasna,Flat,3 BHK,19000,Semi furnished,2000,"Lift, Parking, Garden, Kids Area",SHREE KASHTBHANJAN DEV Real Estate Consultant,3w ago
+Vadodara,Sama Savli,Flat,3 BHK,18000,Semi furnished,1200,"Gym, Lift, Parking, Garden",PRAMUKH GLOBAL REALTORS,2w ago
+Vadodara,Harni,Flat,3 BHK,20000,Semi furnished,1650,"Gym, Lift, Parking, Garden",Mars Property Dealer,1w ago
+Vadodara,New Alkapuri,Flat,3 BHK,20000,Semi furnished,1100,"Lift, Parking, Garden, Gated Community",CITYSCOPE,3w ago
+Vadodara,Harni,Flat,2 BHK,14000,Semi furnished,1100,"24x7 Security, Close to Airport, Close to Jain Temple, Close to Mall",Sun Welkin Complex,Radhe Real Estate
+Vadodara,Bhayli,Flat,4 BHK,33000,Fully furnished,2000,"Close to Grocery Store, Close to Sterling Hospitals - Bhayli, Vadodara, Power Backup, Lift",Shyamal Park,Shiv Properties,2d ago
+Vadodara,Chhani,Flat,3 BHK,40000,Fully furnished,1800,"Children Play Area, Club House, Gymnasium, Utility Shops",DREAM HOME PROPERTY 🏠,1d ago
+Vadodara,Atladara,Flat,2 BHK,15000,Semi furnished,1650,"Gym, Lift, Parking, Power Backup",Prapti Solitude 1,Tridev Real Estate,3w ago
+Vadodara,Bhayli,Villa,4 BHK,42000,Fully furnished,2366,"Pool, Gym, Parking, Garden",Pacifica Madrid County,Sevak Properties,6d ago
+Vadodara,Manjalpur,Independent House,1 BHK,13000,Semi furnished,750,"Parking, Gas Pipeline",Shriji Estate,2w ago
+Vadodara,Sunpharma Road,Duplex,4 BHK,25000,Fully furnished,1900,"Gym, Parking, Garden, Water Supply",Nilamber Oriens,Shree Pramukh Estate,2w ago
+Vadodara,Sama Savli,Flat,3 BHK,17500,Semi furnished,1600,"Gym, Lift, Parking, Garden",Kalash Properties,2w ago
+Vadodara,Chhani,Flat,3 BHK,23000,Fully furnished,1600,"Parking, Gas Pipeline",Shree Parth Property Consultancy,1w ago
+Vadodara,Bhayli,Villa,4 BHK,38000,Semi furnished,2150,"Parking, Garden, Gated Community, Water Supply",A Realty,3w ago
+Vadodara,Akota,Flat,2 BHK,15200,Semi furnished,1250,"Lift, Parking, Water Supply, Gas Pipeline",PRAMUKH ESTATE AGENCY,1w ago
+Vadodara,Vemali,Flat,2 BHK,20000,Fully furnished,850,"Lift, Parking",Krishna Property Estate Agency,Verified, 4w ago
+Vadodara,New Gotri,Flat,3 BHK,33000,Fully furnished,2100,"24x7 Security, Children Play Area, Gated Community, Landscaped Garden",DREAM HOME REALTY,Verified
+Vadodara,Chhani Jakat Naka,Flat,3 BHK,30000,Fully furnished,1846,"Pool, Gym, Lift, Parking",Alembic Samsara Apartment,Jatinbhai,5d ago
+Vadodara,Sama Savli,Villa,3 BHK,30000,Fully furnished,2800,"Parking, Pet Allowed, Kids Area, Gated Community",Shivaay Realty World
+Vadodara,Vasna,Flat,2 BHK,16000,Fully furnished,750,"Lift, Parking, Garden, Kids Area",Hanuram Real Estate,New, 1d ago
+Vadodara,Alkapuri,Flat,2 BHK,18000,Semi furnished,1500,"Close to Genda Circle Bus Stop, Close to Aadicura Superspeciality Hospital Vadodara, Close to Me...",Prisha Real Estate Solutions,3d ago
+Vadodara,Bhayli,Flat,3 BHK,30000,Semi furnished,1500,"Parking",Shreeji Two,URMI PROPERTY,New, 1d ago
+Vadodara,Manjalpur,Flat,3 BHK,25000,Fully furnished,1200,"Parking",AARAMBH PROPERTIES,1w ago
+Vadodara,Harni,Flat,3 BHK,18000,Semi furnished,1300,"Gym, Lift, Parking, Power Backup",Shivay Real Estate,2w ago
+Vadodara,Gotri,Flat,3 BHK,50000,Fully furnished,1853,"Pool, Gym, Lift, Parking",JP Iscon Heights,Apex Real Estate,1w ago
+Vadodara,Bhayli,Flat,4 BHK,25000,Semi furnished,3300,"Pool, Gym, Parking, Garden",Rashee Realty,3w ago
+Vadodara,Chhani Jakat Naka,Flat,3 BHK,30000,Fully furnished,1200,"Pool, Gym, Lift, Parking",Alembic Veda II,Diptesh Mehta,1w ago
+Vadodara,Sama Savli,Flat,2 BHK,15500,Semi furnished,850,"Parking",BIG BLOCK REALITY,2w ago
+Vadodara,Bhayli,Flat,2 BHK,20000,Fully furnished,1100,"Pool, Gym, Lift, Parking",Kanu Parmar,2w ago
+Vadodara,New Alkapuri,Flat,2 BHK,16500,Semi furnished,1200,"Lift, Parking, Power Backup, Garden",Vadodara Property Partners,2w ago
+Vadodara,Bhayli,Villa,3 BHK,35000,Fully furnished,1700,"Parking, Garden, Gated Community",Aranya One44 Phase 2,Mahakali Estate Agency,3w ago
+Vadodara,Harni,Flat,2 BHK,17000,Fully furnished,1200,"Lift, Parking, Garden, Kids Area",Meera Real Estate,4w ago
+Vadodara,Chhani Jakat Naka,Flat,3 BHK,25000,Semi furnished,1150,"Pool, Gym, Lift, Parking",Alembic Alchemy Veda,Patel Real Estate,4w ago
+Vadodara,Atladara,Flat,3 BHK,15500,Semi furnished,1600,"24x7 Security, Children Play Area, Close to Hospital, Closer to Pharmacy",Shivam Aarya Elite,Shree Ram Real Estate
+Vadodara,Bhayli,Flat,3 BHK,23000,Fully furnished,1250,"Parking, Power Backup, Garden, Gated Community",For You Property,6d ago
+Vadodara,Bhayli,Flat,3 BHK,65000,Fully furnished,1750,"Lift, Parking, Power Backup, Intercom",Aarna 48,HARDIK PATEL,2w ago
+Vadodara,Undera,Independent House,2 BHK,11500,Semi furnished,950,"Parking, Power Backup, Gated Community, Water Supply",Samir.ghanchi201*,2w ago
+Vadodara,Gotri,Flat,3 BHK,13500,Semi furnished,1350,"Lift, Parking, Intercom",Jay Mataji Real Estate
+Vadodara,Saiyed Vasna,Flat,2 BHK,20000,Fully furnished,2000,"Lift, Parking, Gated Community",Property Raja
+Vadodara,Vasna,Flat,3 BHK,48000,Fully furnished,1860,"Pool, Gym, Lift, Parking",ARIHANT ESTATE HUB,5d ago
+Vadodara,Vadsar,Flat,3 BHK,25000,Fully furnished,1100,"Lift, Parking, Power Backup, Intercom",ARIHANT ESTATE HUB,1w ago
+Vadodara,Saiyed Vasna,Penthouse,4 BHK,35000,Fully furnished,2600,"Parking, Power Backup, Garden, Kids Area",ARIHANT ESTATE HUB,1w ago
+Vadodara,Atladara,Duplex,3 BHK,15000,Semi furnished,1650,"Gym, Parking, Power Backup, Kids Area",ARIHANT ESTATE HUB,1w ago
+Vadodara,Vasna,Duplex,3 BHK,18000,Semi furnished,1900,"Parking, Power Backup, Kids Area, Gated Community",ARIHANT ESTATE HUB,1w ago
+Vadodara,Vadsar,Flat,3 BHK,20000,Semi furnished,1400,"Gym, Parking, Power Backup, Garden",ARIHANT ESTATE HUB,1w ago
+Vadodara,Vasna,Duplex,4 BHK,25000,Semi furnished,1800,"Gym, Parking, Power Backup, Garden",ARIHANT ESTATE HUB,1w ago
+Vadodara,Jetalpur,Duplex,2 BHK,16500,Semi furnished,1100,"Parking, Gated Community, Gas Pipeline",ARIHANT ESTATE HUB,1w ago
+Vadodara,Diwalipura,Duplex,2 BHK,14500,Semi furnished,1000,"Parking, Gated Community, Gas Pipeline",ARIHANT ESTATE HUB,1w ago
+Vadodara,Atladara,Flat,3 BHK,20000,Semi furnished,1450,"Gym, Lift, Parking, Power Backup",ARIHANT ESTATE HUB,1w ago
+Vadodara,Vasna,Flat,3 BHK,35000,Fully furnished,1700,"Pool, Gym, Lift, Parking",ARIHANT ESTATE HUB,1w ago
+Vadodara,Vasna,Flat,3 BHK,24000,Semi furnished,1602,"Gym, Lift, Parking, Power Backup",ARIHANT ESTATE HUB,1w ago
+Vadodara,Sevasi,Flat,3 BHK,24000,Semi furnished,1629,"Pool, Gym, Lift, Parking",ARIHANT ESTATE HUB,1w ago
+Vadodara,Atladara,Flat,3 BHK,16000,Semi furnished,1400,"Lift, Parking, Power Backup, Garden",ARIHANT ESTATE HUB,1w ago
+Vadodara,Akota,Duplex,4 BHK,35000,Semi furnished,1800,"Parking, Gated Community",ARIHANT ESTATE HUB,1w ago
+Vadodara,Vasna,Flat,3 BHK,16000,Semi furnished,1500,"Pool, Gym, Lift, Parking",ARIHANT ESTATE HUB,1w ago
+Vadodara,Vasna,Flat,2 BHK,14000,Semi furnished,950,"Parking, Power Backup, Gated Community, Water Supply",ARIHANT ESTATE HUB,1w ago
+Vadodara,Atladara,Flat,2 BHK,15000,Semi furnished,1650,"Gym, Lift, Parking, Power Backup",ARIHANT ESTATE HUB,1w ago
+Vadodara,Sama Savli,Flat,3 BHK,16000,Semi furnished,1420,"Pool, Gym, Lift, Parking",Prime Properties,6d ago
+Vadodara,Race Course,Flat,2 BHK,18000,Semi furnished,1200,"Lift, Parking, Power Backup, Water Supply",Prime Properties,6d ago
+Vadodara,Atladara,Flat,2 BHK,10000,Semi furnished,1050,"Lift, Parking",Vadodara Vista Realty,1w ago
+Vadodara,Sayajiganj,Flat,2 BHK,20000,Semi furnished,1225,"Natural Light, Vastu Compliant, Gated Community, Power Backup",Darshanam Central Park,Shivalaya Associate,1d ago
+Vadodara,Gotri,Independent House,3 BHK,32000,Fully furnished,1800,"24x7 Security, Children Play Area, Swimming Pool, Gymnasium",Aatmiya Prince And Princess Villa,BARODA PROPERTIES,6d ago
+Vadodara,Vasna,Independent House,3.5 BHK,55000,Semi furnished,2500,"Close to Hospital, Close to Mall, Close to Movie Theatres, Close to Pubs & Restaurants",BARODA PROPERTIES,6d ago
+Vadodara,Akota,Independent Builder Floor,2 BHK,17500,Semi furnished,1250,"Close to Hospital, Close to Jain Temple, Close to Movie Theatres, Close to Mall",BARODA PROPERTIES,1w ago
+Vadodara,Subhanpura,Flat,2 BHK,18000,Semi furnished,900,"Parking",Vadodara Vista Realty,2w ago
+Vadodara,Vasna,Flat,2 BHK,35000,Fully furnished,1200,"Lift, Parking, Water Supply",SHREE KASHTBHANJAN DEV Real Estate Consultant,4w ago
+Vadodara,Atladara,Flat,2 BHK,14000,Fully furnished,950,"Lift, Parking, Garden, Gated Community",PRAMUKH GLOBAL REALTORS,2w ago
+Vadodara,Bhayli,Flat,3 BHK,30000,Semi furnished,2300,"Gym, Lift, Parking, Power Backup",SHREE KASHTBHANJAN DEV Real Estate Consultant,3w ago
+Vadodara,Bapu nagar,Flat,2 BHK,12500,Semi furnished,1150,"Lift, Parking, Garden, Water Supply",Prime Properties,5d ago
+Vadodara,Ellora Park,Flat,4 BHK,24000,Semi furnished,1500,"Close to Hospital, Close to Jain Temple, Close to Grocery Stores, Close to Mall",BARODA PROPERTIES,1w ago
+Vadodara,Bhayli,Flat,4 BHK,35000,Fully furnished,2400,"Pool, Gym, Lift, Parking",SHREE KASHTBHANJAN DEV Real Estate Consultant,4w ago
+Vadodara,Akota,Flat,3 BHK,30000,Fully furnished,1650,"Lift, Close to ATM, Close to Grocery Stores, Close to Hospital",Shivalaya Associate,1w ago
+Vadodara,Gotri,Duplex,3 BHK,25000,Fully furnished,1700,"24x7 Security, Gated Community, Landscaped Garden, Children Play Area",Shivalaya Associate,1w ago
+Vadodara,Bhayli,Flat,3 BHK,25000,Semi furnished,1525,"Gym, Lift, Parking, Power Backup",SHREE KASHTBHANJAN DEV Real Estate Consultant,4w ago
+Vadodara,Gotri,Villa,4 BHK,40000,Semi furnished,2400,"Pool, Gym, Parking, Power Backup",Aatmiya Prince And Princess Villa,SHREE KASHTBHANJAN DEV Real Estate Consultant,4w ago
+Vadodara,Bhayli,Flat,3 BHK,51600,Fully furnished,2400,"Badminton Court, Gymnasium, Children Play Area, Gated Community",Serene Signatures,SHREE KASHTBHANJAN DEV Real Estate Consultant
+Vadodara,Bhayli,Flat,2 BHK,20000,Fully furnished,1305,"Lift, Parking",Vadodara Vista Realty,3w ago
+Vadodara,Vasna,Independent House,5 BHK,50000,Fully furnished,2400,"Parking",SHREE KASHTBHANJAN DEV Real Estate Consultant
+Vadodara,Saiyed Vasna,Flat,3 BHK,25000,Fully furnished,2000,"Lift, Parking, Garden, Kids Area",Abhinav Reality Saakar Aurum,SHREE KASHTBHANJAN DEV Real Estate Consultant
+Vadodara,Bhayli,Villa,5 BHK,100000,Fully furnished,3300,"Pool, Gym, Parking, Power Backup",SHREE KASHTBHANJAN DEV Real Estate Consultant
+Vadodara,New Alkapuri,Flat,3 BHK,25000,Fully furnished,1150,"Gym, Lift, Parking, Garden",PRAMUKH GLOBAL REALTORS,2w ago
+Vadodara,Atladara,Flat,2 BHK,12000,Semi furnished,1000,"Parking",PRAMUKH GLOBAL REALTORS,3w ago
+Vadodara,Akota,Flat,3 BHK,22000,Semi furnished,1750,"Close to Bus Stop, Close to Grocery Stores, Close to Hospital, Close to Mall",BARODA PROPERTIES,1w ago
+Vadodara,Gotri,Independent House,3 BHK,21000,Semi furnished,1500,"24x7 Security, Basketball Court, Close to Hospital, Close to Mall",BARODA PROPERTIES,1w ago
+Vadodara,Pratapgunj,Flat,2 BHK,23000,Fully furnished,700,"Parking",Vadodara Vista Realty,4w ago
+Vadodara,Sunpharma Road,Duplex,4 BHK,17000,Semi furnished,1700,"Gym, Parking, Power Backup, Garden",ARIHANT ESTATE HUB
+Vadodara,Sama Savli,Penthouse,3 BHK,35000,Fully furnished,1650,"24x7 Security, Power Backup, Children Play Area, Gated Community",Shivalaya Associate,1w ago
+Vadodara,Gotri,Duplex,3 BHK,16000,Semi furnished,1800,"Parking, Power Backup, Garden, Kids Area",ARIHANT ESTATE HUB
+Vadodara,Akota,Flat,4 BHK,45000,Fully furnished,2000,"Lift, Parking, Gated Community, Water Supply",ARIHANT ESTATE HUB
+Vadodara,Sunpharma Road,Villa,4 BHK,24000,Semi furnished,2100,"Pool, Gym, Parking, Power Backup",ARIHANT ESTATE HUB,3d ago
+Vadodara,Alkapuri,Flat,2 BHK,20000,Fully furnished,1250,"Close to Hospital, Close to Mall, Close to Railway Station, Close to Jain Temple",BARODA PROPERTIES,6d ago

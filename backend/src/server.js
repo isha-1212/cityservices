@@ -4,7 +4,7 @@ import path from 'path';
 
 dotenv.config({ path: path.resolve('../.env') });
 console.log('DATABASE_URL:', process.env.DATABASE_URL ? '[CONFIGURED]' : '[NOT SET]');
-
+import wishlistRouter from "./routes/wishlist.js";
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';

@@ -4,15 +4,28 @@ import json
 from supabase_client import supabase  # your supabase client instance
 
 # Market Basket Analysis imports
-from mlxtend.frequent_patterns import apriori, association_rules
-from mlxtend.preprocessing import TransactionEncoder
+# from mlxtend.frequent_patterns import apriori, association_rules
+# from mlxtend.preprocessing import TransactionEncoder
 import time
 from functools import lru_cache
 
+# ------------------ IMAGE MAPPING ------------------
+def _get_mock_image(category: str) -> str:
+    """Get a mock image URL based on service category"""
+    image_map = {
+        'accommodation': 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400',
+        'food': 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400',
+        'tiffin': 'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=400',
+        'transport': 'https://images.pexels.com/photos/385998/pexels-photo-385998.jpeg?auto=compress&cs=tinysrgb&w=400',
+        'coworking': 'https://images.pexels.com/photos/7147649/pexels-photo-7147649.jpeg?auto=compress&cs=tinysrgb&w=400',
+        'utilities': 'https://images.pexels.com/photos/3847490/pexels-photo-3847490.jpeg?auto=compress&cs=tinysrgb&w=400'
+    }
+    return image_map.get(category.lower(), 'https://via.placeholder.com/400x300')
+
 # Global cache for association rules
-_cached_rules = None
-_cache_timestamp = None
-_cache_duration = 300  # 5 minutes cache
+# _cached_rules = None
+# _cache_timestamp = None
+# _cache_duration = 300  # 5 minutes cache
 
 # ------------------ LOAD SERVICE DATA ------------------
 def _load_df(path: str) -> pd.DataFrame:
@@ -106,132 +119,32 @@ def fetch_wishlist() -> pd.DataFrame:
     return pd.DataFrame(columns=["id", "user_id", "service_id", "service_data"])
 
 # ------------------ ASSOCIATION RULES ANALYSIS ------------------
+"""
 def generate_association_rules(wishlist_df: pd.DataFrame, min_support=0.01, min_confidence=0.1):
-    """Generate association rules from user bookmarking patterns"""
-    if wishlist_df.empty or len(wishlist_df["user_id"].unique()) < 2:
-        print("Not enough data for association rules")
-        return pd.DataFrame()
-    
-    # Create user-service matrix (transactions)
-    user_service_matrix = wishlist_df.groupby('user_id')['service_id'].apply(list).reset_index()
-    transactions = user_service_matrix['service_id'].tolist()
-    
-    # Filter out users with too few bookmarks (less than 2)
-    transactions = [t for t in transactions if len(t) >= 2]
-    
-    if len(transactions) < 2:
-        print("Not enough valid transactions for association rules")
-        return pd.DataFrame()
-    
-    print(f"Processing {len(transactions)} transactions for association rules")
-    
-    try:
-        # Create binary matrix using TransactionEncoder
-        te = TransactionEncoder()
-        te_ary = te.fit(transactions).transform(transactions)
-        df_encoded = pd.DataFrame(te_ary, columns=te.columns_)
-        
-        # Find frequent itemsets using Apriori algorithm
-        frequent_itemsets = apriori(df_encoded, min_support=min_support, use_colnames=True)
-        
-        if frequent_itemsets.empty:
-            print(f"No frequent itemsets found with min_support={min_support}")
-            return pd.DataFrame()
-        
-        print(f"Found {len(frequent_itemsets)} frequent itemsets")
-        
-        # Generate association rules
-        rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=min_confidence)
-        
-        if rules.empty:
-            print(f"No association rules found with min_confidence={min_confidence}")
-            return pd.DataFrame()
-        
-        print(f"Generated {len(rules)} association rules")
-        return rules
-        
-    except Exception as e:
-        print(f"Error generating association rules: {e}")
-        return pd.DataFrame()
-
+    # Generate association rules from user bookmarking patterns
+    ...
 def get_association_recommendations(user_id: str, wishlist_df: pd.DataFrame, rules_df: pd.DataFrame, top_k: int = 5):
-    """Get recommendations based on association rules"""
-    if rules_df.empty:
-        return []
-    
-    # Get user's current bookmarks
-    user_bookmarks = set(wishlist_df[wishlist_df["user_id"] == user_id]["service_id"].tolist())
-    
-    if not user_bookmarks:
-        return []
-    
-    # Find applicable rules where antecedents are subset of user's bookmarks
-    applicable_rules = []
-    
-    for _, rule in rules_df.iterrows():
-        antecedents = set(rule['antecedents'])
-        consequents = set(rule['consequents'])
-        
-        # Check if antecedents are subset of user bookmarks
-        # and consequents are not already bookmarked
-        if (antecedents.issubset(user_bookmarks) and 
-            not consequents.intersection(user_bookmarks)):
-            
-            for consequent in consequents:
-                applicable_rules.append({
-                    'service_id': consequent,
-                    'confidence': rule['confidence'],
-                    'lift': rule['lift'],
-                    'support': rule['support'],
-                    'antecedents': list(antecedents),
-                    'rule_strength': rule['confidence'] * rule['lift']  # Combined score
-                })
-    
-    # Sort by rule strength (confidence * lift) and get top recommendations
-    applicable_rules.sort(key=lambda x: x['rule_strength'], reverse=True)
-    
-    recommendations = []
-    seen_services = set()
-    
-    for rule in applicable_rules:
-        service_id = rule['service_id']
-        if service_id not in seen_services:
-            rec = _service_to_block(service_id)
-            if rec:
-                rec['association_confidence'] = round(rule['confidence'], 3)
-                rec['association_lift'] = round(rule['lift'], 3)
-                rec['association_support'] = round(rule['support'], 3)
-                rec['rule_strength'] = round(rule['rule_strength'], 3)
-                rec['based_on_services'] = rule['antecedents']
-                recommendations.append(rec)
-                seen_services.add(service_id)
-        
-        if len(recommendations) >= top_k:
-            break
-    
-    return recommendations
+    # Get recommendations based on association rules
+    ...
+"""
 
 # ------------------ HYBRID RECOMMENDATION ------------------
 def recommend_for_user(user_id: str, wishlist_df: pd.DataFrame, top_k: int = 5):
-    """Hybrid recommendations: Association Rules + Popularity-based + Random fallback"""
+    """Hybrid recommendations: Popularity-based + Random fallback (Association rules commented out)"""
     user_rows = wishlist_df[wishlist_df["user_id"] == user_id]
     user_bookmarks = set(user_rows["service_id"].tolist())
 
     print(f"\n🔍 Generating recommendations for user: {user_id}")
     print(f"User has {len(user_bookmarks)} bookmarks")
 
-    # Generate association rules from all user data
-    print("\n📊 Generating association rules...")
-    rules_df = generate_association_rules(wishlist_df, min_support=0.02, min_confidence=0.1)
-    
     recommendations = []
-    
-    # 1. First, try association rules recommendations
-    if not rules_df.empty and user_bookmarks:
-        print("🧠 Getting association rules recommendations...")
-        association_recs = get_association_recommendations(user_id, wishlist_df, rules_df, top_k)
-        recommendations.extend(association_recs)
-        print(f"Found {len(association_recs)} association-based recommendations")
+
+    # 1. Association rules recommendation commented out
+    # print("\n📊 Generating association rules...")
+    # rules_df = generate_association_rules(wishlist_df, min_support=0.02, min_confidence=0.1)
+    # if not rules_df.empty and user_bookmarks:
+    #     association_recs = get_association_recommendations(user_id, wishlist_df, rules_df, top_k)
+    #     recommendations.extend(association_recs)
 
     # 2. Fill remaining slots with popularity-based recommendations
     remaining_slots = top_k - len(recommendations)
@@ -239,7 +152,6 @@ def recommend_for_user(user_id: str, wishlist_df: pd.DataFrame, top_k: int = 5):
         print(f"📈 Getting {remaining_slots} popularity-based recommendations...")
         popularity_recs = get_popularity_recommendations(user_id, wishlist_df, remaining_slots)
         
-        # Filter out services already recommended
         already_recommended = set(r["id"] for r in recommendations)
         filtered_popularity = [r for r in popularity_recs if r["id"] not in already_recommended]
         recommendations.extend(filtered_popularity[:remaining_slots])
@@ -252,44 +164,35 @@ def recommend_for_user(user_id: str, wishlist_df: pd.DataFrame, top_k: int = 5):
         random_recs = _random_recs(already_ids, remaining_slots)
         recommendations.extend(random_recs)
 
-    # Sort by recommendation type priority: association rules > popularity > random
+    # Sort by recommendation type priority: popularity > random
     def get_priority(rec):
-        if 'association_confidence' in rec:
-            return (0, rec.get('rule_strength', 0))  # Highest priority
-        elif 'bookmarked_by_users' in rec and rec['bookmarked_by_users'] > 0:
-            return (1, rec.get('bookmarked_by_users', 0))  # Medium priority
+        if rec.get('bookmarked_by_users', 0) > 0:
+            return (1, rec.get('bookmarked_by_users', 0))
         else:
-            return (2, rec.get('rating', 0))  # Lowest priority (random)
-
+            return (2, 0)
     recommendations.sort(key=get_priority)
     return recommendations[:top_k]
 
 def get_popularity_recommendations(user_id: str, wishlist_df: pd.DataFrame, top_k: int = 5):
-    """Get popularity-based recommendations (extracted from original function)"""
+    """Get popularity-based recommendations"""
     user_rows = wishlist_df[wishlist_df["user_id"] == user_id]
     user_bookmarks = set(user_rows["service_id"].tolist())
 
-    # Get all services bookmarked by other users (exclude current user's bookmarks)
     other_users_data = wishlist_df[wishlist_df["user_id"] != user_id]
     
     if other_users_data.empty:
         return []
 
-    # Count how many times each service has been bookmarked by different users
     service_popularity = other_users_data["service_id"].value_counts()
-    
-    # Filter out services already bookmarked by current user
     popular_services = service_popularity[~service_popularity.index.isin(user_bookmarks)]
     
     if popular_services.empty:
         return []
 
-    # Get top_k most popular services and convert to recommendations
     recommendations = []
-    for service_id, bookmark_count in popular_services.head(top_k * 2).items():  # Get extra in case some don't exist
+    for service_id, bookmark_count in popular_services.head(top_k * 2).items():
         rec = _service_to_block(service_id)
         if rec:
-            # Add popularity score to the recommendation
             rec["popularity_score"] = int(bookmark_count)
             rec["bookmarked_by_users"] = int(bookmark_count)
             recommendations.append(rec)
@@ -300,18 +203,19 @@ def get_popularity_recommendations(user_id: str, wishlist_df: pd.DataFrame, top_
 
 def _service_to_block(service_id: str):
     """Find service by real service_id across all DataFrames"""
-    # Search in all service DataFrames for the real service_id
     row = service_df[service_df["service_id"] == service_id]
     if row.empty:
         return None
     s = row.iloc[0]
+    category = s.get("category", "")
     return {
         "id": s["service_id"],
         "name": s.get("name", ""),
-        "category": s.get("category", ""),
+        "category": category,
         "area": s.get("area", ""),
         "rating": float(s.get("rating", 0.0)),
         "price": str(s.get("price", 0.0)),
+        "image": _get_mock_image(category)  # Add mock image based on category
     }
 
 def _random_recs(exclude_ids: set, n: int):
@@ -328,7 +232,7 @@ def _random_recs(exclude_ids: set, n: int):
             "area": s.get("area", ""),
             "rating": float(s.get("rating", 0.0)),
             "price": str(s.get("price", 0.0)),
-            "popularity_score": 0,  # Random recommendations get 0 popularity
+            "popularity_score": 0,
             "bookmarked_by_users": 0
         })
     return out
@@ -355,11 +259,9 @@ if __name__ == "__main__":
     print(f"- Tiffin: {len(tiffin_df)} rows")
     print(f"- Combined: {len(service_df)} rows")
     
-    # Fetch initial wishlist
     wishlist_df = fetch_wishlist()
     print(f"\nWishlist rows: {len(wishlist_df)}")
 
-    # Show popularity statistics
     popularity_stats = get_popularity_stats(wishlist_df)
     print(f"\n📊 POPULARITY STATISTICS:")
     print(f"- Total bookmarks: {popularity_stats.get('total_bookmarks', 0)}")
@@ -372,30 +274,24 @@ if __name__ == "__main__":
         if service_info:
             print(f"  {count}x - {service_info['name']} ({service_info['category']}) - {service_id}")
 
-    # Example recommendations for the real user you specified
     test_user_id = "a1497ae5-5396-42a6-8e12-4a2113a52b0e"
     
     if not wishlist_df.empty:
         user_bookmarks = wishlist_df[wishlist_df["user_id"] == test_user_id]["service_id"].tolist()
         print(f"\n👤 User {test_user_id} has {len(user_bookmarks)} bookmarks:")
-        for bookmark in user_bookmarks[:5]:  # Show first 5
+        for bookmark in user_bookmarks[:5]:
             print(f"  - {bookmark}")
     
-    print(f"\n🎯 HYBRID RECOMMENDATIONS (Association Rules + Popularity + Random) for user: {test_user_id}")
+    print(f"\n🎯 HYBRID RECOMMENDATIONS (Popularity + Random) for user: {test_user_id}")
     recs = recommend_for_user(test_user_id, wishlist_df, top_k=5)
     for i, rec in enumerate(recs, 1):
         rec_type = ""
-        if 'association_confidence' in rec:
-            rec_type = f" (🧠 Association: {rec['association_confidence']:.2f} confidence, {rec['association_lift']:.2f} lift)"
-        elif rec.get('bookmarked_by_users', 0) > 0:
+        if rec.get('bookmarked_by_users', 0) > 0:
             rec_type = f" (📈 Popular: {rec['bookmarked_by_users']} users)"
         else:
             rec_type = " (🎲 Random fallback)"
         
         print(f"{i}. {rec['name']} - {rec['category']} - ⭐{rec['rating']} - ₹{rec['price']}{rec_type}")
-        
-        if 'based_on_services' in rec:
-            print(f"   └─ Based on your bookmarks: {', '.join(rec['based_on_services'][:3])}...")
     
     print(f"\nFull JSON response:")
     print(json.dumps(recs, indent=2))

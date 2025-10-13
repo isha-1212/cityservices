@@ -75,8 +75,8 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
               className={`p-2 rounded ${isBookmarkPage
                 ? 'text-red-500 hover:bg-red-50'
                 : isBookmarked
-                ? 'text-red-500 hover:bg-red-50'
-                : 'text-slate-400 hover:bg-slate-50'
+                  ? 'text-red-500 hover:bg-red-50'
+                  : 'text-slate-400 hover:bg-slate-50'
                 }`}
             >
               {isBookmarkPage ? (
@@ -134,10 +134,10 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
           data-bookmark
           className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm ${isBookmarked
             ? 'bg-red-500/20 text-red-500'
-            : 'bg-white/20 text-white hover:bg-white/30'
+            : 'bg-slate-500/20 text-slate-700 hover:bg-slate-500/30'
             }`}
         >
-          <ActionIcon className={`w-4 h-4 stroke-current ${isBookmarked ? 'text-red-500' : 'text-white'}`} />
+          <ActionIcon className={`w-4 h-4 stroke-current ${isBookmarked ? 'text-red-500' : 'text-slate-700'}`} />
         </button>
       </div>
 

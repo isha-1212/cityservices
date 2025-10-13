@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendation System Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .recommendation {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            background: white;
+        }
+
+        .recommendation h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: 2px;
+            background: #007bff;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .rating {
+            color: #ffc107;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .error {
+            color: red;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 5px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎯 Recommendation System Test</h1>
+
+        <div class="user-section">
+            <h2>Available Users</h2>
+            <button onclick="loadUsers()">Load Users</button>
+            <div id="users-list"></div>
+        </div>
+
+        <div class="user-section">
+            <h2>Test Recommendations</h2>
+            <input type="text" id="user-id" placeholder="Enter User ID" value="a1497ae5-5396-42a6-8e12-4a2113a52b0e"
+                style="width: 400px; padding: 8px;">
+            <input type="number" id="num-recs" placeholder="Number of recommendations" value="5"
+                style="width: 100px; padding: 8px;">
+            <button onclick="loadRecommendations()">Get Recommendations</button>
+        </div>
+
+        <div id="recommendations-container"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        async function loadUsers() {
+            const container = document.getElementById('users-list');
+            container.innerHTML = '<div class="loading">Loading users...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/users`);
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    container.innerHTML = `
+                        <p><strong>Found ${data.count} users:</strong></p>
+                        ${data.user_ids.map(userId =>
+                        `<div style="margin: 5px 0;">
+                                <button onclick="setUserId('${userId}')">${userId}</button>
+                            </div>`
+                    ).join('')}
+                    `;
+                } else {
+                    container.innerHTML = `<div class="error">Error: ${data.message}</div>`;
+                }
+            } catch (error) {
+                container.innerHTML = `<div class="error">Failed to load users: ${error.message}</div>`;
+            }
+        }
+
+        function setUserId(userId) {
+            document.getElementById('user-id').value = userId;
+        }
+
+        async function loadRecommendations() {
+            const userId = document.getElementById('user-id').value;
+            const numRecs = document.getElementById('num-recs').value || 5;
+            const container = document.getElementById('recommendations-container');
+
+            if (!userId) {
+                alert('Please enter a user ID');
+                return;
+            }
+
+            container.innerHTML = '<div class="loading">Loading recommendations...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/recommendations/${userId}?n=${numRecs}`);
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    if (data.recommendations.length === 0) {
+                        container.innerHTML = '<div class="error">No recommendations found for this user.</div>';
+                        return;
+                    }
+
+                    container.innerHTML = `
+                        <h2>Recommendations for User: ${userId}</h2>
+                        <p><strong>Found ${data.recommendations.length} hybrid recommendations (Association Rules + Popularity + Random):</strong></p>
+                        ${data.recommendations.map((rec, index) => {
+                        let recTypeTag = '';
+                        let recDetails = '';
+
+                        if (rec.association_confidence) {
+                            recTypeTag = `<span class="tag" style="background: #6f42c1;">🧠 Association Rules</span>`;
+                            recDetails = `<p><small>Confidence: ${rec.association_confidence}, Lift: ${rec.association_lift}, Based on: ${(rec.based_on_services || []).join(', ')}</small></p>`;
+                        } else if (rec.bookmarked_by_users > 0) {
+                            recTypeTag = `<span class="tag" style="background: #28a745;">📈 ${rec.bookmarked_by_users} users</span>`;
+                        } else {
+                            recTypeTag = `<span class="tag" style="background: #6c757d;">🎲 random</span>`;
+                        }
+
+                        return `
+                                <div class="recommendation">
+                                    <h3>${index + 1}. ${rec.name}</h3>
+                                    <div>
+                                        <span class="tag">${rec.category}</span>
+                                        <span class="tag">${rec.area}</span>
+                                        <span class="rating">⭐ ${rec.rating}</span>
+                                        <span class="price">₹${rec.price}</span>
+                                        ${recTypeTag}
+                                    </div>
+                                    ${recDetails}
+                                    <p><small>ID: ${rec.id}</small></p>
+                                </div>
+                            `;
+                    }).join('')}
+                    `;
+                } else {
+                    container.innerHTML = `<div class="error">Error: ${data.message}</div>`;
+                }
+            } catch (error) {
+                container.innerHTML = `<div class="error">Failed to load recommendations: ${error.message}</div>`;
+            }
+        }
+
+        // Load users on page load
+        window.onload = function () {
+            loadUsers();
+        };
+    </script>
+</body>
+
+</html>

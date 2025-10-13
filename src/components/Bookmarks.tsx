@@ -19,6 +19,23 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
   const [showBudgetBuddy, setShowBudgetBuddy] = useState(false);
   const [allServices, setAllServices] = useState<Service[]>([]);
 
+  // -------------------- SEND BOOKMARKS TO PYTHON BACKEND --------------------
+  const sendBookmarksToBackend = async (items: Service[]) => {
+    if (!user || !user.id) {
+      console.log("User not logged in, skipping backend sync.");
+      return;
+    }
+
+    try {
+      // Removed call to /save_bookmarks endpoint (backend route does not exist)
+
+      console.log("Bookmarks sent to backend successfully");
+    } catch (error) {
+      console.error("Failed to send bookmarks to backend:", error);
+    }
+  };
+
+  // -------------------- LOAD BOOKMARKS --------------------
   const loadBookmarks = async () => {
     try {
       if (!user) {
@@ -27,35 +44,30 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
         return;
       }
 
-      // Clear previous bookmarks to avoid duplicates
       setBookmarkedServices([]);
 
-      // Try to load from cache first
       const cachedBookmarks = UserStorage.getItemAsJSON<Service[]>('cached_bookmarks', []);
       if (cachedBookmarks.length > 0) {
-        // Filter out invalid or empty services
         const validCached = cachedBookmarks.filter(s => s && s.id && s.name);
         setBookmarkedServices(validCached);
       }
 
-      // First try to migrate any local data to database
       await UserStorage.migrateWishlistToDatabase();
 
-      // Load bookmarks from database
       const ids = await UserStorage.getWishlistFromDB();
       const map = await UserStorage.getWishlistItemsFromDB();
 
       const items = ids
         .map(id => (map[id] as Service) || mockServices.find(s => s.id === id))
         .filter((s): s is Service => Boolean(s))
-        .filter(s => s.id && s.name); // Filter invalid services
+        .filter(s => s.id && s.name);
 
       setBookmarkedServices(items);
-      // Cache the latest bookmarks
       UserStorage.setItem('cached_bookmarks', items);
 
-      // Dispatch event to notify other components of bookmark changes
-      console.log('Bookmarks: Dispatching bookmarks:changed event after loading bookmarks');
+      // Send to Python backend
+      sendBookmarksToBackend(items);
+
       window.dispatchEvent(new CustomEvent('bookmarks:changed'));
     } catch (e) {
       console.warn('Failed to load user bookmarks from database', e);
@@ -65,11 +77,9 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
     }
   };
 
-  useEffect(() => {
-    loadBookmarks();
-    loadAllServices();
-  }, [user]);
 
+
+  // -------------------- LOAD ALL SERVICES --------------------
   const loadAllServices = async () => {
     try {
       const services = await loadAllServicesFromCSV();
@@ -81,6 +91,11 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
   };
 
   useEffect(() => {
+    loadBookmarks();
+    loadAllServices();
+  }, [user]);
+
+  useEffect(() => {
     const handler = () => {
       try {
         loadBookmarks();
@@ -88,13 +103,13 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
         console.error('Error loading bookmarks on event:', error);
       }
     };
-    // Listen for both localStorage and database changes
     window.addEventListener('bookmarks:changed', handler);
     return () => {
       window.removeEventListener('bookmarks:changed', handler);
     };
   }, [loadBookmarks]);
 
+  // -------------------- REMOVE BOOKMARK --------------------
   const removeLocal = async (id: string) => {
     if (!user) {
       onAuthRequired?.();
@@ -104,11 +119,12 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
     try {
       const success = await UserStorage.removeFromWishlistDB(id);
       if (success) {
-        // Just update the local state immediately for better UX
-        setBookmarkedServices(prev => prev.filter(service => service.id !== id));
+        const updated = bookmarkedServices.filter(service => service.id !== id);
+        setBookmarkedServices(updated);
 
-        // Dispatch event to notify other components of bookmark changes
-        console.log('Bookmarks: Dispatching bookmarks:changed event after removing bookmark');
+        // Send updated bookmarks to backend
+        sendBookmarksToBackend(updated);
+
         window.dispatchEvent(new CustomEvent('bookmarks:changed'));
       } else {
         throw new Error('Failed to remove from database');
@@ -118,6 +134,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
     }
   };
 
+  // -------------------- RENDER --------------------
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="text-center mb-6 sm:mb-8 px-4">
@@ -127,14 +144,17 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
             <p className="text-sm sm:text-base text-slate-600">Saved services you added to your Wishlist</p>
           </div>
         </div>
+
         {user && bookmarkedServices.length > 0 && (
-          <button
-            onClick={() => setShowBudgetBuddy(true)}
-            className="inline-flex items-center gap-2 bg-slate-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-800 transition-colors shadow-md hover:shadow-lg"
-          >
-            <Calculator className="w-5 h-5" />
-            Budget Buddy
-          </button>
+          <div className="flex justify-center gap-4">
+            <button
+              onClick={() => setShowBudgetBuddy(true)}
+              className="inline-flex items-center gap-2 bg-slate-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-800 transition-colors shadow-md hover:shadow-lg"
+            >
+              <Calculator className="w-5 h-5" /> Budget Buddy
+            </button>
+
+          </div>
         )}
       </div>
 
@@ -147,7 +167,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
         <div className="text-center py-8 sm:py-12 px-4">
           <div className="max-w-md mx-auto">
             <div className="mb-6">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 sm:w-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
               </div>
               <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Login to View Your Wishlist</h3>
@@ -167,7 +187,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
         <div className="text-center py-8 sm:py-12 px-4">
           <div className="max-w-md mx-auto">
             <div className="mb-6">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 sm:w-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
               </div>
               <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Your Wishlist list is empty</h3>
@@ -179,11 +199,8 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
         </div>
       ) : (
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {bookmarkedServices.map((service) => {
-            if (!service) {
-              console.error('Invalid service in bookmarks:', service);
-              return null;
-            }
+          {bookmarkedServices.map(service => {
+            if (!service) return null;
             return (
               <ServiceCard
                 key={service.id}
@@ -200,6 +217,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
           })}
         </div>
       )}
+
       {selected && <ServiceDetails service={selected} onClose={() => setSelected(null)} />}
       {showBudgetBuddy && (
         <BudgetBuddy

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ServiceCard } from './ServiceCard';
+import { ServiceDetails } from './ServiceDetails';
 import { supabase } from '../config/supabase';
+import { Service } from '../data/mockServices';
+import { UserStorage } from '../utils/userStorage';
 
 interface Recommendation {
   id: string;
@@ -9,6 +12,7 @@ interface Recommendation {
   area: string;
   rating: number;
   price: string;
+  image: string;
   association_confidence?: number;
   association_lift?: number;
   bookmarked_by_users?: number;
@@ -16,10 +20,10 @@ interface Recommendation {
   based_on_services?: string[];
 }
 
-const convertRecommendationToService = (rec: Recommendation) => ({
+const convertRecommendationToService = (rec: Recommendation): Service => ({
   id: rec.id,
   name: rec.name,
-  type: rec.category,
+  type: rec.category as 'food' | 'accommodation' | 'tiffin' | 'transport' | 'coworking' | 'utilities',
   city: rec.area,
   description: rec.association_confidence
     ? `Smart recommendation (${(rec.association_confidence * 100).toFixed(0)}% confidence)`
@@ -27,7 +31,7 @@ const convertRecommendationToService = (rec: Recommendation) => ({
       : `High-rated service`,
   price: parseFloat(rec.price) || 0,
   rating: rec.rating,
-  image: '/api/placeholder/300/200',
+  image: rec.image || '/api/placeholder/300/200',
   features: [`⭐ ${rec.rating}`, `📍 ${rec.area}`, rec.category]
 });
 
@@ -36,6 +40,8 @@ export const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string>('');
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [userBookmarks, setUserBookmarks] = useState<Set<string>>(new Set());
 
   // Get current user ID from Supabase auth
   useEffect(() => {
@@ -86,8 +92,88 @@ export const Dashboard: React.FC = () => {
     }
   }, [userId]);
 
+  // Fetch user's bookmarks
+  useEffect(() => {
+    const loadBookmarks = async () => {
+      if (!userId) return;
+
+      try {
+        const resolved = new Set<string>();
+
+        // Load from database (ids) and items map
+        const ids = await UserStorage.getWishlistFromDB();
+        const itemsMap = await UserStorage.getWishlistItemsFromDB();
+
+        console.log('Dashboard: Loaded bookmarks from DB ids:', ids);
+
+        // Start with direct DB ids
+        ids.forEach(id => resolved.add(id));
+
+        // Try to reconcile any DB stored service_data or cached_bookmarks to current recommendations
+        const cached = UserStorage.getItemAsJSON<Service[]>('cached_bookmarks', []);
+
+        // Use itemsMap first to reconcile bookmarks
+        Object.keys(itemsMap || {}).forEach(dbId => {
+          const sd = itemsMap[dbId] || {};
+          // Try to match with current recommendations
+          const recommendationMatch = recommendations.find(rec => {
+            const service = convertRecommendationToService(rec);
+            return service.id === dbId ||
+              (sd.name && sd.type &&
+                service.type === sd.type &&
+                service.name === sd.name &&
+                service.city === sd.city);
+          });
+          if (recommendationMatch) {
+            resolved.add(recommendationMatch.id);
+          }
+        });
+
+        // Also reconcile cached_bookmarks
+        cached.forEach(cb => {
+          const recommendationMatch = recommendations.find(rec => {
+            const service = convertRecommendationToService(rec);
+            return service.type === cb.type &&
+              service.name === cb.name &&
+              service.city === cb.city;
+          });
+          if (recommendationMatch) {
+            resolved.add(recommendationMatch.id);
+          }
+        });
+
+        setUserBookmarks(prev => new Set([...Array.from(prev), ...Array.from(resolved)]));
+
+        // Listen for bookmark changes
+        const handleBookmarkChange = async () => {
+          console.log('Dashboard: Received bookmarks change event, reloading bookmarks');
+          loadBookmarks(); // Reload using the same reconciliation logic
+        };
+
+        window.addEventListener('wishlist:changed', handleBookmarkChange);
+        return () => {
+          window.removeEventListener('wishlist:changed', handleBookmarkChange);
+        };
+      } catch (error) {
+        console.error('Error loading bookmarks:', error);
+      }
+    };
+
+    if (recommendations.length > 0) {
+      loadBookmarks();
+    }
+  }, [userId, recommendations]);
+
   return (
     <div className="space-y-6 sm:space-y-8">
+      {/* Service Details Modal */}
+      {selectedService && (
+        <ServiceDetails
+          service={selectedService}
+          onClose={() => setSelectedService(null)}
+        />
+      )}
+
       {/* Header */}
       <div className="text-center px-4">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2 sm:mb-3">
@@ -130,12 +216,48 @@ export const Dashboard: React.FC = () => {
                 <ServiceCard
                   key={`${recommendation.id}-${index}`}
                   service={service}
-                  isBookmarked={false}
-                  onToggleBookmark={() => { }}
+                  isBookmarked={userBookmarks.has(service.id)}
+                  onToggleBookmark={async () => {
+                    try {
+                      if (userBookmarks.has(service.id)) {
+                        // Remove bookmark using UserStorage
+                        const success = await UserStorage.removeFromWishlistDB(service.id);
+                        if (success) {
+                          setUserBookmarks(prev => {
+                            const next = new Set(prev);
+                            next.delete(service.id);
+                            return next;
+                          });
+                        }
+                      } else {
+                        // Add bookmark with complete service data using UserStorage
+                        const serviceData = {
+                          id: service.id,
+                          name: service.name,
+                          type: service.type,
+                          city: service.city,
+                          description: service.description,
+                          price: service.price,
+                          rating: service.rating,
+                          image: service.image,
+                          features: service.features
+                        };
+
+                        const success = await UserStorage.addToWishlistDB(service.id, serviceData);
+                        if (success) {
+                          setUserBookmarks(prev => new Set(prev).add(service.id));
+                        }                        // Dispatch event to notify bookmarks/wishlist about the change
+                        window.dispatchEvent(new CustomEvent('wishlist:changed'));
+                      }
+                    } catch (error) {
+                      console.error('Error toggling bookmark:', error);
+                    }
+                  }}
                   onViewDetails={() => {
-                    console.log('View details for:', recommendation.name);
+                    setSelectedService(service);
                   }}
                   viewMode="grid"
+                  isBookmarkPage={false}
                 />
               );
             })}

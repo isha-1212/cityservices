@@ -9,6 +9,7 @@ interface BudgetAnalysisResultProps {
   alternatives: Alternative[];
   onClose: () => void;
   onSavePlan?: () => void;
+  isSaving?: boolean;
 }
 
 export const BudgetAnalysisResult: React.FC<BudgetAnalysisResultProps> = ({
@@ -16,7 +17,8 @@ export const BudgetAnalysisResult: React.FC<BudgetAnalysisResultProps> = ({
   budget,
   alternatives,
   onClose,
-  onSavePlan
+  onSavePlan,
+  isSaving = false
 }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -172,10 +174,14 @@ export const BudgetAnalysisResult: React.FC<BudgetAnalysisResultProps> = ({
           <div className="flex gap-3 pt-4 border-t border-gray-200">
             {onSavePlan && (
               <button
-                onClick={onSavePlan}
-                className="flex-1 bg-slate-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-800 transition-colors"
+                onClick={() => {
+                  console.log('Save button clicked'); // Add logging
+                  onSavePlan();
+                }}
+                disabled={isSaving}
+                className="flex-1 bg-slate-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
-                Save This Plan
+                {isSaving ? 'Saving...' : 'Save This Plan'}
               </button>
             )}
             <button

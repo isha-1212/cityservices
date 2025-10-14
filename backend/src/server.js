@@ -4,8 +4,9 @@ import path from 'path';
 
 dotenv.config({ path: path.resolve('../.env') });
 console.log('DATABASE_URL:', process.env.DATABASE_URL ? '[CONFIGURED]' : '[NOT SET]');
-import wishlistRouter from "./routes/wishlist.js";
+// import wishlistRouter from "./routes/wishlist.js"; // Commented out - routes directory doesn't exist
 import express from 'express';
+import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import pkg from 'pg';
@@ -15,6 +16,15 @@ import fsSync from 'fs';
 import { parse as csvParse } from 'csv-parse';
 
 const app = express();
+
+// Enable CORS for all origins in development
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production' 
+        ? ['https://your-frontend-domain.com'] // Update for production
+        : true, // Allow all origins in development
+    credentials: true
+}));
+
 app.use(express.json());
 
 const pool = new Pool({
@@ -230,14 +240,112 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Recommendations endpoint - returns mock data for now
+app.get('/recommendations/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const n = parseInt(req.query.n) || 6;
+    
+    console.log(`Fetching ${n} recommendations for user ${userId}`);
+    
+    try {
+        // Mock recommendations data - in production this would use ML/recommendation algorithms
+        const mockRecommendations = [
+            {
+                id: 'rec-1',
+                name: 'Gujarati Thali House',
+                category: 'food',
+                area: 'Navrangpura',
+                rating: 4.5,
+                price: '250',
+                image: '/api/placeholder/300/200',
+                association_confidence: 0.85,
+                popularity_score: 92
+            },
+            {
+                id: 'rec-2', 
+                name: 'Budget Stay PG',
+                category: 'accommodation',
+                area: 'Paldi',
+                rating: 4.2,
+                price: '8000',
+                image: '/api/placeholder/300/200',
+                bookmarked_by_users: 45,
+                popularity_score: 78
+            },
+            {
+                id: 'rec-3',
+                name: 'Home Style Tiffin',
+                category: 'tiffin',
+                area: 'Satellite',
+                rating: 4.7,
+                price: '3500',
+                image: '/api/placeholder/300/200',
+                association_confidence: 0.92,
+                popularity_score: 95
+            },
+            {
+                id: 'rec-4',
+                name: 'City Metro Transport',
+                category: 'transport',
+                area: 'All Areas',
+                rating: 4.0,
+                price: '50',
+                image: '/api/placeholder/300/200',
+                bookmarked_by_users: 120,
+                popularity_score: 88
+            },
+            {
+                id: 'rec-5',
+                name: 'WorkSpace Hub',
+                category: 'coworking',
+                area: 'SG Highway',
+                rating: 4.3,
+                price: '5000',
+                image: '/api/placeholder/300/200',
+                association_confidence: 0.78,
+                popularity_score: 71
+            },
+            {
+                id: 'rec-6',
+                name: 'Quick Utilities Service',
+                category: 'utilities',
+                area: 'Ahmedabad',
+                rating: 4.1,
+                price: '500',
+                image: '/api/placeholder/300/200',
+                bookmarked_by_users: 35,
+                popularity_score: 65
+            }
+        ];
+
+        // Return only the requested number of recommendations
+        const recommendations = mockRecommendations.slice(0, n);
+        
+        res.json({
+            status: 'success',
+            recommendations,
+            count: recommendations.length,
+            user_id: userId
+        });
+        
+    } catch (error) {
+        console.error('Error fetching recommendations:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to fetch recommendations'
+        });
+    }
+});
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Backend running on port ${PORT}`);
 });
 
 // Endpoint to seed services data from mockServices
-import { mockServices } from '../src/data/mockServices';
+// import { mockServices } from '../src/data/mockServices'; // Commented out - file is empty
 
+/*
 app.post('/api/services/seed', authenticateToken, async (req, res) => {
     try {
         // Validate prices and data
@@ -447,3 +555,4 @@ app.post('/api/budget/plans', authenticateToken, async (req, res) => {
         res.status(500).json({ error: 'Failed to save budget plan' });
     }
 });
+*/

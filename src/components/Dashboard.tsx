@@ -4,6 +4,7 @@ import { ServiceDetails } from './ServiceDetails';
 import { supabase } from '../config/supabase';
 import { Service } from '../data/mockServices';
 import { UserStorage } from '../utils/userStorage';
+import { apiConfig, apiRequest } from '../config/api';
 
 interface Recommendation {
   id: string;
@@ -65,13 +66,7 @@ export const Dashboard: React.FC = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`http://localhost:8000/recommendations/${userId}?n=6`);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
+      const data = await apiRequest(apiConfig.endpoints.recommendations(userId, 6));
 
       if (data.status === 'success') {
         setRecommendations(data.recommendations || []);

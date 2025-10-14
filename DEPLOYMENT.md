@@ -8,34 +8,19 @@ This app requires both frontend and backend deployment. The backend serves recom
 
 The frontend uses environment variables prefixed with `VITE_` for build-time configuration.
 
-#### Key Environment Variables:
-- `VITE_API_BASE_URL`: Backend API URL
-- `VITE_SUPABASE_URL`: Supabase project URL
-- `VITE_SUPABASE_ANON_KEY`: Supabase anonymous key
+
 
 #### Platform-Specific Configuration:
 
-**Vercel/Netlify:**
-```bash
-VITE_API_BASE_URL=https://your-backend-domain.com
-VITE_SUPABASE_URL=https://iecothmegflxbpvndnru.supabase.co
-VITE_SUPABASE_ANON_KEY=your_supabase_key
-```
 
-**Same-Domain Deployment:**
-If backend is served from `/api` path:
-```bash
-VITE_API_BASE_URL=/api
-```
+
+
 
 ### Backend Deployment
 
 The backend server runs on port 8000 and requires PostgreSQL database.
 
-#### Required Environment Variables:
-- `DATABASE_URL`: PostgreSQL connection string
-- `JWT_SECRET`: JWT signing secret
-- `PORT`: Server port (defaults to 8000)
+
 
 #### Deployment Commands:
 ```bash

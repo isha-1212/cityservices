@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, CreditCard as Edit3, Save, X } from 'lucide-react';
+import { User, Pencil, Save, X } from 'lucide-react';
 import { supabase } from '../config/supabase';
 import { CustomSelect } from './CustomSelect.tsx';
 
@@ -53,8 +53,8 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-6 bg-slate-50 rounded-xl mb-4 sm:mb-6">
         <div className="flex items-center space-x-3 sm:space-x-4 w-full sm:w-auto">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-slate-700 rounded-full flex items-center justify-center flex-shrink-0">
-            <User className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
+          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <User className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
           </div>
           <div className="flex-1">
             <h3 className="text-base sm:text-lg md:text-xl font-bold text-slate-900">
@@ -69,10 +69,10 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
           onClick={onToggleEdit}
           className={`flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors w-full sm:w-auto ${isEditing
             ? 'bg-red-100 text-red-700 hover:bg-red-200'
-            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            : 'bg-slate-700 text-white hover:bg-slate-800'
             }`}
         >
-          {isEditing ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
+          {isEditing ? <X className="w-4 h-4" /> : <Pencil className="w-4 h-4" />}
           <span className="text-sm sm:text-base">{isEditing ? 'Cancel' : 'Edit'}</span>
         </button>
       </div>

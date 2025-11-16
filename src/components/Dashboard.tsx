@@ -5,6 +5,7 @@ import { supabase } from '../config/supabase';
 import { Service } from '../data/mockServices';
 import { UserStorage } from '../utils/userStorage';
 import { apiConfig, apiRequest, getMockRecommendations } from '../config/api';
+import { getServiceImage } from '../utils/imageMapping';
 
 interface Recommendation {
   id: string;
@@ -32,7 +33,9 @@ const convertRecommendationToService = (rec: Recommendation): Service => ({
       : `High-rated service`,
   price: parseFloat(rec.price) || 0,
   rating: rec.rating,
-  image: rec.image || '/api/placeholder/300/200',
+  image: rec.image && rec.image !== '/api/placeholder/300/200' 
+    ? rec.image 
+    : getServiceImage(rec.category, rec.name),
   features: [`⭐ ${rec.rating}`, `📍 ${rec.area}`, rec.category]
 });
 

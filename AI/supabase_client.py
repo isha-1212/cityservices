@@ -10,11 +10,11 @@ env_path = Path(__file__).parent.parent / '.env'
 load_dotenv(env_path)
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("service_role_key")
+SUPABASE_KEY = os.getenv("SUPABASE_ANON_KEY")
 
 # Initialize Supabase client
-if not SUPABASE_URL or SUPABASE_KEY == "YOUR_SUPABASE_SERVICE_KEY":
-    print("Warning: Supabase URL and service role key must be properly configured")
+if not SUPABASE_URL or not SUPABASE_KEY:
+    print("Warning: SUPABASE_URL and SUPABASE_ANON_KEY must be set in .env file")
     supabase = None
 else:
     try:

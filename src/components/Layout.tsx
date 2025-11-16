@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import { MapPin, User, BookOpen, BarChart3, Calculator, Search, LogOut, Shield } from 'lucide-react';
+=======
+import { MapPin, User, Heart, BarChart3, Calculator, Search, LogOut } from 'lucide-react';
+>>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -7,16 +11,27 @@ interface LayoutProps {
   onPageChange: (page: string) => void;
   onSignOut?: () => void;
   headerRef?: React.RefObject<HTMLDivElement>;
+<<<<<<< HEAD
   user?: any;
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut, headerRef, user }) => {
+=======
+  wishlistCount?: number;
+}
+
+export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut, headerRef, wishlistCount = 0 }) => {
+>>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'search', label: 'Find Services', icon: Search },
     { id: 'calculator', label: 'Calculator', icon: Calculator },
+<<<<<<< HEAD
     { id: 'bookmarks', label: 'Wishlist', icon: BookOpen },
     { id: 'admin', label: 'Admin', icon: Shield },
+=======
+    { id: 'bookmarks', label: 'Wishlist', icon: Heart },
+>>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
     { id: 'profile', label: 'Profile', icon: User },
   ];
 
@@ -58,16 +73,24 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = currentPage === item.id;
+                const showBadge = item.id === 'bookmarks' && wishlistCount > 0;
                 return (
                   <button
                     key={item.id}
                     onClick={() => onPageChange(item.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative ${isActive
                       ? 'bg-slate-700 text-white shadow-sm'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                       }`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <div className="relative">
+                      <Icon className="w-4 h-4" />
+                      {showBadge && (
+                        <span className="absolute -top-3 -right-2 bg-slate-900 text-white text-[10px] font-medium rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">
+                          {wishlistCount > 9 ? '9+' : wishlistCount}
+                        </span>
+                      )}
+                    </div>
                     <span>{item.label}</span>
                   </button>
                 );
@@ -106,16 +129,24 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
+            const showBadge = item.id === 'bookmarks' && wishlistCount > 0;
             return (
               <button
                 key={item.id}
                 onClick={() => onPageChange(item.id)}
-                className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-all duration-200 ${isActive
+                className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-all duration-200 relative ${isActive
                   ? 'text-slate-700'
                   : 'text-slate-400 hover:text-slate-600'
                   }`}
               >
-                <Icon className="w-5 h-5" />
+                <div className="relative">
+                  <Icon className="w-5 h-5" />
+                  {showBadge && (
+                    <span className="absolute -top-2 -right-2 bg-slate-900 text-white text-[10px] font-medium rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">
+                      {wishlistCount > 9 ? '9+' : wishlistCount}
+                    </span>
+                  )}
+                </div>
                 <span className="text-xs font-medium">{item.label}</span>
                 {isActive && (
                   <div className="w-4 h-0.5 bg-slate-700 rounded-full"></div>

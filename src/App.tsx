@@ -21,6 +21,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showAuthPage, setShowAuthPage] = useState(false);
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
 
   // Service search filter state - lifted to persist across page switches
   const [criteria, setCriteria] = useState<FilterCriteria>({
@@ -39,6 +40,7 @@ function App() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [activeView, setActiveView] = useState<'combined' | 'individual'>('combined');
   const [sortOrder, setSortOrder] = useState<'priceLowToHigh' | 'priceHighToLow'>('priceLowToHigh');
+  const [wishlistCount, setWishlistCount] = useState(0);
   const headerRef = React.createRef<HTMLDivElement>();
 
   // Initialize authentication state
@@ -71,7 +73,11 @@ function App() {
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
 
-        if (event === 'SIGNED_IN' && session?.user) {
+        if (event === 'PASSWORD_RECOVERY') {
+          // User clicked password reset link - show auth page with reset modal
+          setIsPasswordRecovery(true);
+          setShowAuthPage(true);
+        } else if (event === 'SIGNED_IN' && session?.user) {
           const userData = {
             id: session.user.id,
             email: session.user.email,
@@ -82,12 +88,14 @@ function App() {
           setUser(userData);
           localStorage.setItem('token', session.access_token);
           localStorage.setItem('user', JSON.stringify(userData));
+          setIsPasswordRecovery(false);
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           // Clear user-specific data
           clearUserSpecificData();
+          setIsPasswordRecovery(false);
         }
         setLoading(false);
       }
@@ -116,6 +124,40 @@ function App() {
       // ignore parse errors
     }
   }, []);
+
+  // Load wishlist count
+  useEffect(() => {
+    const updateWishlistCount = async () => {
+      if (!user) {
+        setWishlistCount(0);
+        return;
+      }
+
+      try {
+        const { UserStorage } = await import('./utils/userStorage');
+        const ids = await UserStorage.getWishlistFromDB();
+        setWishlistCount(ids.length);
+      } catch (error) {
+        console.error('Failed to load wishlist count:', error);
+        setWishlistCount(0);
+      }
+    };
+
+    updateWishlistCount();
+
+    // Listen for wishlist changes
+    const handleWishlistChange = () => {
+      updateWishlistCount();
+    };
+
+    window.addEventListener('wishlist:changed', handleWishlistChange);
+    window.addEventListener('bookmarks:changed', handleWishlistChange);
+
+    return () => {
+      window.removeEventListener('wishlist:changed', handleWishlistChange);
+      window.removeEventListener('bookmarks:changed', handleWishlistChange);
+    };
+  }, [user]);
 
   // Save service search state to localStorage
   useEffect(() => {
@@ -185,14 +227,14 @@ function App() {
   if (showAuthPage) {
     return (
       <>
-        <AuthPage onAuth={handleAuth} />
+        <AuthPage onAuth={handleAuth} isPasswordRecovery={isPasswordRecovery} />
         <ToastContainer />
       </>
     );
   }
 
   const handleAuthRequired = () => {
-    setShowAuthModal(true);
+    setShowAuthPage(true);
   };
 
   const handleLoginPrompt = () => {
@@ -244,6 +286,7 @@ function App() {
   };
 
   return (
+<<<<<<< HEAD
     <Layout 
       currentPage={currentPage} 
       onPageChange={setCurrentPage} 
@@ -251,6 +294,9 @@ function App() {
       headerRef={headerRef}
       user={user}
     >
+=======
+    <Layout currentPage={currentPage} onPageChange={setCurrentPage} onSignOut={user ? handleSignOut : undefined} headerRef={headerRef} wishlistCount={wishlistCount}>
+>>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
       {renderCurrentPage()}
       <LoginPromptModal
         isOpen={showAuthModal}

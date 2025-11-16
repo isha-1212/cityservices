@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Settings, Bell, CreditCard as Edit3, Save, X } from 'lucide-react';
+import { User, Pencil, Save, X } from 'lucide-react';
 import { supabase } from '../config/supabase';
 import { CustomSelect } from './CustomSelect.tsx';
 import { AdminPromotion } from './AdminPromotion';
@@ -54,17 +54,12 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
   isAdmin,
   onBecomeAdmin,
 }) => {
-  const handleSaveAndToggle = async () => {
-    await onSave();
-    onToggleEdit();
-  };
-
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-6 bg-slate-50 rounded-xl mb-4 sm:mb-6">
         <div className="flex items-center space-x-3 sm:space-x-4 w-full sm:w-auto">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-slate-700 rounded-full flex items-center justify-center flex-shrink-0">
-            <User className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
+          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-slate-700 rounded-full flex items-center justify-center flex-shrink-0">
+            <User className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
           </div>
           <div className="flex-1">
             <h3 className="text-base sm:text-lg md:text-xl font-bold text-slate-900">
@@ -73,6 +68,7 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
             <p className="text-xs sm:text-sm text-slate-600 truncate">
               {profileData.email || 'No email provided'}
             </p>
+<<<<<<< HEAD
             {isAdmin ? (
               <span className="inline-block bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mt-1 shadow-sm">
                 ⭐ Admin
@@ -93,16 +89,18 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
                 </button>
               </div>
             )}
+=======
+>>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
           </div>
         </div>
         <button
           onClick={onToggleEdit}
           className={`flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors w-full sm:w-auto ${isEditing
             ? 'bg-red-100 text-red-700 hover:bg-red-200'
-            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            : 'bg-slate-700 text-white hover:bg-slate-800'
             }`}
         >
-          {isEditing ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
+          {isEditing ? <X className="w-4 h-4" /> : <Pencil className="w-4 h-4" />}
           <span className="text-sm sm:text-base">{isEditing ? 'Cancel' : 'Edit'}</span>
         </button>
       </div>
@@ -202,7 +200,7 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
       {isEditing && (
         <div className="flex justify-end pt-3 sm:pt-4">
           <button
-            onClick={handleSaveAndToggle}
+            onClick={onSave}
             disabled={isLoading}
             className="flex items-center justify-center space-x-2 px-4 sm:px-6 py-2 text-sm sm:text-base bg-slate-700 text-white rounded-lg hover:bg-slate-800 focus:ring-2 focus:ring-slate-700 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
           >
@@ -228,8 +226,11 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
 };
 
 export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
+<<<<<<< HEAD
   const [activeTab, setActiveTab] = useState('profile');
   const [showAdminPromotion, setShowAdminPromotion] = useState(false);
+=======
+>>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
   const [isEditing, setIsEditing] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [profileData, setProfileData] = useState({
@@ -356,13 +357,19 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
   // Handle edit toggle
   const handleToggleEdit = () => {
     if (isEditing) {
-      // Reset form data when canceling edit
-      setProfileData({
-        name: user?.name || '',
-        email: user?.email || '',
-        phone: user?.phone || '',
-        city: user?.city || '',
-        profession: user?.profession || '',
+      // When canceling edit, reset to current profileData (not user prop)
+      // This prevents losing saved changes
+      const { data: { user: currentUser } } = supabase.auth.getUser().then(({ data }) => {
+        if (data.user) {
+          const metadata = data.user.user_metadata || {};
+          setProfileData({
+            name: metadata.name || profileData.name,
+            email: data.user.email || profileData.email,
+            phone: metadata.phone || profileData.phone,
+            city: metadata.city || profileData.city,
+            profession: metadata.profession || profileData.profession,
+          });
+        }
       });
     }
     setIsEditing(!isEditing);
@@ -394,15 +401,36 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
       console.log('✅ Save successful:', data);
       setMessage('Profile updated successfully!');
 
-      // Update localStorage with new user data
-      const updatedUser = {
-        ...user,
-        name: profileData.name,
-        phone: profileData.phone,
-        city: profileData.city,
-        profession: profileData.profession
-      };
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      // Re-fetch the updated user data from Supabase
+      const { data: { user: updatedSupabaseUser } } = await supabase.auth.getUser();
+      
+      if (updatedSupabaseUser) {
+        const metadata = updatedSupabaseUser.user_metadata || {};
+        
+        // Update profileData state with fresh data from Supabase
+        const freshProfileData = {
+          name: metadata.name || profileData.name,
+          email: updatedSupabaseUser.email || profileData.email,
+          phone: metadata.phone || profileData.phone,
+          city: metadata.city || profileData.city,
+          profession: metadata.profession || profileData.profession,
+        };
+        
+        setProfileData(freshProfileData);
+        
+        // Update localStorage with new user data
+        const updatedUser = {
+          ...user,
+          name: metadata.name || profileData.name,
+          phone: metadata.phone || profileData.phone,
+          city: metadata.city || profileData.city,
+          profession: metadata.profession || profileData.profession
+        };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
+      
+      // Exit edit mode after successful save
+      setIsEditing(false);
 
       // Clear message after 3 seconds
       setTimeout(() => setMessage(''), 3000);
@@ -414,115 +442,10 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
     }
   };
 
-  const tabs = [
-    { id: 'profile', label: 'Profile', icon: User },
-    { id: 'preferences', label: 'Preferences', icon: Settings },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-  ];
-
-
-
-  const PreferencesTab = () => (
-    <div className="space-y-8">
-      {/* Budget Preferences */}
-      <div className="bg-slate-50 rounded-xl p-6">
-        <h3 className="text-lg font-semibold text-slate-900 mb-4">Budget Preferences</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">Monthly Budget</label>
-            <CustomSelect
-              options={[
-                { value: '20000-30000', label: '₹20,000 - ₹30,000' },
-                { value: '30000-50000', label: '₹30,000 - ₹50,000' },
-                { value: '50000-75000', label: '₹50,000 - ₹75,000' },
-                { value: '75000+', label: '₹75,000+' }
-              ]}
-              value="20000-30000"
-              onChange={() => { }}
-              placeholder="Select budget range"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">Priority</label>
-            <CustomSelect
-              options={[
-                { value: 'cost-effective', label: 'Cost-effective' },
-                { value: 'quality', label: 'Quality' },
-                { value: 'convenience', label: 'Convenience' },
-                { value: 'location', label: 'Location' }
-              ]}
-              value="cost-effective"
-              onChange={() => { }}
-              placeholder="Select priority"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Service Preferences */}
-      <div>
-        <h3 className="text-lg font-semibold text-slate-900 mb-4">Service Preferences</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {['Accommodation', 'Food', 'Transport', 'Coworking', 'Utilities'].map((service) => (
-            <label key={service} className="flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
-              <span className="font-medium text-slate-700">{service}</span>
-              <input type="checkbox" defaultChecked className="w-5 h-5 text-slate-700 border-slate-300 rounded focus:ring-slate-700" />
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Preferred Cities */}
-      <div>
-        <h3 className="text-lg font-semibold text-slate-900 mb-4">Preferred Cities</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {['Mumbai', 'Delhi', 'Bangalore', 'Pune', 'Hyderabad', 'Chennai', 'Jaipur', 'Kolkata'].map((city) => (
-            <label key={city} className="flex items-center space-x-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
-              <input type="checkbox" defaultChecked className="w-4 h-4 text-slate-700 border-slate-300 rounded focus:ring-slate-700" />
-              <span className="text-sm font-medium text-slate-700">{city}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
-  const NotificationsTab = () => (
-    <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-slate-900">Notification Settings</h3>
-      <div className="space-y-4">
-        {[
-          { label: 'New service recommendations', description: 'Get notified when we find services matching your preferences' },
-          { label: 'Price alerts', description: 'Alert when prices drop for bookmarked services' },
-          { label: 'Weekly cost summary', description: 'Receive weekly spending analysis and tips' },
-          { label: 'City updates', description: 'Updates about new services in your preferred cities' },
-          { label: 'Marketing emails', description: 'Promotional offers and feature updates' }
-        ].map((item, index) => (
-          <div key={index} className="flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-            <div className="flex-1">
-              <div className="font-medium text-slate-900">{item.label}</div>
-              <div className="text-sm text-slate-600 mt-1">{item.description}</div>
-            </div>
-            <input type="checkbox" defaultChecked className="w-5 h-5 text-slate-700 border-slate-300 rounded focus:ring-slate-700" />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
   // Show login prompt for unauthenticated users
   if (!user) {
     return (
       <div className="space-y-6">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-slate-800 mb-2">
-            Profile Settings
-          </h2>
-          <p className="text-slate-600">
-            Manage your account and preferences
-          </p>
-        </div>
-
         <div className="text-center py-12">
           <div className="max-w-md mx-auto">
             <div className="mb-6">
@@ -548,6 +471,7 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
 
   return (
     <div className="space-y-4 sm:space-y-6">
+<<<<<<< HEAD
       <div className="text-center mb-6 sm:mb-8 px-4">
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
           Profile Settings
@@ -614,6 +538,21 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
           />
         </>
       )}
+=======
+      <ProfileTab
+        profileData={profileData}
+        onNameChange={handleNameChange}
+        onEmailChange={handleEmailChange}
+        onPhoneChange={handlePhoneChange}
+        onCityChange={handleCityChange}
+        onProfessionChange={handleProfessionChange}
+        onSave={handleSaveProfile}
+        isLoading={isLoading}
+        message={message}
+        isEditing={isEditing}
+        onToggleEdit={handleToggleEdit}
+      />
+>>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
     </div>
   );
 };

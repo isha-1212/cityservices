@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Lock, User, Eye, EyeOff, Building2 } from 'lucide-react';
 import { ForgotPasswordModal } from './components/ForgotPasswordModal';
+import { ResetPasswordModal } from './components/ResetPasswordModal';
 import { authHelpers, supabase } from './config/supabase';
 
 interface AuthPageProps {
     onAuth: (user: any, token: string) => void;
+    isPasswordRecovery?: boolean;
 }
 
 interface FormData {
@@ -21,12 +23,16 @@ interface PasswordStrength {
   color: string;
 }
 
-export const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
+export const AuthPage: React.FC<AuthPageProps> = ({ onAuth, isPasswordRecovery = false }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+<<<<<<< HEAD
   const [isAdminSignup, setIsAdminSignup] = useState(false);
+=======
+  const [showResetPassword, setShowResetPassword] = useState(isPasswordRecovery);
+>>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
   const [formData, setFormData] = useState<FormData>({
     username: '',
     email: '',
@@ -39,9 +45,17 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
 
   // Listen for authentication state changes
   useEffect(() => {
+    // Check if we're in password recovery mode from prop
+    if (isPasswordRecovery) {
+      setShowResetPassword(true);
+    }
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
+        if (event === 'PASSWORD_RECOVERY') {
+          // User clicked password reset link - show reset password modal
+          setShowResetPassword(true);
+        } else if (event === 'SIGNED_IN' && session) {
           // User successfully authenticated with Google
           const user = session.user;
           const token = session.access_token;
@@ -53,7 +67,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
     );
 
     return () => subscription.unsubscribe();
-  }, [onAuth]);
+  }, [onAuth, isPasswordRecovery]);
 
   const checkPasswordStrength = (password: string): PasswordStrength => {
     const feedback: string[] = [];
@@ -507,6 +521,16 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
       <ForgotPasswordModal 
         isOpen={showForgotPassword}
         onClose={() => setShowForgotPassword(false)}
+      />
+      
+      {/* Reset Password Modal */}
+      <ResetPasswordModal 
+        isOpen={showResetPassword}
+        onClose={() => setShowResetPassword(false)}
+        onSuccess={() => {
+          setShowResetPassword(false);
+          setIsLogin(true);
+        }}
       />
     </div>
   );

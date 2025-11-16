@@ -8,18 +8,29 @@ interface AdminPanelProps {
   user: any;
 }
 
+interface ExtendedService extends Service {
+  area?: string;
+  contact?: string;
+  email?: string;
+  address?: string;
+  website?: string;
+  amenities?: string[];
+  created_at?: string;
+  updated_at?: string;
+}
+
 export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
   const [activeTab, setActiveTab] = useState<'services' | 'admins'>('services');
-  const [services, setServices] = useState<Service[]>([]);
+  const [services, setServices] = useState<ExtendedService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [editingService, setEditingService] = useState<ExtendedService | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [isAdmin, setIsAdmin] = useState(false);
 
   // Form state
-  const [formData, setFormData] = useState<Partial<Service>>({
+  const [formData, setFormData] = useState<Partial<ExtendedService>>({
     name: '',
     type: 'accommodation',
     city: '',
@@ -32,6 +43,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
     email: '',
     website: '',
     amenities: [],
+    features: [],
     image: ''
   });
 
@@ -98,6 +110,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
     setFormData(prev => ({ ...prev, amenities }));
   };
 
+  const handleFeaturesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const features = e.target.value.split(',').map(a => a.trim()).filter(a => a);
+    setFormData(prev => ({ ...prev, features }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -150,7 +167,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
     }
   };
 
-  const handleEdit = (service: Service) => {
+  const handleEdit = (service: ExtendedService) => {
     setEditingService(service);
     setFormData(service);
     setShowAddForm(true);
@@ -196,6 +213,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
       email: '',
       website: '',
       amenities: [],
+      features: [],
       image: ''
     });
     setEditingService(null);
@@ -231,131 +249,169 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
           <h1 className="text-3xl font-bold text-slate-900">Admin Panel</h1>
           <p className="text-slate-600 mt-1">Manage services and listings</p>
         </div>
-        <button
-          onClick={() => setShowAddForm(true)}
-          className="flex items-center gap-2 bg-slate-700 text-white px-6 py-3 rounded-lg hover:bg-slate-800 transition-colors"
-        >
-          <Plus className="w-5 h-5" />
-          Add Service
-        </button>
-      </div>
-
-      {/* Search and Filter */}
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search services..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
-            />
-          </div>
-          <div className="relative">
-            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <select
-              value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
-            >
-              <option value="all">All Categories</option>
-              <option value="accommodation">Accommodation</option>
-              <option value="food">Food</option>
-              <option value="transport">Transport</option>
-              <option value="tiffin">Tiffin</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-          <div className="text-sm text-slate-600 mb-1">Total Services</div>
-          <div className="text-3xl font-bold text-slate-900">{services.length}</div>
-        </div>
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-          <div className="text-sm text-slate-600 mb-1">Filtered Results</div>
-          <div className="text-3xl font-bold text-slate-900">{filteredServices.length}</div>
-        </div>
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-          <div className="text-sm text-slate-600 mb-1">Categories</div>
-          <div className="text-3xl font-bold text-slate-900">{new Set(services.map(s => s.type)).size}</div>
-        </div>
-      </div>
-
-      {/* Services List */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200">
-        {isLoading ? (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 border-4 border-slate-700 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p className="mt-4 text-slate-600">Loading services...</p>
-          </div>
-        ) : filteredServices.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-slate-600">No services found</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-slate-50 border-b border-slate-200">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Service</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Category</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Location</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Price</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Rating</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-slate-700 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-slate-200">
-                {filteredServices.map((service) => (
-                  <tr key={service.id} className="hover:bg-slate-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        {service.image && (
-                          <img src={service.image} alt={service.name} className="w-10 h-10 rounded-lg object-cover mr-3" />
-                        )}
-                        <div className="text-sm font-medium text-slate-900">{service.name}</div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-700 capitalize">
-                        {service.type}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                      {service.city}{service.area && `, ${service.area}`}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
-                      ₹{service.price?.toLocaleString() || 0}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
-                      {service.rating || 'N/A'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button
-                        onClick={() => handleEdit(service)}
-                        className="text-slate-600 hover:text-slate-900 mr-3"
-                      >
-                        <Edit2 className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(service.id)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        {activeTab === 'services' && (
+          <button
+            onClick={() => setShowAddForm(true)}
+            className="flex items-center gap-2 bg-slate-700 text-white px-6 py-3 rounded-lg hover:bg-slate-800 transition-colors"
+          >
+            <Plus className="w-5 h-5" />
+            Add Service
+          </button>
         )}
       </div>
+
+      {/* Tabs */}
+      <div className="border-b border-slate-200">
+        <nav className="flex space-x-8">
+          <button
+            onClick={() => setActiveTab('services')}
+            className={`py-4 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'services'
+                ? 'border-slate-700 text-slate-900'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
+            }`}
+          >
+            Services Management
+          </button>
+          <button
+            onClick={() => setActiveTab('admins')}
+            className={`py-4 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'admins'
+                ? 'border-slate-700 text-slate-900'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              Admin Management
+            </div>
+          </button>
+        </nav>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'services' ? (
+        <div className="space-y-6">
+          {/* Search and Filter */}
+          <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search services..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
+                />
+              </div>
+              <div className="relative">
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <select
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
+                >
+                  <option value="all">All Categories</option>
+                  <option value="accommodation">Accommodation</option>
+                  <option value="food">Food</option>
+                  <option value="transport">Transport</option>
+                  <option value="tiffin">Tiffin</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+              <div className="text-sm text-slate-600 mb-1">Total Services</div>
+              <div className="text-3xl font-bold text-slate-900">{services.length}</div>
+            </div>
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+              <div className="text-sm text-slate-600 mb-1">Filtered Results</div>
+              <div className="text-3xl font-bold text-slate-900">{filteredServices.length}</div>
+            </div>
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+              <div className="text-sm text-slate-600 mb-1">Categories</div>
+              <div className="text-3xl font-bold text-slate-900">{new Set(services.map(s => s.type)).size}</div>
+            </div>
+          </div>
+
+          {/* Services List */}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200">
+            {isLoading ? (
+              <div className="text-center py-12">
+                <div className="w-16 h-16 border-4 border-slate-700 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <p className="mt-4 text-slate-600">Loading services...</p>
+              </div>
+            ) : filteredServices.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-slate-600">No services found</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Service</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Category</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Location</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Price</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">Rating</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-slate-700 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-slate-200">
+                    {filteredServices.map((service) => (
+                      <tr key={service.id} className="hover:bg-slate-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            {service.image && (
+                              <img src={service.image} alt={service.name} className="w-10 h-10 rounded-lg object-cover mr-3" />
+                            )}
+                            <div className="text-sm font-medium text-slate-900">{service.name}</div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-700 capitalize">
+                            {service.type}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+                          {service.city}{service.area && `, ${service.area}`}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
+                          ₹{service.price?.toLocaleString() || 0}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
+                          {service.rating || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <button
+                            onClick={() => handleEdit(service)}
+                            className="text-slate-600 hover:text-slate-900 mr-3"
+                          >
+                            <Edit2 className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(service.id)}
+                            className="text-red-600 hover:text-red-900"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <AdminManagement />
+      )}
 
       {/* Add/Edit Form Modal */}
       {showAddForm && (
@@ -378,7 +434,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                     <input
                       type="text"
                       name="name"
-                      value={formData.name}
+                      value={formData.name || ''}
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
@@ -389,7 +445,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                     <label className="block text-sm font-medium text-slate-700 mb-1">Category *</label>
                     <select
                       name="type"
-                      value={formData.type}
+                      value={formData.type || 'accommodation'}
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
@@ -406,7 +462,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                     <input
                       type="text"
                       name="city"
-                      value={formData.city}
+                      value={formData.city || ''}
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
@@ -418,7 +474,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                     <input
                       type="text"
                       name="area"
-                      value={formData.area}
+                      value={formData.area || ''}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
                     />
@@ -429,7 +485,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                     <input
                       type="number"
                       name="price"
-                      value={formData.price}
+                      value={formData.price || 0}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
                     />
@@ -440,7 +496,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                     <input
                       type="number"
                       name="rating"
-                      value={formData.rating}
+                      value={formData.rating || 0}
                       onChange={handleInputChange}
                       min="0"
                       max="5"
@@ -454,7 +510,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                     <input
                       type="text"
                       name="contact"
-                      value={formData.contact}
+                      value={formData.contact || ''}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
                     />
@@ -465,7 +521,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                     <input
                       type="email"
                       name="email"
-                      value={formData.email}
+                      value={formData.email || ''}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
                     />
@@ -476,7 +532,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                   <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
                   <textarea
                     name="description"
-                    value={formData.description}
+                    value={formData.description || ''}
                     onChange={handleInputChange}
                     rows={3}
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
@@ -488,7 +544,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                   <input
                     type="text"
                     name="address"
-                    value={formData.address}
+                    value={formData.address || ''}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
                   />
@@ -499,7 +555,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                   <input
                     type="url"
                     name="website"
-                    value={formData.website}
+                    value={formData.website || ''}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
                   />
@@ -510,8 +566,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
                   <input
                     type="url"
                     name="image"
-                    value={formData.image}
+                    value={formData.image || ''}
                     onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Features (comma-separated)</label>
+                  <input
+                    type="text"
+                    value={formData.features?.join(', ') || ''}
+                    onChange={handleFeaturesChange}
+                    placeholder="WiFi, Parking, AC, etc."
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-transparent"
                   />
                 </div>

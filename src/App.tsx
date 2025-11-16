@@ -286,17 +286,14 @@ function App() {
   };
 
   return (
-<<<<<<< HEAD
     <Layout 
       currentPage={currentPage} 
       onPageChange={setCurrentPage} 
       onSignOut={user ? handleSignOut : undefined} 
       headerRef={headerRef}
       user={user}
+      wishlistCount={wishlistCount}
     >
-=======
-    <Layout currentPage={currentPage} onPageChange={setCurrentPage} onSignOut={user ? handleSignOut : undefined} headerRef={headerRef} wishlistCount={wishlistCount}>
->>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
       {renderCurrentPage()}
       <LoginPromptModal
         isOpen={showAuthModal}

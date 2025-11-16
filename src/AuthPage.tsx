@@ -12,6 +12,7 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
+  adminKey: string;
 }
 
 interface PasswordStrength {
@@ -25,11 +26,13 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [isAdminSignup, setIsAdminSignup] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    adminKey: ''
   });
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -154,6 +157,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
         // Use Supabase for registration
         const userName = formData.username || `${formData.email.split('@')[0]}`;
         
+        // Check admin key if admin signup
+        const isAdminRegistration = isAdminSignup && formData.adminKey === 'ADMIN2024';
+        
         const { data, error } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
@@ -161,6 +167,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
             data: {
               full_name: userName,
               name: userName,
+              is_admin: isAdminRegistration,
+              role: isAdminRegistration ? 'admin' : 'user'
             }
           }
         });
@@ -172,6 +180,17 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
         }
 
         if (data.user && data.session) {
+          // Create profile in profiles table with admin status
+          if (isAdminRegistration) {
+            await supabase.from('profiles').insert({
+              id: data.user.id,
+              email: data.user.email,
+              full_name: userName,
+              is_admin: true,
+              role: 'admin'
+            });
+          }
+          
           // Create user object for compatibility
           const user = {
             id: data.user.id,
@@ -217,11 +236,13 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
   const switchMode = () => {
     setIsLogin(!isLogin);
     setErrors({});
+    setIsAdminSignup(false);
     setFormData({
       username: '',
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      adminKey: ''
     });
   };
 
@@ -241,8 +262,30 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-gray-800">
-              {isLogin ? 'Login Form' : 'Sign Up Form'}
+              {isLogin ? 'Login Form' : isAdminSignup ? 'Admin Sign Up' : 'Sign Up Form'}
             </h2>
+            {!isLogin && (
+              <div className="mt-3 flex justify-center space-x-4">
+                <button
+                  type="button"
+                  onClick={() => setIsAdminSignup(false)}
+                  className={`px-4 py-2 rounded-lg text-sm transition-colors ${
+                    !isAdminSignup ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:text-blue-600'
+                  }`}
+                >
+                  Regular User
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsAdminSignup(true)}
+                  className={`px-4 py-2 rounded-lg text-sm transition-colors ${
+                    isAdminSignup ? 'bg-yellow-100 text-yellow-700' : 'text-gray-600 hover:text-yellow-600'
+                  }`}
+                >
+                  Admin User
+                </button>
+              </div>
+            )}
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -363,6 +406,27 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
                 {errors.confirmPassword && (
                   <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
                 )}
+              </div>
+            )}
+
+            {/* Admin Key for Admin Signup */}
+            {!isLogin && isAdminSignup && (
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-yellow-500" />
+                </div>
+                <input
+                  type="password"
+                  value={formData.adminKey}
+                  onChange={(e) => handleInputChange('adminKey', e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-yellow-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-yellow-50"
+                  placeholder="Admin Secret Key"
+                />
+                <div className="mt-1">
+                  <p className="text-xs text-yellow-600">
+                    💡 Enter the admin secret key to create an admin account
+                  </p>
+                </div>
               </div>
             )}
 

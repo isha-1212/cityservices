@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, User, BookOpen, BarChart3, Calculator, Search, LogOut } from 'lucide-react';
+import { MapPin, User, BookOpen, BarChart3, Calculator, Search, LogOut, Shield } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -7,14 +7,16 @@ interface LayoutProps {
   onPageChange: (page: string) => void;
   onSignOut?: () => void;
   headerRef?: React.RefObject<HTMLDivElement>;
+  user?: any;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut, headerRef }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut, headerRef, user }) => {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'search', label: 'Find Services', icon: Search },
     { id: 'calculator', label: 'Calculator', icon: Calculator },
     { id: 'bookmarks', label: 'Wishlist', icon: BookOpen },
+    { id: 'admin', label: 'Admin', icon: Shield },
     { id: 'profile', label: 'Profile', icon: User },
   ];
 

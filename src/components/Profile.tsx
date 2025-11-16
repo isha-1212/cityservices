@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { User, Settings, Bell, CreditCard as Edit3, Save, X } from 'lucide-react';
 import { supabase } from '../config/supabase';
 import { CustomSelect } from './CustomSelect.tsx';
+import { AdminPromotion } from './AdminPromotion';
 
 interface ProfileProps {
   user: {
@@ -34,6 +35,8 @@ interface ProfileTabProps {
   onToggleEdit: () => void;
   isLoading: boolean;
   message: string;
+  isAdmin: boolean;
+  onBecomeAdmin: () => void;
 }
 
 const ProfileTab: React.FC<ProfileTabProps> = ({
@@ -48,6 +51,8 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
   onToggleEdit,
   isLoading,
   message,
+  isAdmin,
+  onBecomeAdmin,
 }) => {
   const handleSaveAndToggle = async () => {
     await onSave();
@@ -68,9 +73,26 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
             <p className="text-xs sm:text-sm text-slate-600 truncate">
               {profileData.email || 'No email provided'}
             </p>
-            <span className="inline-block bg-slate-700 text-white text-xs px-2 py-1 rounded-full mt-1">
-              Premium Member
-            </span>
+            {isAdmin ? (
+              <span className="inline-block bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mt-1 shadow-sm">
+                ⭐ Admin
+              </span>
+            ) : (
+              <div className="mt-1 space-y-2">
+                <span className="inline-block bg-slate-700 text-white text-xs px-2 py-1 rounded-full">
+                  Premium Member
+                </span>
+                <button
+                  onClick={() => {
+                    console.log('Become Admin button clicked');
+                    onBecomeAdmin();
+                  }}
+                  className="block bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs px-3 py-1 rounded-full hover:from-yellow-600 hover:to-orange-600 transition-all duration-200 shadow-sm"
+                >
+                  Become Admin
+                </button>
+              </div>
+            )}
           </div>
         </div>
         <button
@@ -207,7 +229,9 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
 
 export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
   const [activeTab, setActiveTab] = useState('profile');
+  const [showAdminPromotion, setShowAdminPromotion] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
     email: user?.email || '',
@@ -217,6 +241,32 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+
+  // Check admin status
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (!user?.id) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('is_admin, role')
+          .eq('id', user.id)
+          .single();
+
+        if (error) {
+          console.error('Error checking admin status:', error);
+          return;
+        }
+
+        setIsAdmin(data?.is_admin === true || data?.role === 'admin');
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+      }
+    };
+
+    checkAdminStatus();
+  }, [user]);
 
   // Fetch profile data from Supabase when component mounts
   useEffect(() => {
@@ -545,12 +595,25 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
               message={message}
               isEditing={isEditing}
               onToggleEdit={handleToggleEdit}
+              isAdmin={isAdmin}
+              onBecomeAdmin={() => setShowAdminPromotion(true)}
             />
           )}
           {activeTab === 'preferences' && <PreferencesTab />}
           {activeTab === 'notifications' && <NotificationsTab />}
         </div>
       </div>
+      
+      {/* Admin Promotion Modal */}
+      {showAdminPromotion && (
+        <>
+          {console.log('Rendering AdminPromotion modal')}
+          <AdminPromotion 
+            user={user}
+            onClose={() => setShowAdminPromotion(false)}
+          />
+        </>
+      )}
     </div>
   );
 };

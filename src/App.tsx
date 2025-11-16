@@ -10,6 +10,7 @@ import { AuthTest } from './components/AuthTest';
 import CostCalculatorPage from './CostCalculatorPage';
 import TiffinRentalList from './components/TiffinRentalList';
 import { LoginPromptModal } from './components/LoginPromptModal';
+import { AdminPanel } from './components/AdminPanel';
 import { supabase } from './config/supabase';
 import { FilterCriteria } from './utils/serviceFilteringLogic';
 
@@ -228,7 +229,9 @@ function App() {
       case 'tiffin':
         return <TiffinRentalList />;
       case 'calculator':
-        return <CostCalculatorPage />;
+        return <CostCalculatorPage user={user} />;
+      case 'admin':
+        return <AdminPanel user={user} />;
       case 'bookmarks':
         return <Bookmarks user={user} onAuthRequired={handleAuthRequired} />;
       case 'profile':
@@ -241,7 +244,13 @@ function App() {
   };
 
   return (
-    <Layout currentPage={currentPage} onPageChange={setCurrentPage} onSignOut={user ? handleSignOut : undefined} headerRef={headerRef}>
+    <Layout 
+      currentPage={currentPage} 
+      onPageChange={setCurrentPage} 
+      onSignOut={user ? handleSignOut : undefined} 
+      headerRef={headerRef}
+      user={user}
+    >
       {renderCurrentPage()}
       <LoginPromptModal
         isOpen={showAuthModal}

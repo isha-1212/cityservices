@@ -6,15 +6,17 @@ import Papa from 'papaparse';
 
 import mockServices, { Service } from '../data/mockServices';
 
+import { supabase } from '../config/supabase';
+
 import {
 
-  applyAdvancedFilters,
+  applyAdvancedFilters,
 
-  getAllCombinationsSorted,
+  getAllCombinationsSorted,
 
-  convertToMonthlyPrice,
+  convertToMonthlyPrice,
 
-  FilterCriteria
+  FilterCriteria
 
 } from '../utils/serviceFilteringLogic';
 
@@ -23,8 +25,6 @@ import { ServiceDetails } from './ServiceDetails';
 import { UserStorage } from '../utils/userStorage';
 
 import { TransportModal } from './TransportModal';
-
-
 
 interface ServiceSearchProps {
 
@@ -1248,13 +1248,13 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
 
   const [selectedService, setSelectedService] = useState<Service | null>(null);
 
-  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
 
-  const [csvServices, setCsvServices] = useState<Service[]>([]);
+  const [csvServices, setCsvServices] = useState<Service[]>([]);
 
-  const [loading, setLoading] = useState(false);
+  const [dbServices, setDbServices] = useState<Service[]>([]);
 
-
+  const [loading, setLoading] = useState(false);
 
   // UI-only states
 
@@ -1294,13 +1294,55 @@ const ServiceSearch: React.FC<ServiceSearchProps> = ({
 
   const [filtersTop, setFiltersTop] = useState<number | null>(null);
 
-  const [filtersOpenedFrom, setFiltersOpenedFrom] = useState<'main' | 'sticky' | null>(null);
+  const [filtersOpenedFrom, setFiltersOpenedFrom] = useState<'main' | 'sticky' | null>(null);
+
+  // Load services from database
+  useEffect(() => {
+    const loadServicesFromDB = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('services')
+          .select('*');
+        
+        if (error) {
+          console.error('Error loading services:', error);
+          return;
+        }
+        
+        if (data) {
+          // Transform database services to match Service interface
+          const transformedServices: Service[] = data.map(service => ({
+            id: service.id,
+            name: service.name || '',
+            type: service.type || 'accommodation',
+            city: service.city || '',
+            price: service.price || 0,
+            rating: service.rating || 0,
+            description: service.description || '',
+            image: service.image || '/api/placeholder/400/300',
+            features: service.amenities ? [service.amenities] : [],
+            meta: {
+              area: service.area || '',
+              address: service.address || '',
+              contact: service.contact || '',
+              email: service.email || '',
+              website: service.website || ''
+            }
+          }));
+          
+          setDbServices(transformedServices);
+          console.log('Loaded services from database:', transformedServices.length);
+        }
+      } catch (error) {
+        console.error('Failed to load services from database:', error);
+      }
+    };
+    
+    loadServicesFromDB();
+  }, []);
 
 
-
-  // Backward-compatible setters used throughout the component
-
-  const setSearchQuery = (v: string) => setCriteria(prev => ({ ...prev, searchQuery: v }));
+  // Backward-compatible setters used throughout the component  const setSearchQuery = (v: string) => setCriteria(prev => ({ ...prev, searchQuery: v }));
 
   const setSelectedCity = (v: string) => setCriteria(prev => ({ ...prev, selectedCity: v }));
 
@@ -1881,7 +1923,7 @@ const toTitleCase = (str: string) => {
   // Combine and filter services - Remove duplicates by ID and standardize city names
 
   const allServices = useMemo(() => {
-    const combined = [...mockServices, ...csvServices];
+    const combined = [...mockServices, ...csvServices, ...dbServices];
     const seen = new Set<string>();
     const uniqueServices = combined.filter(service => {
       if (seen.has(service.id)) {
@@ -1902,7 +1944,7 @@ const toTitleCase = (str: string) => {
     });
     console.log('Processed allServices:', uniqueServices.length);
     return uniqueServices;
-  }, [mockServices, csvServices]);
+  }, [mockServices, csvServices, dbServices]);
 
   const areaSuggestions = useMemo(() => {
     if (!selectedTypes.includes('accommodation')) return [];

@@ -34,9 +34,9 @@ def _load_df(path: str) -> pd.DataFrame:
     return df.copy()
 
 # Load preprocessed PKL files (now with service_id columns)
-accommodation_raw = _load_df("AI/accom.pkl")
-food_raw = _load_df("AI/food.pkl") 
-tiffin_raw = _load_df("AI/tif.pkl")
+accommodation_raw = _load_df("accom.pkl")
+food_raw = _load_df("food.pkl") 
+tiffin_raw = _load_df("tif.pkl")
 
 print(f"Loaded pickle files:")
 print(f"- Accommodation: {len(accommodation_raw)} entries")

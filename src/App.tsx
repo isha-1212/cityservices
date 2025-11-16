@@ -233,7 +233,7 @@ function App() {
   }
 
   const handleAuthRequired = () => {
-    setShowAuthModal(true);
+    setShowAuthPage(true);
   };
 
   const handleLoginPrompt = () => {

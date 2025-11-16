@@ -20,6 +20,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showAuthPage, setShowAuthPage] = useState(false);
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
 
   // Service search filter state - lifted to persist across page switches
   const [criteria, setCriteria] = useState<FilterCriteria>({
@@ -71,7 +72,11 @@ function App() {
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
 
-        if (event === 'SIGNED_IN' && session?.user) {
+        if (event === 'PASSWORD_RECOVERY') {
+          // User clicked password reset link - show auth page with reset modal
+          setIsPasswordRecovery(true);
+          setShowAuthPage(true);
+        } else if (event === 'SIGNED_IN' && session?.user) {
           const userData = {
             id: session.user.id,
             email: session.user.email,
@@ -82,12 +87,14 @@ function App() {
           setUser(userData);
           localStorage.setItem('token', session.access_token);
           localStorage.setItem('user', JSON.stringify(userData));
+          setIsPasswordRecovery(false);
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           // Clear user-specific data
           clearUserSpecificData();
+          setIsPasswordRecovery(false);
         }
         setLoading(false);
       }
@@ -219,7 +226,7 @@ function App() {
   if (showAuthPage) {
     return (
       <>
-        <AuthPage onAuth={handleAuth} />
+        <AuthPage onAuth={handleAuth} isPasswordRecovery={isPasswordRecovery} />
         <ToastContainer />
       </>
     );

@@ -53,7 +53,7 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-6 bg-slate-50 rounded-xl mb-4 sm:mb-6">
         <div className="flex items-center space-x-3 sm:space-x-4 w-full sm:w-auto">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-slate-700 rounded-full flex items-center justify-center flex-shrink-0">
             <User className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
           </div>
           <div className="flex-1">

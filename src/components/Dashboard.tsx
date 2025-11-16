@@ -4,7 +4,7 @@ import { ServiceDetails } from './ServiceDetails';
 import { supabase } from '../config/supabase';
 import { Service } from '../data/mockServices';
 import { UserStorage } from '../utils/userStorage';
-import { apiConfig, apiRequest } from '../config/api';
+import { apiConfig, apiRequest, getMockRecommendations } from '../config/api';
 
 interface Recommendation {
   id: string;
@@ -70,12 +70,29 @@ export const Dashboard: React.FC = () => {
 
       if (data.status === 'success') {
         setRecommendations(data.recommendations || []);
+        // If backend returned fallback message, show it but still display data
+        if (data.message && data.message.includes('fallback')) {
+          console.info('Backend returned fallback data:', data.message);
+        }
       } else {
         throw new Error(data.message || 'Failed to fetch recommendations');
       }
     } catch (err) {
       console.error('Error fetching recommendations:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch recommendations');
+      
+      // Always fallback to mock data if API fails
+      console.log('Using fallback recommendations due to backend unavailability');
+      try {
+        const mockData = getMockRecommendations();
+        setRecommendations(mockData.recommendations || []);
+        // Don't show error if we have fallback data
+        setError(null);
+        setLoading(false);
+        return;
+      } catch (mockError) {
+        console.error('Even mock data failed:', mockError);
+        setError(err instanceof Error ? err.message : 'Failed to fetch recommendations');
+      }
     } finally {
       setLoading(false);
     }
@@ -182,21 +199,43 @@ export const Dashboard: React.FC = () => {
       {/* Recommendations Grid */}
       <div className="px-4">
         {error ? (
-          <div className="text-center py-8 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-600 font-medium">Error loading recommendations</p>
-            <p className="text-red-500 text-sm mt-1">{error}</p>
-            <button
-              onClick={fetchRecommendations}
-              className="mt-3 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-            >
-              Try Again
-            </button>
+          <div className="text-center py-8 bg-red-50 border border-red-200 rounded-lg mx-2">
+            <p className="text-red-600 font-medium text-sm sm:text-base">Error loading recommendations</p>
+            <p className="text-red-500 text-xs sm:text-sm mt-1 px-2">{error}</p>
+            <div className="mt-4 space-y-2 sm:space-y-0 sm:space-x-3 sm:flex sm:justify-center">
+              <button
+                onClick={fetchRecommendations}
+                className="w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm transition-colors"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    setError(null);
+                    const mockData = getMockRecommendations();
+                    setRecommendations(mockData.recommendations || []);
+                  } catch (err) {
+                    console.error('Mock data fallback failed:', err);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm transition-colors mt-2 sm:mt-0"
+              >
+                Show Sample Data
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-3 px-2">
+              Network issues? Try "Show Sample Data" to see how recommendations work.
+            </p>
           </div>
         ) : loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-lg border border-slate-200 p-4 animate-pulse">
-                <div className="h-32 bg-slate-200 rounded-lg mb-3"></div>
+              <div key={i} className="bg-white rounded-lg border border-slate-200 p-3 sm:p-4 animate-pulse">
+                <div className="h-28 sm:h-32 bg-slate-200 rounded-lg mb-3"></div>
                 <div className="h-4 bg-slate-200 rounded w-3/4 mb-2"></div>
                 <div className="h-3 bg-slate-200 rounded w-1/2 mb-2"></div>
                 <div className="h-3 bg-slate-200 rounded w-2/3"></div>
@@ -204,7 +243,7 @@ export const Dashboard: React.FC = () => {
             ))}
           </div>
         ) : recommendations.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {recommendations.map((recommendation, index) => {
               const service = convertRecommendationToService(recommendation);
               return (

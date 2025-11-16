@@ -49,11 +49,6 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
   isLoading,
   message,
 }) => {
-  const handleSaveAndToggle = async () => {
-    await onSave();
-    onToggleEdit();
-  };
-
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-6 bg-slate-50 rounded-xl mb-4 sm:mb-6">
@@ -68,9 +63,6 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
             <p className="text-xs sm:text-sm text-slate-600 truncate">
               {profileData.email || 'No email provided'}
             </p>
-            <span className="inline-block bg-slate-700 text-white text-xs px-2 py-1 rounded-full mt-1">
-              Premium Member
-            </span>
           </div>
         </div>
         <button
@@ -180,7 +172,7 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
       {isEditing && (
         <div className="flex justify-end pt-3 sm:pt-4">
           <button
-            onClick={handleSaveAndToggle}
+            onClick={onSave}
             disabled={isLoading}
             className="flex items-center justify-center space-x-2 px-4 sm:px-6 py-2 text-sm sm:text-base bg-slate-700 text-white rounded-lg hover:bg-slate-800 focus:ring-2 focus:ring-slate-700 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
           >
@@ -306,13 +298,19 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
   // Handle edit toggle
   const handleToggleEdit = () => {
     if (isEditing) {
-      // Reset form data when canceling edit
-      setProfileData({
-        name: user?.name || '',
-        email: user?.email || '',
-        phone: user?.phone || '',
-        city: user?.city || '',
-        profession: user?.profession || '',
+      // When canceling edit, reset to current profileData (not user prop)
+      // This prevents losing saved changes
+      const { data: { user: currentUser } } = supabase.auth.getUser().then(({ data }) => {
+        if (data.user) {
+          const metadata = data.user.user_metadata || {};
+          setProfileData({
+            name: metadata.name || profileData.name,
+            email: data.user.email || profileData.email,
+            phone: metadata.phone || profileData.phone,
+            city: metadata.city || profileData.city,
+            profession: metadata.profession || profileData.profession,
+          });
+        }
       });
     }
     setIsEditing(!isEditing);
@@ -344,15 +342,36 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
       console.log('✅ Save successful:', data);
       setMessage('Profile updated successfully!');
 
-      // Update localStorage with new user data
-      const updatedUser = {
-        ...user,
-        name: profileData.name,
-        phone: profileData.phone,
-        city: profileData.city,
-        profession: profileData.profession
-      };
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      // Re-fetch the updated user data from Supabase
+      const { data: { user: updatedSupabaseUser } } = await supabase.auth.getUser();
+      
+      if (updatedSupabaseUser) {
+        const metadata = updatedSupabaseUser.user_metadata || {};
+        
+        // Update profileData state with fresh data from Supabase
+        const freshProfileData = {
+          name: metadata.name || profileData.name,
+          email: updatedSupabaseUser.email || profileData.email,
+          phone: metadata.phone || profileData.phone,
+          city: metadata.city || profileData.city,
+          profession: metadata.profession || profileData.profession,
+        };
+        
+        setProfileData(freshProfileData);
+        
+        // Update localStorage with new user data
+        const updatedUser = {
+          ...user,
+          name: metadata.name || profileData.name,
+          phone: metadata.phone || profileData.phone,
+          city: metadata.city || profileData.city,
+          profession: metadata.profession || profileData.profession
+        };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
+      
+      // Exit edit mode after successful save
+      setIsEditing(false);
 
       // Clear message after 3 seconds
       setTimeout(() => setMessage(''), 3000);

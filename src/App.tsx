@@ -38,6 +38,7 @@ function App() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [activeView, setActiveView] = useState<'combined' | 'individual'>('combined');
   const [sortOrder, setSortOrder] = useState<'priceLowToHigh' | 'priceHighToLow'>('priceLowToHigh');
+  const [wishlistCount, setWishlistCount] = useState(0);
   const headerRef = React.createRef<HTMLDivElement>();
 
   // Initialize authentication state
@@ -115,6 +116,40 @@ function App() {
       // ignore parse errors
     }
   }, []);
+
+  // Load wishlist count
+  useEffect(() => {
+    const updateWishlistCount = async () => {
+      if (!user) {
+        setWishlistCount(0);
+        return;
+      }
+
+      try {
+        const { UserStorage } = await import('./utils/userStorage');
+        const ids = await UserStorage.getWishlistFromDB();
+        setWishlistCount(ids.length);
+      } catch (error) {
+        console.error('Failed to load wishlist count:', error);
+        setWishlistCount(0);
+      }
+    };
+
+    updateWishlistCount();
+
+    // Listen for wishlist changes
+    const handleWishlistChange = () => {
+      updateWishlistCount();
+    };
+
+    window.addEventListener('wishlist:changed', handleWishlistChange);
+    window.addEventListener('bookmarks:changed', handleWishlistChange);
+
+    return () => {
+      window.removeEventListener('wishlist:changed', handleWishlistChange);
+      window.removeEventListener('bookmarks:changed', handleWishlistChange);
+    };
+  }, [user]);
 
   // Save service search state to localStorage
   useEffect(() => {
@@ -241,7 +276,7 @@ function App() {
   };
 
   return (
-    <Layout currentPage={currentPage} onPageChange={setCurrentPage} onSignOut={user ? handleSignOut : undefined} headerRef={headerRef}>
+    <Layout currentPage={currentPage} onPageChange={setCurrentPage} onSignOut={user ? handleSignOut : undefined} headerRef={headerRef} wishlistCount={wishlistCount}>
       {renderCurrentPage()}
       <LoginPromptModal
         isOpen={showAuthModal}

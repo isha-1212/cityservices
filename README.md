@@ -2,7 +2,35 @@
 
 A modern, intelligent city services platform built with React, TypeScript, and Vite that helps users discover, compare, and bookmark various city services including accommodation, food delivery, and more.
 
+## 🚀 Quick Start
+
+### Local Development
+
+**1. Start the Python AI Backend:**
+```powershell
+cd "c:\Documents\isha's 5th august latest\cityservices"
+python AI\server.py
+```
+
+**2. Start the Frontend (new terminal):**
+```powershell
+npm install  # First time only
+npm run dev
+```
+
+**3. Open:** http://localhost:5000
+
+### Deploy to Vercel
+
+See **[VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md)** for complete deployment instructions.
+
 ## 🌟 Features
+
+### 🤖 AI-Powered Recommendations
+- **Personalized suggestions** based on user wishlist and behavior
+- **Smart algorithms** using collaborative filtering and market basket analysis
+- **Automatic fallback** to sample data when backend is unavailable
+- **Real-time updates** from Supabase database
 
 ### 🔍 Service Search & Discovery
 - Advanced search with multiple filters:

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapPin, Trash2, Calculator } from 'lucide-react';
+import { Heart, Trash2, Calculator } from 'lucide-react';
 import mockServices, { Service } from '../data/mockServices';
 import { ServiceDetails } from './ServiceDetails';
 import { ServiceCard } from './ServiceCard';
@@ -168,7 +168,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
           <div className="max-w-md mx-auto">
             <div className="mb-6">
               <div className="w-12 h-12 sm:w-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
+                <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
               </div>
               <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Login to View Your Wishlist</h3>
               <p className="text-sm sm:text-base text-gray-600 mb-6">
@@ -188,7 +188,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({ user, onAuthRequired }) =>
           <div className="max-w-md mx-auto">
             <div className="mb-6">
               <div className="w-12 h-12 sm:w-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
+                <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
               </div>
               <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Your Wishlist list is empty</h3>
               <p className="text-sm sm:text-base text-gray-600">

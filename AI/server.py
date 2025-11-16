@@ -6,7 +6,13 @@ from supabase_client import supabase
 from recommender import recommend_for_user
 
 app = Flask(__name__)
-CORS(app)
+# Enable CORS for all routes and origins
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+# Add a health check that logs to console
+@app.before_request
+def log_request():
+    print(f"Incoming request: {request.method} {request.path}")
 
 # Add error handler
 @app.errorhandler(Exception)

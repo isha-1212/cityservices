@@ -2,7 +2,9 @@
 
 ## Environment Configuration
 
-This app requires both frontend and backend deployment. The backend serves recommendations data on port 8000.
+This app requires both frontend and backend deployment:
+- **Frontend**: React + Vite application
+- **Backend (AI/Recommendations)**: Python Flask server running on port 8000
 
 ### Frontend Deployment
 
@@ -22,30 +24,57 @@ VITE_SUPABASE_URL=https://iecothmegflxbpvndnru.supabase.co
 VITE_SUPABASE_ANON_KEY=your_supabase_key
 ```
 
+**Example with deployed backend:**
+```bash
+VITE_API_BASE_URL=https://your-app.onrender.com
+# or
+VITE_API_BASE_URL=https://your-app.up.railway.app
+```
+
 **Same-Domain Deployment:**
 If backend is served from `/api` path:
 ```bash
 VITE_API_BASE_URL=/api
 ```
 
-### Backend Deployment
+### Backend Deployment (Python Flask AI Service)
 
-The backend server runs on port 8000 and requires PostgreSQL database.
+The recommendation backend is a Python Flask server (`AI/server.py`) running on port 8000.
 
 #### Required Environment Variables:
-- `DATABASE_URL`: PostgreSQL connection string
-- `JWT_SECRET`: JWT signing secret
+- `SUPABASE_URL`: Your Supabase project URL
+- `SUPABASE_KEY`: Your Supabase service key or anon key
 - `PORT`: Server port (defaults to 8000)
+
+#### Required Python Packages:
+```bash
+pip install flask flask-cors pandas supabase
+```
 
 #### Deployment Commands:
 ```bash
 # Build frontend
 npm run build
 
-# Start backend (from backend directory)
-cd backend
-npm start
+# Start Python AI backend
+cd AI
+python server.py
 ```
+
+#### Backend Deployment Options:
+1. **Render.com** (Recommended for Python):
+   - Service: Web Service
+   - Build Command: `cd AI && pip install -r requirements.txt`
+   - Start Command: `cd AI && python server.py`
+   - Add environment variables in Render dashboard
+
+2. **Railway.app**:
+   - Deploy from GitHub
+   - Set root directory to `AI`
+   - Add environment variables
+
+3. **PythonAnywhere** or **Heroku**:
+   - Follow platform-specific Python deployment guides
 
 ## Common Deployment Issues
 
@@ -82,7 +111,29 @@ npm start
 - Check `VITE_API_BASE_URL` points to correct backend URL
 - Verify network connectivity between frontend and backend
 
+**Mobile-Specific Issues:**
+- **Recommendations not showing on mobile**: 
+  - Check if backend URL is accessible from mobile network
+  - Ensure HTTPS is used for production (mobile browsers require secure connections)
+  - Test with "Show Sample Data" button if network fails
+  - Check mobile browser developer tools for CORS errors
+- **Slower loading on mobile**:
+  - App includes longer timeout for mobile devices (15s vs 10s)
+  - Fallback to mock data when network fails
+  - Consider implementing offline support
+
+**Network Issues:**
+- App automatically detects mobile devices and provides fallbacks
+- Mock data available when backend is unreachable
+- Retry mechanism with mobile-friendly UI
+- Different timeout settings for desktop vs mobile
+
 **Auth Issues:**
 - Verify Supabase configuration
 - Check environment variables are loaded correctly
 - Ensure JWT_SECRET matches between frontend and backend
+
+**CORS Issues (Mobile Browsers):**
+- Ensure backend CORS configuration allows mobile origins
+- Check if backend accepts requests from your deployment domain
+- Mobile browsers may have stricter CORS policies

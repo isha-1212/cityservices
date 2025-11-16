@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, User, BookOpen, BarChart3, Calculator, Search, LogOut } from 'lucide-react';
+import { MapPin, User, Heart, BarChart3, Calculator, Search, LogOut } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -7,14 +7,15 @@ interface LayoutProps {
   onPageChange: (page: string) => void;
   onSignOut?: () => void;
   headerRef?: React.RefObject<HTMLDivElement>;
+  wishlistCount?: number;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut, headerRef }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut, headerRef, wishlistCount = 0 }) => {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'search', label: 'Find Services', icon: Search },
     { id: 'calculator', label: 'Calculator', icon: Calculator },
-    { id: 'bookmarks', label: 'Wishlist', icon: BookOpen },
+    { id: 'bookmarks', label: 'Wishlist', icon: Heart },
     { id: 'profile', label: 'Profile', icon: User },
   ];
 
@@ -56,16 +57,24 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = currentPage === item.id;
+                const showBadge = item.id === 'bookmarks' && wishlistCount > 0;
                 return (
                   <button
                     key={item.id}
                     onClick={() => onPageChange(item.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative ${isActive
                       ? 'bg-slate-700 text-white shadow-sm'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                       }`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <div className="relative">
+                      <Icon className="w-4 h-4" />
+                      {showBadge && (
+                        <span className="absolute -top-3 -right-2 bg-slate-900 text-white text-[10px] font-medium rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">
+                          {wishlistCount > 9 ? '9+' : wishlistCount}
+                        </span>
+                      )}
+                    </div>
                     <span>{item.label}</span>
                   </button>
                 );
@@ -104,16 +113,24 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
+            const showBadge = item.id === 'bookmarks' && wishlistCount > 0;
             return (
               <button
                 key={item.id}
                 onClick={() => onPageChange(item.id)}
-                className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-all duration-200 ${isActive
+                className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-all duration-200 relative ${isActive
                   ? 'text-slate-700'
                   : 'text-slate-400 hover:text-slate-600'
                   }`}
               >
-                <Icon className="w-5 h-5" />
+                <div className="relative">
+                  <Icon className="w-5 h-5" />
+                  {showBadge && (
+                    <span className="absolute -top-2 -right-2 bg-slate-900 text-white text-[10px] font-medium rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">
+                      {wishlistCount > 9 ? '9+' : wishlistCount}
+                    </span>
+                  )}
+                </div>
                 <span className="text-xs font-medium">{item.label}</span>
                 {isActive && (
                   <div className="w-4 h-0.5 bg-slate-700 rounded-full"></div>

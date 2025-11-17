@@ -2999,21 +2999,16 @@ const toTitleCase = (str: string) => {
 
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
 
-                  <input
-
-                    type="text"
-
-                    placeholder="Search..."
-
-                    value={criteria.searchQuery}
-
-                    onChange={(e) => setSearchQuery(e.target.value)}
-
-                    className="w-full pl-10 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500 bg-white"
-
-                  />
-
-                </div>
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={criteria.searchQuery}
+                    onChange={(e) => {
+                      console.log('Modal search input change:', e.target.value);
+                      setCriteria(prev => ({ ...prev, searchQuery: e.target.value }));
+                    }}
+                    className="w-full pl-10 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500 bg-white"
+                  />                </div>
 
 
 
@@ -3679,21 +3674,16 @@ const toTitleCase = (str: string) => {
 
           <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
 
-          <input
-
-            type="text"
-
-            placeholder="Search services, cities, or areas..."
-
-            value={criteria.searchQuery}
-
-            onChange={(e) => setSearchQuery(e.target.value)}
-
-            className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
-
-          />
-
-        </div>
+          <input
+            type="text"
+            placeholder="Search services, cities, or areas..."
+            value={criteria.searchQuery}
+            onChange={(e) => {
+              console.log('Search input change:', e.target.value);
+              setCriteria(prev => ({ ...prev, searchQuery: e.target.value }));
+            }}
+            className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
+          />        </div>
 
 
 

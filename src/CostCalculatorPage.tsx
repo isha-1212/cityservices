@@ -76,28 +76,28 @@ export const CostCalculatorPage: React.FC<CostCalculatorPageProps> = ({ user }) 
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 sm:space-y-8">
       {/* Header */}
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-slate-900 mb-3">Cost Calculator</h1>
-        <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+      <div className="text-center px-4">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2 sm:mb-3">Cost Calculator</h1>
+        <p className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto px-2">
           {user ? 'Calculate costs based on your wishlist services' : 'Plan your monthly expenses and stay within budget with our smart calculator'}
         </p>
         {!user && (
-          <p className="text-sm text-slate-500 mt-2">
+          <p className="text-xs sm:text-sm text-slate-500 mt-1 sm:mt-2">
             Login to calculate costs from your wishlist
           </p>
         )}
       </div>
 
       {/* Budget Range Selector */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-        <h3 className="text-lg font-semibold text-slate-900 mb-4">Set Your Budget Range</h3>
+      <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 mx-4 sm:mx-0">
+        <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 sm:mb-4">Set Your Budget Range</h3>
         
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-2">
                 Minimum Budget: ₹{min.toLocaleString()}
               </label>
               <input
@@ -110,12 +110,12 @@ export const CostCalculatorPage: React.FC<CostCalculatorPageProps> = ({ user }) 
                   const val = Math.min(Number(e.target.value), max - 1000);
                   setMin(val);
                 }}
-                className="w-full"
+                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-2">
                 Maximum Budget: ₹{max.toLocaleString()}
               </label>
               <input
@@ -128,16 +128,16 @@ export const CostCalculatorPage: React.FC<CostCalculatorPageProps> = ({ user }) 
                   const val = Math.max(Number(e.target.value), min + 1000);
                   setMax(val);
                 }}
-                className="w-full"
+                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer"
               />
             </div>
           </div>
 
           {/* Budget Display */}
           <div className="flex items-center justify-center">
-            <div className="bg-slate-100 rounded-xl px-6 py-3">
-              <span className="text-slate-600 text-sm">Your Budget Range: </span>
-              <span className="font-bold text-slate-900">
+            <div className="bg-slate-100 rounded-lg sm:rounded-xl px-4 sm:px-6 py-2 sm:py-3 text-center">
+              <span className="text-slate-600 text-xs sm:text-sm block sm:inline">Your Budget Range: </span>
+              <span className="font-bold text-slate-900 text-sm sm:text-base">
                 ₹{min.toLocaleString()} - ₹{max.toLocaleString()}/month
               </span>
             </div>
@@ -146,7 +146,9 @@ export const CostCalculatorPage: React.FC<CostCalculatorPageProps> = ({ user }) 
       </div>
 
       {/* Calculator Component */}
-      <CostCalculator selectedServices={items} userBudget={{ min, max }} />
+      <div className="mx-4 sm:mx-0">
+        <CostCalculator selectedServices={items} userBudget={{ min, max }} />
+      </div>
     </div>
   );
 };

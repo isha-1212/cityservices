@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Pencil, Save, X, Settings, Bell } from 'lucide-react';
+import { User, Pencil, Save, X } from 'lucide-react';
 import { supabase } from '../config/supabase';
 import { CustomSelect } from './CustomSelect';
 import { AdminPromotion } from './AdminPromotion';
@@ -227,26 +227,9 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
 // Define the tabs array
 const tabs = [
   { id: 'profile', label: 'Profile', icon: User },
-  { id: 'preferences', label: 'Preferences', icon: Settings },
-  { id: 'notifications', label: 'Notifications', icon: Bell },
 ];
 
-// Placeholder components for other tabs
-const PreferencesTab: React.FC = () => (
-  <div className="text-center py-8 text-slate-600">
-    <Settings className="w-12 h-12 mx-auto mb-4" />
-    <h3 className="text-lg font-semibold mb-2">Preferences</h3>
-    <p>Preference settings coming soon...</p>
-  </div>
-);
 
-const NotificationsTab: React.FC = () => (
-  <div className="text-center py-8 text-slate-600">
-    <Bell className="w-12 h-12 mx-auto mb-4" />
-    <h3 className="text-lg font-semibold mb-2">Notifications</h3>
-    <p>Notification settings coming soon...</p>
-  </div>
-);
 
 export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
 
@@ -530,25 +513,21 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
 
         {/* Tab Content */}
         <div className="p-4 sm:p-6">
-          {activeTab === 'profile' && (
-            <ProfileTab
-              profileData={profileData}
-              onNameChange={handleNameChange}
-              onEmailChange={handleEmailChange}
-              onPhoneChange={handlePhoneChange}
-              onCityChange={handleCityChange}
-              onProfessionChange={handleProfessionChange}
-              onSave={handleSaveProfile}
-              isLoading={isLoading}
-              message={message}
-              isEditing={isEditing}
-              onToggleEdit={handleToggleEdit}
-              isAdmin={isAdmin}
-              onBecomeAdmin={() => setShowAdminPromotion(true)}
-            />
-          )}
-          {activeTab === 'preferences' && <PreferencesTab />}
-          {activeTab === 'notifications' && <NotificationsTab />}
+          <ProfileTab
+            profileData={profileData}
+            onNameChange={handleNameChange}
+            onEmailChange={handleEmailChange}
+            onPhoneChange={handlePhoneChange}
+            onCityChange={handleCityChange}
+            onProfessionChange={handleProfessionChange}
+            onSave={handleSaveProfile}
+            isLoading={isLoading}
+            message={message}
+            isEditing={isEditing}
+            onToggleEdit={handleToggleEdit}
+            isAdmin={isAdmin}
+            onBecomeAdmin={() => setShowAdminPromotion(true)}
+          />
         </div>
       </div>
       

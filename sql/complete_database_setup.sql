@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS public.services (
   contact TEXT,
   email TEXT,
   website TEXT,
-  amenities TEXT[],
+  amenities TEXT,
   image TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

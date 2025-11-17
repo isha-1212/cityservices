@@ -13,7 +13,7 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut, headerRef, user, wishlistCount = 0 }) => {
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
+    { id: 'dashboard', label: 'For You', icon: BarChart3 },
     { id: 'search', label: 'Find Services', icon: Search },
     { id: 'calculator', label: 'Calculator', icon: Calculator },
     { id: 'bookmarks', label: 'Wishlist', icon: Heart },

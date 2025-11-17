@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS services (
   website TEXT,
   amenities TEXT[],
   image TEXT,
+  admin_id UUID REFERENCES auth.users(id),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -21,6 +22,7 @@ CREATE TABLE IF NOT EXISTS services (
 -- Create index for faster queries
 CREATE INDEX IF NOT EXISTS idx_services_type ON services(type);
 CREATE INDEX IF NOT EXISTS idx_services_city ON services(city);
+CREATE INDEX IF NOT EXISTS idx_services_admin_id ON services(admin_id);
 CREATE INDEX IF NOT EXISTS idx_services_created_at ON services(created_at DESC);
 
 -- Update profiles table to add admin role

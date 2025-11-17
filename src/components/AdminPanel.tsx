@@ -82,12 +82,29 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
   const loadServices = async () => {
     try {
       setIsLoading(true);
+      
+      // Load only services created by this admin
       const { data, error } = await supabase
         .from('services')
         .select('*')
+        .eq('admin_id', user?.id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error loading services:', error);
+        // If admin_id column doesn't exist yet, fall back to loading all services
+        if (error.message.includes('admin_id')) {
+          const { data: fallbackData, error: fallbackError } = await supabase
+            .from('services')
+            .select('*')
+            .order('created_at', { ascending: false });
+          
+          if (!fallbackError) {
+            setServices(fallbackData || []);
+          }
+        }
+        return;
+      }
 
       setServices(data || []);
     } catch (error) {
@@ -127,6 +144,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user }) => {
       const serviceData = {
         ...formData,
         id: editingService?.id || `service_${Date.now()}`,
+        admin_id: user?.id, // Associate service with current admin
         created_at: editingService?.created_at || new Date().toISOString(),
         updated_at: new Date().toISOString()
       };

@@ -28,11 +28,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth, isPasswordRecovery =
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
-<<<<<<< HEAD
+
   const [isAdminSignup, setIsAdminSignup] = useState(false);
-=======
   const [showResetPassword, setShowResetPassword] = useState(isPasswordRecovery);
->>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
   const [formData, setFormData] = useState<FormData>({
     username: '',
     email: '',
@@ -140,18 +138,25 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth, isPasswordRecovery =
     if (!validateForm()) return;
 
     setIsLoading(true);
+    setErrors({}); // Clear previous errors
     
     try {
       if (isLogin) {
-        // Use Supabase for login
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password,
-        });
+        // Use authHelpers for login
+        const { data, error } = await authHelpers.signInWithEmail(
+          formData.email,
+          formData.password
+        );
 
         if (error) {
           console.error('Login error:', error);
-          setErrors({ email: error.message || 'Login failed. Please check your credentials.' });
+          if (error.message?.includes('Email not confirmed')) {
+            setErrors({ email: '📧 Please check your email and confirm your account before logging in.' });
+          } else if (error.message?.includes('Invalid login credentials')) {
+            setErrors({ email: '❌ Invalid email or password. Please check your credentials.' });
+          } else {
+            setErrors({ email: `❌ ${error.message || 'Login failed. Please try again.'}` });
+          }
           return;
         }
 
@@ -168,41 +173,78 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth, isPasswordRecovery =
           onAuth(user, data.session.access_token);
         }
       } else {
-        // Use Supabase for registration
+        // Use authHelpers for registration with retry
         const userName = formData.username || `${formData.email.split('@')[0]}`;
         
         // Check admin key if admin signup
         const isAdminRegistration = isAdminSignup && formData.adminKey === 'ADMIN2024';
         
-        const { data, error } = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
-          options: {
-            data: {
-              full_name: userName,
-              name: userName,
-              is_admin: isAdminRegistration,
-              role: isAdminRegistration ? 'admin' : 'user'
+        const metadata = {
+          full_name: userName,
+          name: userName,
+          is_admin: isAdminRegistration,
+          role: isAdminRegistration ? 'admin' : 'user'
+        };
+
+        // Retry mechanism for network issues
+        let data = null;
+        let error = null;
+        
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            const result = await authHelpers.signUpWithEmail(
+              formData.email,
+              formData.password,
+              metadata
+            );
+            data = result.data;
+            error = result.error;
+            break;
+          } catch (retryError) {
+            if (attempt >= 2) {
+              error = { message: `Connection failed after 3 attempts: ${(retryError as Error).message}` };
+            } else {
+              // Wait 1 second before retry
+              await new Promise(resolve => setTimeout(resolve, 1000));
             }
           }
-        });
+        }
 
         if (error) {
           console.error('Registration error:', error);
-          setErrors({ email: error.message || 'Registration failed. Please try again.' });
+          if (error.message?.includes('User already registered')) {
+            setErrors({ email: '\u274c Account already exists. Please log in instead.' });
+            setIsLogin(true);
+          } else if (error.message?.includes('over_email_send_rate_limit')) {
+            setErrors({ email: '\u23f1\ufe0f Too many emails sent. Please wait a few minutes before trying again.' });
+          } else {
+            setErrors({ email: `\u274c ${error.message || 'Registration failed. Please try again.'}` });
+          }
+          return;
+        }
+
+        if (!data) {
+          setErrors({
+            email: '\u274c Registration completed but no session was returned. Please check your email and try logging in.'
+          });
           return;
         }
 
         if (data.user && data.session) {
-          // Create profile in profiles table with admin status
+          // Create profile in profiles table with admin status if needed
           if (isAdminRegistration) {
-            await supabase.from('profiles').insert({
-              id: data.user.id,
-              email: data.user.email,
-              full_name: userName,
-              is_admin: true,
-              role: 'admin'
-            });
+            try {
+              await supabase.from('profiles').insert({
+                id: data.user.id,
+                email: data.user.email,
+                full_name: userName,
+                is_admin: true,
+                role: 'admin'
+              });
+            } catch (profileError) {
+              console.error('Profile creation error:', profileError);
+              // Continue even if profile creation fails
+            }
           }
           
           // Create user object for compatibility
@@ -216,14 +258,34 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth, isPasswordRecovery =
           
           onAuth(user, data.session.access_token);
         } else if (data.user && !data.session) {
-          // Email confirmation required
-          alert('Please check your email for confirmation link before signing in.');
+          // Email confirmation required - show success message
+          setErrors({ 
+            email: '\u2705 Account created successfully! Please check your email for a confirmation link. After confirming, you can log in.' 
+          });
           setIsLogin(true); // Switch to login mode
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Authentication error:', error);
-      setErrors({ email: 'Network error. Please check your connection and try again.' });
+      
+      // Handle specific error types with better messages and solutions
+      if (error.message?.includes('Failed to fetch') || error.message?.includes('NetworkError') || error.message?.includes('CORS')) {
+        setErrors({ 
+          email: '🚫 CORS Policy Error: Your Supabase project needs to allow localhost:5000. Go to Supabase Dashboard → Settings → API → CORS and add "http://localhost:5000" to allowed origins. Or disable email confirmations in Authentication settings.'
+        });
+      } else if (error.message?.includes('Unable to connect')) {
+        setErrors({ email: '🔌 Cannot connect to authentication service. Please try again later.' });
+      } else if (error.message?.includes('Invalid login credentials')) {
+        setErrors({ email: '❌ Invalid email or password. Please check your credentials.' });
+      } else if (error.message?.includes('Email not confirmed')) {
+        setErrors({ email: '📧 Please check your email and click the confirmation link before logging in.' });
+      } else if (error.message?.includes('User already registered')) {
+        setErrors({ email: '❌ Account already exists. Please log in instead.' });
+      } else if (error.message?.includes('over_email_send_rate_limit')) {
+        setErrors({ email: '⏱️ Too many emails sent. Please wait a few minutes before trying again.' });
+      } else {
+        setErrors({ email: `❌ ${error.message || 'An unexpected error occurred. Please try again.'}` });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -300,7 +362,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth, isPasswordRecovery =
                 </button>
               </div>
             )}
-          </div>
+                      </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Username for Signup */}
@@ -423,6 +485,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuth, isPasswordRecovery =
               </div>
             )}
 
+            
             {/* Admin Key for Admin Signup */}
             {!isLogin && isAdminSignup && (
               <div className="relative">

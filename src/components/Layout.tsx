@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
-import { MapPin, User, BookOpen, BarChart3, Calculator, Search, LogOut, Shield } from 'lucide-react';
-=======
-import { MapPin, User, Heart, BarChart3, Calculator, Search, LogOut } from 'lucide-react';
->>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
+import { MapPin, User, BookOpen, Heart, BarChart3, Calculator, Search, LogOut, Shield } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,27 +7,17 @@ interface LayoutProps {
   onPageChange: (page: string) => void;
   onSignOut?: () => void;
   headerRef?: React.RefObject<HTMLDivElement>;
-<<<<<<< HEAD
   user?: any;
-}
-
-export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut, headerRef, user }) => {
-=======
   wishlistCount?: number;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut, headerRef, wishlistCount = 0 }) => {
->>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
+export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange, onSignOut, headerRef, user, wishlistCount = 0 }) => {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'search', label: 'Find Services', icon: Search },
     { id: 'calculator', label: 'Calculator', icon: Calculator },
-<<<<<<< HEAD
-    { id: 'bookmarks', label: 'Wishlist', icon: BookOpen },
-    { id: 'admin', label: 'Admin', icon: Shield },
-=======
     { id: 'bookmarks', label: 'Wishlist', icon: Heart },
->>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
+    { id: 'admin', label: 'Admin', icon: Shield },
     { id: 'profile', label: 'Profile', icon: User },
   ];
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { User, Pencil, Save, X } from 'lucide-react';
+import { User, Pencil, Save, X, Settings, Bell } from 'lucide-react';
 import { supabase } from '../config/supabase';
-import { CustomSelect } from './CustomSelect.tsx';
+import { CustomSelect } from './CustomSelect';
 import { AdminPromotion } from './AdminPromotion';
 
 interface ProfileProps {
@@ -68,7 +68,7 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
             <p className="text-xs sm:text-sm text-slate-600 truncate">
               {profileData.email || 'No email provided'}
             </p>
-<<<<<<< HEAD
+
             {isAdmin ? (
               <span className="inline-block bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mt-1 shadow-sm">
                 ⭐ Admin
@@ -89,8 +89,7 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
                 </button>
               </div>
             )}
-=======
->>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
+
           </div>
         </div>
         <button
@@ -225,12 +224,35 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
   );
 };
 
+// Define the tabs array
+const tabs = [
+  { id: 'profile', label: 'Profile', icon: User },
+  { id: 'preferences', label: 'Preferences', icon: Settings },
+  { id: 'notifications', label: 'Notifications', icon: Bell },
+];
+
+// Placeholder components for other tabs
+const PreferencesTab: React.FC = () => (
+  <div className="text-center py-8 text-slate-600">
+    <Settings className="w-12 h-12 mx-auto mb-4" />
+    <h3 className="text-lg font-semibold mb-2">Preferences</h3>
+    <p>Preference settings coming soon...</p>
+  </div>
+);
+
+const NotificationsTab: React.FC = () => (
+  <div className="text-center py-8 text-slate-600">
+    <Bell className="w-12 h-12 mx-auto mb-4" />
+    <h3 className="text-lg font-semibold mb-2">Notifications</h3>
+    <p>Notification settings coming soon...</p>
+  </div>
+);
+
 export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
-<<<<<<< HEAD
+
   const [activeTab, setActiveTab] = useState('profile');
   const [showAdminPromotion, setShowAdminPromotion] = useState(false);
-=======
->>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
+
   const [isEditing, setIsEditing] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [profileData, setProfileData] = useState({
@@ -355,11 +377,11 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
   };
 
   // Handle edit toggle
-  const handleToggleEdit = () => {
+  const handleToggleEdit = async () => {
     if (isEditing) {
-      // When canceling edit, reset to current profileData (not user prop)
-      // This prevents losing saved changes
-      const { data: { user: currentUser } } = supabase.auth.getUser().then(({ data }) => {
+      // When canceling edit, reset to current profileData from Supabase
+      try {
+        const { data } = await supabase.auth.getUser();
         if (data.user) {
           const metadata = data.user.user_metadata || {};
           setProfileData({
@@ -370,7 +392,9 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
             profession: metadata.profession || profileData.profession,
           });
         }
-      });
+      } catch (error) {
+        console.error('Error resetting profile data:', error);
+      }
     }
     setIsEditing(!isEditing);
   };
@@ -471,7 +495,7 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-<<<<<<< HEAD
+
       <div className="text-center mb-6 sm:mb-8 px-4">
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
           Profile Settings
@@ -538,21 +562,6 @@ export const Profile: React.FC<ProfileProps> = ({ user, onAuthRequired }) => {
           />
         </>
       )}
-=======
-      <ProfileTab
-        profileData={profileData}
-        onNameChange={handleNameChange}
-        onEmailChange={handleEmailChange}
-        onPhoneChange={handlePhoneChange}
-        onCityChange={handleCityChange}
-        onProfessionChange={handleProfessionChange}
-        onSave={handleSaveProfile}
-        isLoading={isLoading}
-        message={message}
-        isEditing={isEditing}
-        onToggleEdit={handleToggleEdit}
-      />
->>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
     </div>
   );
 };

@@ -38,15 +38,9 @@ import os
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Load preprocessed PKL files (now with service_id columns)
-<<<<<<< HEAD
-accommodation_raw = _load_df("accom.pkl")
-food_raw = _load_df("food.pkl") 
-tiffin_raw = _load_df("tif.pkl")
-=======
 accommodation_raw = _load_df(os.path.join(SCRIPT_DIR, "accom.pkl"))
 food_raw = _load_df(os.path.join(SCRIPT_DIR, "food.pkl")) 
 tiffin_raw = _load_df(os.path.join(SCRIPT_DIR, "tif.pkl"))
->>>>>>> 1363ac7e340820ea08840696b6947f21036cd610
 
 print(f"Loaded pickle files:")
 print(f"- Accommodation: {len(accommodation_raw)} entries")

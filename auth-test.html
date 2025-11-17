@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .error-box { 
+            background: #fef2f2; 
+            border: 1px solid #fecaca; 
+            color: #dc2626; 
+            padding: 12px; 
+            border-radius: 8px; 
+            margin: 10px 0;
+        }
+        .success-box { 
+            background: #f0fdf4; 
+            border: 1px solid #bbf7d0; 
+            color: #16a34a; 
+            padding: 12px; 
+            border-radius: 8px; 
+            margin: 10px 0;
+        }
+        button { 
+            background: #3b82f6; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin: 5px;
+        }
+        button:hover { background: #2563eb; }
+        input { 
+            padding: 8px; 
+            margin: 5px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h2>🔐 Authentication Test</h2>
+    
+    <div>
+        <h3>Test Error Messages:</h3>
+        
+        <div class="error-box">
+            ❌ Invalid email or password. Please check your credentials or sign up if you don't have an account.
+        </div>
+        
+        <div class="error-box">
+            📧 Please check your email and click the confirmation link before logging in.
+        </div>
+        
+        <div class="error-box">
+            ⏱️ Too many emails sent. Please wait a few minutes before trying again or check your email for the confirmation link.
+        </div>
+        
+        <div class="success-box">
+            ✅ Account created successfully! Please check your email for a confirmation link. After confirming, you can log in.
+        </div>
+    </div>
+
+    <h3>Quick Test:</h3>
+    <div>
+        <input type="email" placeholder="help210305@gmail.com" id="email">
+        <input type="password" placeholder="password" id="password">
+        <button onclick="testAuth()">Test Sign In</button>
+    </div>
+    
+    <div id="result"></div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
+        
+        const supabaseUrl = 'https://iecothmegflxbpvndnru.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllY290aG1lZ2ZseGJwdm5kbnJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5NzQ1ODUsImV4cCI6MjA3NDU1MDU4NX0.I4zmPYXfyqNA3ajhyAJlJ5yCLekNWo491BPUDOfcUeI';
+        
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        
+        window.testAuth = async function() {
+            const email = document.getElementById('email').value || 'help210305@gmail.com';
+            const password = document.getElementById('password').value || 'testpassword123';
+            const result = document.getElementById('result');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                if (error) {
+                    if (error.message.includes('Email not confirmed')) {
+                        result.innerHTML = '<div class="error-box">📧 Please check your email and click the confirmation link before logging in.</div>';
+                    } else if (error.message.includes('Invalid login credentials')) {
+                        result.innerHTML = '<div class="error-box">❌ Invalid email or password. Please check your credentials.</div>';
+                    } else {
+                        result.innerHTML = '<div class="error-box">❌ ' + error.message + '</div>';
+                    }
+                } else if (data.user) {
+                    result.innerHTML = '<div class="success-box">✅ Signed in successfully!</div>';
+                }
+            } catch (err) {
+                result.innerHTML = '<div class="error-box">❌ Network error: ' + err.message + '</div>';
+            }
+        }
+    </script>
+</body>
+</html>

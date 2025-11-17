@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@supabase/supabase-js": "^2.81.1",
+    "@vercel/node": "^5.5.6",
     "bcrypt": "^6.0.0",
     "csv-parse": "^6.1.0",
     "csv-parser": "^3.2.0",

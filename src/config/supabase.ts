@@ -7,23 +7,91 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
+// Create Supabase client with proper configuration
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
+    flowType: 'implicit',
+  },
+  db: {
+    schema: 'public',
+  },
+  global: {
+    headers: {
+      'X-Client-Info': 'cityservices@1.0.0',
+    },
+  },
+  realtime: {
+    params: {
+      eventsPerSecond: 2,
+    },
   },
 });
 
-// Auth helper functions
+// Auth helper functions with retry logic
 export const authHelpers = {
+  // Test connection before attempting auth
+  testConnection: async () => {
+    try {
+      const { data, error } = await supabase.auth.getSession();
+      return { connected: !error, error };
+    } catch (err) {
+      return { connected: false, error: err };
+    }
+  },
+
   signInWithGoogle: async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin,
-        skipBrowserRedirect: false,
-      },
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}`,
+          skipBrowserRedirect: false,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
+      });
+      return { data, error };
+    } catch (err) {
+      return { data: null, error: { message: 'Google sign-in failed: ' + err.message } };
+    }
+  },
+
+  signUpWithEmail: async (email: string, password: string, metadata: any = {}) => {
+    try {
+      // Test connection first
+      const connectionTest = await authHelpers.testConnection();
+      if (!connectionTest.connected) {
+        throw new Error('Unable to connect to authentication service. Please check your internet connection.');
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: metadata,
+          emailRedirectTo: undefined, // Disable email redirect for now
+        },
+      });
+      return { data, error };
+    } catch (err) {
+      return { 
+        data: null, 
+        error: { 
+          message: err.message || 'Sign up failed. Please try again.'
+        }
+      };
+    }
+  },
+
+  signInWithEmail: async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
     });
     return { data, error };
   },

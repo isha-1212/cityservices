@@ -1953,6 +1953,13 @@ const toTitleCase = (str: string) => {
       ? allServices.filter(s => s.type === 'accommodation' && s.city === selectedCity)
       : allServices.filter(s => s.type === 'accommodation');
 
+    console.log('Area Suggestions Debug:', {
+      selectedCity,
+      totalAccommodations: allServices.filter(s => s.type === 'accommodation').length,
+      filteredByCity: relevantServices.length,
+      selectedTypes
+    });
+
     const areas = new Set<string>();
     relevantServices.forEach(s => {
       const areaName = s.meta?.['Locality / Area'] || s.meta?.['Area'];
@@ -1960,7 +1967,10 @@ const toTitleCase = (str: string) => {
         areas.add(toTitleCase(areaName));
       }
     });
-    return Array.from(areas).sort();
+    
+    const result = Array.from(areas).sort();
+    console.log('Found areas:', result.length, 'examples:', result.slice(0, 5));
+    return result;
   }, [allServices, selectedCity, selectedTypes]);
 
 
@@ -2279,27 +2289,30 @@ const toTitleCase = (str: string) => {
 
 
 
-    // ✅ Copy array before sorting to avoid mutation
 
-    const sorted = [...result];
+    // ✅ Copy array before sorting to avoid mutation
 
+    const sorted = [...result];
 
+    console.log('Sorting services:', {
+      sortOrder,
+      totalServices: sorted.length,
+      beforeSort: sorted.slice(0, 3).map(s => ({ name: s.name, price: convertToMonthlyPrice(s) }))
+    });
 
-    if (sortOrder === 'priceLowToHigh') {
+    if (sortOrder === 'priceLowToHigh') {
 
-      sorted.sort((a, b) => convertToMonthlyPrice(a) - convertToMonthlyPrice(b));
+      sorted.sort((a, b) => convertToMonthlyPrice(a) - convertToMonthlyPrice(b));
 
-    } else if (sortOrder === 'priceHighToLow') {
+    } else if (sortOrder === 'priceHighToLow') {
 
-      sorted.sort((a, b) => convertToMonthlyPrice(b) - convertToMonthlyPrice(a));
+      sorted.sort((a, b) => convertToMonthlyPrice(b) - convertToMonthlyPrice(a));
 
-    }
+    }
 
+    console.log('After sort:', sorted.slice(0, 3).map(s => ({ name: s.name, price: convertToMonthlyPrice(s) })));
 
-
-    return sorted;
-
-  }, [
+    return sorted;  }, [
 
     allServices,
 
@@ -3064,27 +3077,28 @@ const toTitleCase = (str: string) => {
 
 
 
-                {/* Sort Dropdown */}
+                {/* Sort Dropdown */}
 
-                <select
+                <select
 
-                  value={sortOrder}
+                  value={sortOrder}
 
-                  onChange={(e) => setSortOrder(e.target.value as 'priceLowToHigh' | 'priceHighToLow')}
+                  onChange={(e) => {
+                    console.log('Sort changed to:', e.target.value);
+                    setSortOrder(e.target.value as 'priceLowToHigh' | 'priceHighToLow');
+                  }}
 
-                  className="px-2 py-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700 min-w-[100px] max-w-[140px] flex-shrink-0"
+                  className="px-2 py-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700 min-w-[100px] max-w-[140px] flex-shrink-0"
 
-                  aria-label="Sort services by price"
+                  aria-label="Sort services by price"
 
-                >
+                >
 
-                  <option value="priceLowToHigh">Price: Low to High</option>
+                  <option value="priceLowToHigh">Price: Low to High</option>
 
-                  <option value="priceHighToLow">Price: High to Low</option>
+                  <option value="priceHighToLow">Price: High to Low</option>
 
-                </select>
-
-
+                </select>
 
                 {/* Grid/List Toggle */}
 

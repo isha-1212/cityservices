@@ -3670,11 +3670,7 @@ const toTitleCase = (str: string) => {
 
         {/* Search Bar */}
 
-        <div className="relative mb-4 sm:mb-6">
-
-          <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
-
-          <input
+        <div className="relative mb-6">          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />          <input
             type="text"
             placeholder="Search services, cities, or areas..."
             value={criteria.searchQuery}
@@ -3682,7 +3678,7 @@ const toTitleCase = (str: string) => {
               console.log('Search input change:', e.target.value);
               setCriteria(prev => ({ ...prev, searchQuery: e.target.value }));
             }}
-            className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm sm:text-base border border-slate-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-slate-700 focus:border-slate-700 text-slate-900 placeholder-slate-500"
+            className="w-full pl-12 pr-4 py-4 text-base border-2 border-slate-200 rounded-2xl focus:ring-4 focus:ring-slate-700/10 focus:border-slate-700 text-slate-900 placeholder-slate-500 bg-white shadow-sm hover:border-slate-300 transition-all duration-200"
           />        </div>
 
 

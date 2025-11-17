@@ -3077,27 +3077,28 @@ const toTitleCase = (str: string) => {
 
 
 
-                {/* Sort Dropdown */}
+                {/* Sort Dropdown */}
 
-                <select
+                <select
 
-                  value={sortOrder}
+                  value={sortOrder}
 
-                  onChange={(e) => setSortOrder(e.target.value as 'priceLowToHigh' | 'priceHighToLow')}
+                  onChange={(e) => {
+                    console.log('Sort changed to:', e.target.value);
+                    setSortOrder(e.target.value as 'priceLowToHigh' | 'priceHighToLow');
+                  }}
 
-                  className="px-2 py-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700 min-w-[100px] max-w-[140px] flex-shrink-0"
+                  className="px-2 py-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700 min-w-[100px] max-w-[140px] flex-shrink-0"
 
-                  aria-label="Sort services by price"
+                  aria-label="Sort services by price"
 
-                >
+                >
 
-                  <option value="priceLowToHigh">Price: Low to High</option>
+                  <option value="priceLowToHigh">Price: Low to High</option>
 
-                  <option value="priceHighToLow">Price: High to Low</option>
+                  <option value="priceHighToLow">Price: High to Low</option>
 
-                </select>
-
-
+                </select>
 
                 {/* Grid/List Toggle */}
 

@@ -1953,6 +1953,13 @@ const toTitleCase = (str: string) => {
       ? allServices.filter(s => s.type === 'accommodation' && s.city === selectedCity)
       : allServices.filter(s => s.type === 'accommodation');
 
+    console.log('Area Suggestions Debug:', {
+      selectedCity,
+      totalAccommodations: allServices.filter(s => s.type === 'accommodation').length,
+      filteredByCity: relevantServices.length,
+      selectedTypes
+    });
+
     const areas = new Set<string>();
     relevantServices.forEach(s => {
       const areaName = s.meta?.['Locality / Area'] || s.meta?.['Area'];
@@ -1960,7 +1967,10 @@ const toTitleCase = (str: string) => {
         areas.add(toTitleCase(areaName));
       }
     });
-    return Array.from(areas).sort();
+    
+    const result = Array.from(areas).sort();
+    console.log('Found areas:', result.length, 'examples:', result.slice(0, 5));
+    return result;
   }, [allServices, selectedCity, selectedTypes]);
 
 
@@ -2279,27 +2289,30 @@ const toTitleCase = (str: string) => {
 
 
 
-    // ✅ Copy array before sorting to avoid mutation
 
-    const sorted = [...result];
+    // ✅ Copy array before sorting to avoid mutation
 
+    const sorted = [...result];
 
+    console.log('Sorting services:', {
+      sortOrder,
+      totalServices: sorted.length,
+      beforeSort: sorted.slice(0, 3).map(s => ({ name: s.name, price: convertToMonthlyPrice(s) }))
+    });
 
-    if (sortOrder === 'priceLowToHigh') {
+    if (sortOrder === 'priceLowToHigh') {
 
-      sorted.sort((a, b) => convertToMonthlyPrice(a) - convertToMonthlyPrice(b));
+      sorted.sort((a, b) => convertToMonthlyPrice(a) - convertToMonthlyPrice(b));
 
-    } else if (sortOrder === 'priceHighToLow') {
+    } else if (sortOrder === 'priceHighToLow') {
 
-      sorted.sort((a, b) => convertToMonthlyPrice(b) - convertToMonthlyPrice(a));
+      sorted.sort((a, b) => convertToMonthlyPrice(b) - convertToMonthlyPrice(a));
 
-    }
+    }
 
+    console.log('After sort:', sorted.slice(0, 3).map(s => ({ name: s.name, price: convertToMonthlyPrice(s) })));
 
-
-    return sorted;
-
-  }, [
+    return sorted;  }, [
 
     allServices,
 
